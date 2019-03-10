@@ -86,6 +86,33 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/Routes.js":
+/*!**************************!*\
+  !*** ./client/Routes.js ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app */ "./client/app.js");
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    path: "/",
+    exact: true,
+    component: _app__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }));
+});
+
+/***/ }),
+
 /***/ "./client/app.js":
 /*!***********************!*\
   !*** ./client/app.js ***!
@@ -98,9 +125,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-/* harmony default export */ __webpack_exports__["default"] = (function () {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "hello World");
-});
+
+var Home = function Home() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "I'm the VERY VERY BEST home component"));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Home);
 
 /***/ }),
 
@@ -123,6 +153,36 @@ _server_server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, 
 
 /***/ }),
 
+/***/ "./server/helpers/renderer.js":
+/*!************************************!*\
+  !*** ./server/helpers/renderer.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _client_Routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../client/Routes */ "./client/Routes.js");
+/* harmony import */ var react_dom_server__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom/server */ "react-dom/server");
+/* harmony import */ var react_dom_server__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom_server__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (req) {
+  var content = Object(react_dom_server__WEBPACK_IMPORTED_MODULE_2__["renderToString"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["StaticRouter"], {
+    location: req.path,
+    context: {}
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_client_Routes__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+  return "\n        <html>\n            <head>\n                <title>ServerSide__Rendering</title>\n            </head>\n            <body>\n                <div id=\"root\">".concat(content, "</div>\n                <script src=\"/public-bundle.js\"></script>\n            </body>\n        </html>");
+});
+
+/***/ }),
+
 /***/ "./server/router/root.js":
 /*!*******************************!*\
   !*** ./server/router/root.js ***!
@@ -134,20 +194,12 @@ _server_server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_dom_server__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom/server */ "react-dom/server");
-/* harmony import */ var react_dom_server__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom_server__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _client_app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../client/app */ "./client/app.js");
-
-
+/* harmony import */ var _helpers_renderer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/renderer */ "./server/helpers/renderer.js");
 
 
 var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
-router.get('/', function (req, res) {
-  var content = Object(react_dom_server__WEBPACK_IMPORTED_MODULE_2__["renderToString"])(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_client_app__WEBPACK_IMPORTED_MODULE_3__["default"], null));
-  var html = "\n    <html>\n        <head>\n            <title> ServerSide__Rendering </title>\n        </head>\n        <body>\n            <div id=\"root\">".concat(content, "</div>\n            <script src=\"/public-bundle.js\"></script>\n        </body>\n    </html>");
-  res.send(html);
+router.get('*', function (req, res) {
+  res.send(Object(_helpers_renderer__WEBPACK_IMPORTED_MODULE_1__["default"])(req));
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
@@ -236,6 +288,17 @@ module.exports = require("react");
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
+
+/***/ }),
+
+/***/ "react-router-dom":
+/*!***********************************!*\
+  !*** external "react-router-dom" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
 
 /***/ })
 

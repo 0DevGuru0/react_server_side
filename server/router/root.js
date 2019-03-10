@@ -1,21 +1,9 @@
-import express from 'express'
-import React  from 'react'
-import {renderToString}  from 'react-dom/server'
-import Home from '../../client/app'
-
+import express from 'express';
+import renderer from '../helpers/renderer';
 const router = express.Router();
-router.get('/',(req,res)=>{
-    const content = renderToString(<Home/>);
-    const html = `
-    <html>
-        <head>
-            <title> ServerSide__Rendering </title>
-        </head>
-        <body>
-            <div id="root">${content}</div>
-            <script src="/public-bundle.js"></script>
-        </body>
-    </html>`
-    res.send(html)
+
+router.get('*',(req,res)=>{
+    res.send(renderer(req))
 })
+
 export default router;

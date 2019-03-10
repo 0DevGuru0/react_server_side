@@ -1,2 +1,10 @@
 import React from 'react';
-export default ()=><h1>hello World</h1>
+const Home = () => {
+  return (
+    <div>
+      <div>I'm the VERY VERY BEST home component</div>
+    </div>
+  );
+};
+
+export default Home;
