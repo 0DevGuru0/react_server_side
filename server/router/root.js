@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express'
+import React  from 'react'
+import {renderToString}  from 'react-dom/server'
+import Home from '../../client/app'
+
 const router = express.Router();
-const Home = require('../../client/app').default;
-const {renderToString} = require('react-dom/server');
-
-
 router.get('/',(req,res)=>{
-    const content = renderToString(<Hom/>);
+    const content = renderToString(<Home/>);
     const html = `
     <html>
         <head>
@@ -13,9 +13,9 @@ router.get('/',(req,res)=>{
         </head>
         <body>
             <div id="root">${content}</div>
-            <script src="public-bundle.js"></script>
+            <script src="/public-bundle.js"></script>
         </body>
     </html>`
     res.send(html)
 })
-module.exports= router;
+export default router;

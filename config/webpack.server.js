@@ -5,8 +5,10 @@ const nodeExternals = require('webpack-node-externals');
 
 const config = {
     mode:"development",
-    entry:"./client/index.js",
-    externals:[nodeExternals()],
+    entry:"./index.js",
+    externals:[
+        nodeExternals()
+    ],
     target:"node",
     devtool:"cheap-module-source-map",
     output:{

@@ -1,11 +1,14 @@
-const express = require('express'),
-    app = express(),
-    bodyParser = require('body-parser')
-    rootRouter = require('./router/root');
+import  express from 'express';
+import  bodyParser from 'body-parser';
+import  rootRouter from './router/root';
+
+const app = express()
 require('dotenv').config()
+app.use(express.static('public'));
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 app.use('/',rootRouter);
 
-module.exports = app;
+export default app;
