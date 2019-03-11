@@ -27,7 +27,12 @@ const GoogleAuth = new GoogleStrategy(googleOption,async (accessToken,refreshTok
     if(existingUser){
         return done(null,existingUser);
     }
-    const newUser = await new User({googleId:profile.id}).save()
+    const newUser = await new User({
+        Name:profile.displayName,
+        Email:profile.emails[0].value,
+        password:profile.id,
+        googleId:profile.id
+    }).save()
     done(null,newUser);
 });
 

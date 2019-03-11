@@ -942,6 +942,21 @@ _server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, functio
 
 /***/ }),
 
+/***/ "./middlewares/requireLogin.js":
+/*!*************************************!*\
+  !*** ./middlewares/requireLogin.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (req, res, next) {
+  req.user ? next() : res.status(404).redirect('/login');
+});
+
+/***/ }),
+
 /***/ "./model/user.js":
 /*!***********************!*\
   !*** ./model/user.js ***!
@@ -1003,15 +1018,81 @@ var userModel = Object(mongoose__WEBPACK_IMPORTED_MODULE_0__["model"])('user', u
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
-/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_passport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/passport */ "./services/passport.js");
+/* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
+var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router();
 router.get('/', function (req, res) {
-  res.send('hello');
+  var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/user/api/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/user/api/current_user\">the Current User route</a>\n    </div>\n  ";
+
+  if (req.user) {
+    adminContent = "\n      <div>\n        You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n        or you can <a href=\"/user/api/logout\">Logout</a>.\n      </div>\n    ";
+  }
+
+  res.send("\n    <div>\n      <h4>Hi!  Welcome to the React SSR API</h4>\n      <div>\n        You can see <a href=\"/users\">the Users route</a>\n      </div>\n      ".concat(adminContent, "\n    </div>\n  "));
 });
+router.get('/users', function (req, res) {
+  res.send(users);
+});
+router.get('/users/xss', function (req, res) {
+  res.send(usersXss);
+});
+router.get('/admins', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__["default"], function (req, res) {
+  res.send(admins);
+});
+router.get('/login', function (req, res) {
+  res.send("\n  <html>\n    <body>\n      <a href=\"/user/api/auth/google\">Login via Google</a>\n    </body>\n  </html>");
+});
+var users = [{
+  id: 1,
+  name: 'Leanne Graham'
+}, {
+  id: 2,
+  name: 'Ervin Howell'
+}, {
+  id: 3,
+  name: 'Clementine Bauch'
+}, {
+  id: 4,
+  name: 'Patricia Lebsack'
+}, {
+  id: 5,
+  name: 'Chelsey Dietrich'
+}];
+var usersXss = [{
+  id: 1,
+  name: '</script><script>alert(1234567890)</script>'
+}, {
+  id: 2,
+  name: 'Ervin Howell'
+}, {
+  id: 3,
+  name: 'Clementine Bauch'
+}, {
+  id: 4,
+  name: 'Patricia Lebsack'
+}, {
+  id: 5,
+  name: 'Chelsey Dietrich'
+}];
+var admins = [{
+  id: 1,
+  name: 'Kurtis Weissnat'
+}, {
+  id: 2,
+  name: 'Nicholas Runolfsdottir'
+}, {
+  id: 3,
+  name: 'Gelann Reichert'
+}, {
+  id: 4,
+  name: 'Moriah Stanton'
+}, {
+  id: 5,
+  name: 'Rey Padberg'
+}];
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
@@ -1027,10 +1108,29 @@ router.get('/', function (req, res) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
+
+
 
 var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
-router.get('/', function (req, res) {
-  res.send('hello');
+var googleAuth = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google', {
+  scope: ['profile', 'email']
+});
+var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google', {
+  failureRedirect: '/'
+});
+router.get('/auth/google', googleAuth);
+router.get('/auth/google/callback', googleAuthCB, function (req, res) {
+  res.redirect('/');
+});
+router.get('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
+  req.logOut();
+  res.redirect('/');
+});
+router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
+  res.send(req.user);
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
@@ -1049,18 +1149,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express-session */ "express-session");
 /* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express_session__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var connect_mongo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! connect-mongo */ "connect-mongo");
-/* harmony import */ var connect_mongo__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(connect_mongo__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mongoose */ "mongoose");
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! body-parser */ "body-parser");
-/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! passport */ "passport");
-/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _router_userRouter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../router/userRouter */ "./router/userRouter.js");
-/* harmony import */ var _router_rootRouter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../router/rootRouter */ "./router/rootRouter.js");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ioredis */ "ioredis");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var connect_redis__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! connect-redis */ "connect-redis");
+/* harmony import */ var connect_redis__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(connect_redis__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! mongoose */ "mongoose");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! body-parser */ "body-parser");
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _router_userRouter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../router/userRouter */ "./router/userRouter.js");
+/* harmony import */ var _router_rootRouter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../router/rootRouter */ "./router/rootRouter.js");
+
+
 
 
 
@@ -1076,46 +1182,77 @@ __webpack_require__(/*! ../services/passport */ "./services/passport.js");
 var app = express__WEBPACK_IMPORTED_MODULE_0___default()(); /////////////////START APP MIDDLEWARE///////////////////////////
 
 __webpack_require__(/*! dotenv */ "dotenv").config({
-  path: path__WEBPACK_IMPORTED_MODULE_6___default.a.resolve(process.cwd(), 'config/keys/.env')
+  path: path__WEBPACK_IMPORTED_MODULE_7___default.a.resolve(process.cwd(), 'config/keys/.env')
 });
 
-app.use(body_parser__WEBPACK_IMPORTED_MODULE_4___default.a.json());
-app.use(body_parser__WEBPACK_IMPORTED_MODULE_4___default.a.urlencoded({
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.json());
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.urlencoded({
   extended: true
-})); /////////////////END APP MIDDLEWARE///////////////////////////
+}));
+
+var corsOptionsDelegate = function corsOptionsDelegate(req, callback) {
+  var fullUrl = req.protocol + '://' + req.get('host');
+  var whiteList = ['http://localhost:5000'];
+  var corsOptions;
+
+  if (whiteList.indexOf(fullUrl) !== -1) {
+    corsOptions = {
+      origin: true
+    };
+  } else {
+    corsOptions = {
+      origin: false
+    };
+  }
+
+  callback(null, corsOptions);
+}; // const corsOptions = {
+//     origin:(origin,cb)=>{
+//         ( whiteList.indexOf(origin) !== -1 )?
+//             cb(null,true)
+//            :cb(new Error('Not allowed by CORS'));
+//     }
+// }
+
+
+app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
 /////////////////START DATABASE CONFIG///////////////////////////
 
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.connect(process.env.DB_ADDRESS, {
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connect(process.env.DB_ADDRESS, {
   useNewUrlParser: true
 });
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.connection.on('connected', function () {
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('connected', function () {
   console.log("connection established successfully");
 });
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.connection.on('error', function (err) {
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('error', function (err) {
   console.log('connection to mongo failed ' + err);
 });
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.connection.on('disconnected', function () {
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('disconnected', function () {
   console.log('mongo db connection closed');
 });
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.set('useCreateIndex', true);
-mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.set('useCreateIndex', true);
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
 
-var MongoStore = connect_mongo__WEBPACK_IMPORTED_MODULE_2___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a);
+var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
+var RedisStore = connect_redis__WEBPACK_IMPORTED_MODULE_3___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a);
 app.use(express_session__WEBPACK_IMPORTED_MODULE_1___default()({
   secret: process.env.SESSION_SECRET_KEY,
   saveUninitialized: false,
-  store: new MongoStore({
-    url: process.env.DB_SESSION_STORE,
+  store: new RedisStore({
+    client: redis,
     ttl: 2 * 24 * 60 * 60,
     autoReconnect: true
   }),
+  cookie: {
+    secure: true
+  },
   resave: false
 }));
-app.use(passport__WEBPACK_IMPORTED_MODULE_5___default.a.initialize());
-app.use(passport__WEBPACK_IMPORTED_MODULE_5___default.a.session()); ////////////////START ROUTER CONFIG///////////////////////////
+app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.initialize());
+app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.session()); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/user', _router_userRouter__WEBPACK_IMPORTED_MODULE_7__["default"]);
-app.use('/', _router_rootRouter__WEBPACK_IMPORTED_MODULE_8__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
+app.use('/user/api', _router_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
+app.use('/', _router_rootRouter__WEBPACK_IMPORTED_MODULE_10__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
 
 /* harmony default export */ __webpack_exports__["default"] = (app);
 
@@ -1196,6 +1333,9 @@ function () {
           case 5:
             _context.next = 7;
             return new _model_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
+              Name: profile.displayName,
+              Email: profile.emails[0].value,
+              password: profile.id,
               googleId: profile.id
             }).save();
 
@@ -1231,14 +1371,25 @@ module.exports = require("body-parser");
 
 /***/ }),
 
-/***/ "connect-mongo":
+/***/ "connect-redis":
 /*!********************************!*\
-  !*** external "connect-mongo" ***!
+  !*** external "connect-redis" ***!
   \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require("connect-mongo");
+module.exports = require("connect-redis");
+
+/***/ }),
+
+/***/ "cors":
+/*!***********************!*\
+  !*** external "cors" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("cors");
 
 /***/ }),
 
@@ -1272,6 +1423,17 @@ module.exports = require("express");
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
+
+/***/ }),
+
+/***/ "ioredis":
+/*!**************************!*\
+  !*** external "ioredis" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("ioredis");
 
 /***/ }),
 

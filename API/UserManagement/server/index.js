@@ -1,10 +1,12 @@
 import express      from 'express';
 import session      from 'express-session';
-import MongoConnect from 'connect-mongo';
+import Redis        from 'ioredis';
+import RedisConnect from 'connect-redis';
 import mongoose     from 'mongoose';
 import bodyParser   from 'body-parser';
 import passport     from 'passport';
 import path         from 'path'
+import cors         from 'cors';
 
 import userRouter from '../router/userRouter';
 import rootRouter from '../router/rootRouter';
@@ -19,6 +21,28 @@ require('dotenv').config({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
+
+var corsOptionsDelegate = function (req, callback) {
+    var fullUrl = req.protocol + '://' + req.get('host');
+    const whiteList = ['http://localhost:5000'];
+    let corsOptions;
+    if(whiteList.indexOf(fullUrl) !== -1){
+        corsOptions={origin:true}
+    }else{
+        corsOptions={origin:false}
+    }
+    callback(null,corsOptions)
+}
+// const corsOptions = {
+//     origin:(origin,cb)=>{
+//         ( whiteList.indexOf(origin) !== -1 )?
+//             cb(null,true)
+//            :cb(new Error('Not allowed by CORS'));
+//     }
+// }
+
+app.use(cors(corsOptionsDelegate))
+
 /////////////////END APP MIDDLEWARE///////////////////////////
 
 /////////////////START DATABASE CONFIG///////////////////////////
@@ -30,23 +54,24 @@ mongoose.set('useCreateIndex', true);
 
 mongoose.Promise = global.Promise;
 /////////////////END DATABASE CONFIG///////////////////////////
-
-const MongoStore = MongoConnect(session);
+const redis = new Redis();
+const RedisStore = RedisConnect(session);
 app.use(session({
     secret:process.env.SESSION_SECRET_KEY,
     saveUninitialized:false,
-    store:new MongoStore({
-        url:process.env.DB_SESSION_STORE,
+    store:new RedisStore({
+        client:redis,
         ttl: 2 * 24 * 60 * 60,
         autoReconnect: true
     }),
+    cookie: { secure: true },
     resave:false
 }))
 
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START ROUTER CONFIG///////////////////////////
-app.use('/user',userRouter)
+app.use('/user/api',userRouter)
 app.use('/',rootRouter)
 /////////////////END ROUTER CONFIG///////////////////////////
 
