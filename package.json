@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel dev:*",
-    "dev:server": "nodemon --watch build --watch public --watch server --exec \"node build/server-bundle\" ",
-    "dev:build-client": "webpack --watch --config config/webpack.client.js",
-    "dev:build-server": "webpack --watch --config config/webpack.server.js"
+
+    "start": "npm-run-all --parallel dev:**",
+
+    "dev:root-client"        : "webpack --watch --config config/webpack.client.js",
+    "dev:root-server"        : "webpack --watch --config config/webpack.server.js",
+    "dev:server": "nodemon --watch build --watch public --watch server --exec \"node build/server-bundle\" "
   },
   "author": "",
   "license": "ISC",

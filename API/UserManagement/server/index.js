@@ -22,24 +22,14 @@ require('dotenv').config({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
 
-var corsOptionsDelegate = function (req, callback) {
-    var fullUrl = req.protocol + '://' + req.get('host');
-    const whiteList = ['http://localhost:5000'];
-    let corsOptions;
-    if(whiteList.indexOf(fullUrl) !== -1){
-        corsOptions={origin:true}
-    }else{
-        corsOptions={origin:false}
+const whiteList = [process.env.CORS_APPROVED_ADDRESS];
+const corsOptionsDelegate = {
+    origin:(origin,cb)=>{
+        ( whiteList.indexOf(origin) !== -1 || !origin)?
+            cb(null,true)
+           :cb(new Error('Not allowed by CORS'));
     }
-    callback(null,corsOptions)
 }
-// const corsOptions = {
-//     origin:(origin,cb)=>{
-//         ( whiteList.indexOf(origin) !== -1 )?
-//             cb(null,true)
-//            :cb(new Error('Not allowed by CORS'));
-//     }
-// }
 
 app.use(cors(corsOptionsDelegate))
 
@@ -61,10 +51,10 @@ app.use(session({
     saveUninitialized:false,
     store:new RedisStore({
         client:redis,
-        ttl: 2 * 24 * 60 * 60,
+        ttl: 86400000,
         autoReconnect: true
     }),
-    cookie: { secure: true },
+    cookie: { secure: false,maxAge:86400000 },
     resave:false
 }))
 

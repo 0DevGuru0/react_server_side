@@ -1,0 +1,13 @@
+  "scripts": {
+
+    "prestart": "npm-run-all --parallel build:**",
+
+    "build:root-client"        : "webpack --config config/webpack.client.js",
+    "build:root-server"        : "webpack --config config/webpack.server.js",
+    "build:api:user_management": "webpack --config API/UserManagement/config/webpack.config.js",
+
+    "start": "npm-run-all --parallel dev:**",
+
+    "dev:server": "nodemon --watch build --watch public --watch server --exec \"node build/server-bundle\" ",
+    "dev:server:api-user_management": "nodemon --exec \"node API/UserManagement/build/bundle\" "
+  },

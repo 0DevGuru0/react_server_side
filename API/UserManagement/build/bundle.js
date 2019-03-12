@@ -952,7 +952,9 @@ _server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, functio
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (function (req, res, next) {
-  req.user ? next() : res.status(404).redirect('/login');
+  req.user ? next() : res.status(404).send({
+    error: 'You must log in!'
+  });
 });
 
 /***/ }),
@@ -1189,32 +1191,12 @@ app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.json());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.urlencoded({
   extended: true
 }));
-
-var corsOptionsDelegate = function corsOptionsDelegate(req, callback) {
-  var fullUrl = req.protocol + '://' + req.get('host');
-  var whiteList = ['http://localhost:5000'];
-  var corsOptions;
-
-  if (whiteList.indexOf(fullUrl) !== -1) {
-    corsOptions = {
-      origin: true
-    };
-  } else {
-    corsOptions = {
-      origin: false
-    };
+var whiteList = [process.env.CORS_APPROVED_ADDRESS];
+var corsOptionsDelegate = {
+  origin: function origin(_origin, cb) {
+    whiteList.indexOf(_origin) !== -1 || !_origin ? cb(null, true) : cb(new Error('Not allowed by CORS'));
   }
-
-  callback(null, corsOptions);
-}; // const corsOptions = {
-//     origin:(origin,cb)=>{
-//         ( whiteList.indexOf(origin) !== -1 )?
-//             cb(null,true)
-//            :cb(new Error('Not allowed by CORS'));
-//     }
-// }
-
-
+};
 app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
 /////////////////START DATABASE CONFIG///////////////////////////
 
@@ -1240,11 +1222,12 @@ app.use(express_session__WEBPACK_IMPORTED_MODULE_1___default()({
   saveUninitialized: false,
   store: new RedisStore({
     client: redis,
-    ttl: 2 * 24 * 60 * 60,
+    ttl: 86400000,
     autoReconnect: true
   }),
   cookie: {
-    secure: true
+    secure: false,
+    maxAge: 86400000
   },
   resave: false
 }));
