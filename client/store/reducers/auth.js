@@ -11,7 +11,7 @@ const addUserTOState=(state,action)=>({
 
 const reducer = (state=initialState,action)=>{
     switch(action.type){
-        case actionTypes.CURRENT_USER : return addUserTOState(state,action);
+        case actionTypes.FETCH_CURRENT_USER : return addUserTOState(state,action);
         default:return state;
     }
 }

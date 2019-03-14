@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 const Header = ({user})=>{
+  console.log(user)
     const onLogoutClick = ()=>{}
     const renderButtons=()=>{
       if (user) {
@@ -18,7 +19,7 @@ const Header = ({user})=>{
               <Link to="/admins">Admins</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
+              <a href="/login">Login</a>
             </li>
           </div>
         );

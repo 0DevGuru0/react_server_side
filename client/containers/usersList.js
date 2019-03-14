@@ -26,4 +26,9 @@ const mapDispatchToProps = dispatch=>({
     fetchUsers:()=>dispatch(actionCreators.fetchUsers())
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(UserList);
+const loadData = ({dispatch})=>(dispatch(actionCreators.fetchUsers()))
+
+export default ({
+    component:connect(mapStateToProps,mapDispatchToProps)(UserList),
+    loadData
+});

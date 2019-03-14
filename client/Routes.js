@@ -1,14 +1,25 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
-import App from './app';
+import Home from './containers/home';
 import usersList from './containers/usersList';
 import adminsList from './containers/adminsList';
-import Header from './components/header'
-export default ()=>(
-    <div>
-        <Header/>
-        <Route path="/users"  component={usersList}/>
-        <Route path="/admins"  component={adminsList}/>
-        <Route path="/" exact component={App}/>
-    </div>
-)
+import Root from './RootPage';
+
+export default [{
+    component:Root,
+    path: '/',
+    routes:[
+        {
+            component:Home,
+            path:'/',
+            exact:true,
+        },
+        {
+            path:'/users',
+            ...usersList
+        },
+        {
+            path:'/admins',
+            component:adminsList
+        }
+    ]
+}];

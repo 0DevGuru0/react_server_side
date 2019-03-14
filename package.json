@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-
     "start": "npm-run-all --parallel dev:**",
-
-    "dev:root-client"        : "webpack --watch --config config/webpack.client.js",
-    "dev:root-server"        : "webpack --watch --config config/webpack.server.js",
+    "dev:root-client": "webpack --watch --config config/webpack.client.js",
+    "dev:root-server": "webpack --watch --config config/webpack.server.js",
     "dev:server": "nodemon --watch build --watch public --watch server --exec \"node build/server-bundle\" "
   },
   "author": "",
@@ -27,6 +25,7 @@
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.0",
     "express-static-gzip": "^1.1.3",
+    "express-subdomain": "^1.0.5",
     "extract-loader": "^3.1.0",
     "file-loader": "^2.0.0",
     "gsap": "^2.0.2",

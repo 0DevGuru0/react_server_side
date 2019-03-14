@@ -30,4 +30,12 @@ const mapStateToProps=({admins})=>({
 const mapDispatchToProps = dispatch=>({
     FetchAdmins:()=>dispatch(actionCreator.fetchAdmins())
 })
-export default connect(mapStateToProps,mapDispatchToProps)(AdminsListPage)
+
+const loadData = ({dispatch})=>({
+    FetchAdmins:()=>dispatch(actionCreator.fetchAdmins())
+})
+
+export default {
+    component:connect(mapStateToProps,mapDispatchToProps)(AdminsListPage),
+    loadData
+}
