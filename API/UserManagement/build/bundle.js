@@ -925,6 +925,586 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "../../node_modu
 
 /***/ }),
 
+/***/ "../../node_modules/cookie-session/index.js":
+/*!**************************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/cookie-session/index.js ***!
+  \**************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * cookie-session
+ * Copyright(c) 2013 Jonathan Ong
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var debug = __webpack_require__(/*! debug */ "debug")('cookie-session');
+var Cookies = __webpack_require__(/*! cookies */ "../../node_modules/cookies/index.js");
+var onHeaders = __webpack_require__(/*! on-headers */ "on-headers");
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = cookieSession
+
+/**
+ * Create a new cookie session middleware.
+ *
+ * @param {object} [options]
+ * @param {boolean} [options.httpOnly=true]
+ * @param {array} [options.keys]
+ * @param {string} [options.name=express:sess] Name of the cookie to use
+ * @param {boolean} [options.overwrite=true]
+ * @param {string} [options.secret]
+ * @param {boolean} [options.signed=true]
+ * @return {function} middleware
+ * @public
+ */
+
+function cookieSession(options) {
+  var opts = options || {}
+
+  // name - previously "opts.key"
+  var name = opts.name || opts.key || 'express:sess';
+
+  // secrets
+  var keys = opts.keys;
+  if (!keys && opts.secret) keys = [opts.secret];
+
+  // defaults
+  if (null == opts.overwrite) opts.overwrite = true;
+  if (null == opts.httpOnly) opts.httpOnly = true;
+  if (null == opts.signed) opts.signed = true;
+
+  if (!keys && opts.signed) throw new Error('.keys required.');
+
+  debug('session options %j', opts);
+
+  return function _cookieSession(req, res, next) {
+    var cookies = req.sessionCookies = new Cookies(req, res, {
+      keys: keys
+    });
+    var sess, json;
+
+    // to pass to Session()
+    req.sessionOptions = Object.create(opts)
+    req.sessionKey = name
+
+    req.__defineGetter__('session', function(){
+      // already retrieved
+      if (sess) return sess;
+
+      // unset
+      if (false === sess) return null;
+
+      json = cookies.get(name, req.sessionOptions)
+
+      if (json) {
+        debug('parse %s', json);
+        try {
+          sess = new Session(req, decode(json));
+        } catch (err) {
+          // backwards compatibility:
+          // create a new session if parsing fails.
+          // new Buffer(string, 'base64') does not seem to crash
+          // when `string` is not base64-encoded.
+          // but `JSON.parse(string)` will crash.
+          if (!(err instanceof SyntaxError)) throw err;
+          sess = new Session(req);
+        }
+      } else {
+        debug('new session');
+        sess = new Session(req);
+      }
+
+      return sess;
+    });
+
+    req.__defineSetter__('session', function(val){
+      if (null == val) return sess = false;
+      if ('object' == typeof val) return sess = new Session(req, val);
+      throw new Error('req.session can only be set as null or an object.');
+    });
+
+    onHeaders(res, function setHeaders() {
+      if (sess === undefined) {
+        // not accessed
+        return;
+      }
+
+      try {
+        if (sess === false) {
+          // remove
+          cookies.set(name, '', req.sessionOptions)
+        } else if (!json && !sess.length) {
+          // do nothing if new and not populated
+        } else if (sess.changed(json)) {
+          // save
+          sess.save();
+        }
+      } catch (e) {
+        debug('error saving session %s', e.message);
+      }
+    });
+
+    next();
+  }
+};
+
+/**
+ * Session model.
+ *
+ * @param {Context} ctx
+ * @param {Object} obj
+ * @private
+ */
+
+function Session(ctx, obj) {
+  this._ctx = ctx
+
+  Object.defineProperty(this, 'isNew', {
+    value: !obj
+  })
+
+  if (obj) {
+    for (var key in obj) {
+      this[key] = obj[key]
+    }
+  }
+}
+
+/**
+ * JSON representation of the session.
+ *
+ * @return {Object}
+ * @public
+ */
+
+Session.prototype.inspect =
+Session.prototype.toJSON = function toJSON() {
+  var keys = Object.keys(this)
+  var obj = {}
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i]
+
+    if (key[0] !== '_') {
+      obj[key] = this[key]
+    }
+  }
+
+  return obj
+}
+
+/**
+ * Check if the session has changed relative to the `prev`
+ * JSON value from the request.
+ *
+ * @param {String} [prev]
+ * @return {Boolean}
+ * @private
+ */
+
+Session.prototype.changed = function(prev){
+  if (!prev) return true;
+  this._json = encode(this);
+  return this._json != prev;
+};
+
+/**
+ * Return how many values there are in the session object.
+ * Used to see if it's "populated".
+ *
+ * @return {Number}
+ * @public
+ */
+
+Session.prototype.__defineGetter__('length', function(){
+  return Object.keys(this.toJSON()).length;
+});
+
+/**
+ * populated flag, which is just a boolean alias of .length.
+ *
+ * @return {Boolean}
+ * @public
+ */
+
+Session.prototype.__defineGetter__('populated', function(){
+  return !!this.length;
+});
+
+/**
+ * Save session changes by performing a Set-Cookie.
+ *
+ * @private
+ */
+
+Session.prototype.save = function(){
+  var ctx = this._ctx;
+  var json = this._json || encode(this);
+  var opts = ctx.sessionOptions;
+  var name = ctx.sessionKey;
+
+  debug('save %s', json);
+  ctx.sessionCookies.set(name, json, opts);
+};
+
+/**
+ * Decode the base64 cookie value to an object.
+ *
+ * @param {String} string
+ * @return {Object}
+ * @private
+ */
+
+function decode(string) {
+  var body = new Buffer(string, 'base64').toString('utf8');
+  return JSON.parse(body);
+}
+
+/**
+ * Encode an object into a base64-encoded JSON string.
+ *
+ * @param {Object} body
+ * @return {String}
+ * @private
+ */
+
+function encode(body) {
+  var str = JSON.stringify(body)
+  return new Buffer(str).toString('base64')
+}
+
+
+/***/ }),
+
+/***/ "../../node_modules/cookies/index.js":
+/*!*******************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/cookies/index.js ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * cookies
+ * Copyright(c) 2014 Jed Schmidt, http://jed.is/
+ * Copyright(c) 2015-2016 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+var deprecate = __webpack_require__(/*! depd */ "depd")('cookies')
+var Keygrip = __webpack_require__(/*! keygrip */ "../../node_modules/keygrip/index.js")
+var http = __webpack_require__(/*! http */ "http")
+var cache = {}
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+
+/**
+ * RegExp to match Same-Site cookie attribute value.
+ */
+
+var sameSiteRegExp = /^(?:lax|strict)$/i
+
+function Cookies(request, response, options) {
+  if (!(this instanceof Cookies)) return new Cookies(request, response, options)
+
+  this.secure = undefined
+  this.request = request
+  this.response = response
+
+  if (options) {
+    if (Array.isArray(options)) {
+      // array of key strings
+      deprecate('"keys" argument; provide using options {"keys": [...]}')
+      this.keys = new Keygrip(options)
+    } else if (options.constructor && options.constructor.name === 'Keygrip') {
+      // any keygrip constructor to allow different versions
+      deprecate('"keys" argument; provide using options {"keys": keygrip}')
+      this.keys = options
+    } else {
+      this.keys = Array.isArray(options.keys) ? new Keygrip(options.keys) : options.keys
+      this.secure = options.secure
+    }
+  }
+}
+
+Cookies.prototype.get = function(name, opts) {
+  var sigName = name + ".sig"
+    , header, match, value, remote, data, index
+    , signed = opts && opts.signed !== undefined ? opts.signed : !!this.keys
+
+  header = this.request.headers["cookie"]
+  if (!header) return
+
+  match = header.match(getPattern(name))
+  if (!match) return
+
+  value = match[1]
+  if (!opts || !signed) return value
+
+  remote = this.get(sigName)
+  if (!remote) return
+
+  data = name + "=" + value
+  if (!this.keys) throw new Error('.keys required for signed cookies');
+  index = this.keys.index(data, remote)
+
+  if (index < 0) {
+    this.set(sigName, null, {path: "/", signed: false })
+  } else {
+    index && this.set(sigName, this.keys.sign(data), { signed: false })
+    return value
+  }
+};
+
+Cookies.prototype.set = function(name, value, opts) {
+  var res = this.response
+    , req = this.request
+    , headers = res.getHeader("Set-Cookie") || []
+    , secure = this.secure !== undefined ? !!this.secure : req.protocol === 'https' || req.connection.encrypted
+    , cookie = new Cookie(name, value, opts)
+    , signed = opts && opts.signed !== undefined ? opts.signed : !!this.keys
+
+  if (typeof headers == "string") headers = [headers]
+
+  if (!secure && opts && opts.secure) {
+    throw new Error('Cannot send secure cookie over unencrypted connection')
+  }
+
+  cookie.secure = secure
+  if (opts && "secure" in opts) cookie.secure = opts.secure
+
+  if (opts && "secureProxy" in opts) {
+    deprecate('"secureProxy" option; use "secure" option, provide "secure" to constructor if needed')
+    cookie.secure = opts.secureProxy
+  }
+
+  pushCookie(headers, cookie)
+
+  if (opts && signed) {
+    if (!this.keys) throw new Error('.keys required for signed cookies');
+    cookie.value = this.keys.sign(cookie.toString())
+    cookie.name += ".sig"
+    pushCookie(headers, cookie)
+  }
+
+  var setHeader = res.set ? http.OutgoingMessage.prototype.setHeader : res.setHeader
+  setHeader.call(res, 'Set-Cookie', headers)
+  return this
+};
+
+function Cookie(name, value, attrs) {
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  if (value && !fieldContentRegExp.test(value)) {
+    throw new TypeError('argument value is invalid');
+  }
+
+  value || (this.expires = new Date(0))
+
+  this.name = name
+  this.value = value || ""
+
+  for (var name in attrs) {
+    this[name] = attrs[name]
+  }
+
+  if (this.path && !fieldContentRegExp.test(this.path)) {
+    throw new TypeError('option path is invalid');
+  }
+
+  if (this.domain && !fieldContentRegExp.test(this.domain)) {
+    throw new TypeError('option domain is invalid');
+  }
+
+  if (this.sameSite && this.sameSite !== true && !sameSiteRegExp.test(this.sameSite)) {
+    throw new TypeError('option sameSite is invalid')
+  }
+}
+
+Cookie.prototype.path = "/";
+Cookie.prototype.expires = undefined;
+Cookie.prototype.domain = undefined;
+Cookie.prototype.httpOnly = true;
+Cookie.prototype.sameSite = false;
+Cookie.prototype.secure = false;
+Cookie.prototype.overwrite = false;
+
+Cookie.prototype.toString = function() {
+  return this.name + "=" + this.value
+};
+
+Cookie.prototype.toHeader = function() {
+  var header = this.toString()
+
+  if (this.maxAge) this.expires = new Date(Date.now() + this.maxAge);
+
+  if (this.path     ) header += "; path=" + this.path
+  if (this.expires  ) header += "; expires=" + this.expires.toUTCString()
+  if (this.domain   ) header += "; domain=" + this.domain
+  if (this.sameSite ) header += "; samesite=" + (this.sameSite === true ? 'strict' : this.sameSite.toLowerCase())
+  if (this.secure   ) header += "; secure"
+  if (this.httpOnly ) header += "; httponly"
+
+  return header
+};
+
+// back-compat so maxage mirrors maxAge
+Object.defineProperty(Cookie.prototype, 'maxage', {
+  configurable: true,
+  enumerable: true,
+  get: function () { return this.maxAge },
+  set: function (val) { return this.maxAge = val }
+});
+deprecate.property(Cookie.prototype, 'maxage', '"maxage"; use "maxAge" instead')
+
+function getPattern(name) {
+  if (cache[name]) return cache[name]
+
+  return cache[name] = new RegExp(
+    "(?:^|;) *" +
+    name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") +
+    "=([^;]*)"
+  )
+}
+
+function pushCookie(headers, cookie) {
+  if (cookie.overwrite) {
+    for (var i = headers.length - 1; i >= 0; i--) {
+      if (headers[i].indexOf(cookie.name + '=') === 0) {
+        headers.splice(i, 1)
+      }
+    }
+  }
+
+  headers.push(cookie.toHeader())
+}
+
+Cookies.connect = Cookies.express = function(keys) {
+  return function(req, res, next) {
+    req.cookies = res.cookies = new Cookies(req, res, {
+      keys: keys
+    })
+
+    next()
+  }
+}
+
+Cookies.Cookie = Cookie
+
+module.exports = Cookies
+
+
+/***/ }),
+
+/***/ "../../node_modules/keygrip/index.js":
+/*!*******************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/keygrip/index.js ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * keygrip
+ * Copyright(c) 2011-2014 Jed Schmidt
+ * MIT Licensed
+ */
+
+
+
+var crypto = __webpack_require__(/*! crypto */ "crypto")
+  
+function Keygrip(keys, algorithm, encoding) {
+  if (!algorithm) algorithm = "sha1";
+  if (!encoding) encoding = "base64";
+  if (!(this instanceof Keygrip)) return new Keygrip(keys, algorithm, encoding)
+
+  if (!keys || !(0 in keys)) {
+    throw new Error("Keys must be provided.")
+  }
+
+  function sign(data, key) {
+    return crypto
+      .createHmac(algorithm, key)
+      .update(data).digest(encoding)
+      .replace(/\/|\+|=/g, function(x) {
+        return ({ "/": "_", "+": "-", "=": "" })[x]
+      })
+  }
+
+  this.sign = function(data){ return sign(data, keys[0]) }
+
+  this.verify = function(data, digest) {
+    return this.index(data, digest) > -1
+  }
+
+  this.index = function(data, digest) {
+    for (var i = 0, l = keys.length; i < l; i++) {
+      if (constantTimeCompare(digest, sign(data, keys[i]))) return i
+    }
+
+    return -1
+  }
+}
+
+Keygrip.sign = Keygrip.verify = Keygrip.index = function() {
+  throw new Error("Usage: require('keygrip')(<array-of-keys>)")
+}
+
+//http://codahale.com/a-lesson-in-timing-attacks/
+var constantTimeCompare = function(val1, val2){
+    if(val1 == null && val2 != null){
+        return false;
+    } else if(val2 == null && val1 != null){
+        return false;
+    } else if(val1 == null && val2 == null){
+        return true;
+    }
+
+    if(val1.length !== val2.length){
+        return false;
+    }
+
+    var result = 0;
+
+    for(var i = 0; i < val1.length; i++){
+        result |= val1.charCodeAt(i) ^ val2.charCodeAt(i); //Don't short circuit
+    }
+
+    return result === 0;
+};
+
+module.exports = Keygrip
+
+
+/***/ }),
+
 /***/ "./index.js":
 /*!******************!*\
   !*** ./index.js ***!
@@ -1023,14 +1603,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ioredis */ "ioredis");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router();
+var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
 router.get('/', function (req, res) {
-  var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/user/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/user/api/current_user\">the Current User route</a>\n    </div>\n  ";
+  var redisId = req.cookies['connect.sid'].split('.')[0].slice(2);
+  console.log(redisId);
+  var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/api/current_user\">the Current User route</a>\n    </div>\n  ";
 
   if (req.user) {
-    adminContent = "\n      <div>\n        You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n        or you can <a href=\"/user/logout\">Logout</a>.\n      </div>\n    ";
+    adminContent = "\n      <div>\n        You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n        or you can <a href=\"/logout\">Logout</a>.\n      </div>\n    ";
   }
 
   res.send("\n    <div>\n      <h4>Hi!  Welcome to the React SSR API</h4>\n      <div>\n        You can see <a href=\"/users\">the Users route</a>\n      </div>\n      ".concat(adminContent, "\n    </div>\n  "));
@@ -1045,7 +1631,7 @@ router.get('/admins', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__["de
   res.send(admins);
 });
 router.get('/login', function (req, res) {
-  res.send("\n  <html>\n    <body>\n      <a href=\"/user/auth/google\">Login via Google</a>\n    </body>\n  </html>");
+  res.send("\n  <html>\n    <body>\n      <a href=\"auth/google\">Login via Google</a>\n    </body>\n  </html>");
 });
 var users = [{
   id: 1,
@@ -1120,9 +1706,7 @@ var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
 var googleAuth = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google', {
   scope: ['profile', 'email']
 });
-var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google', {
-  failureRedirect: '/'
-});
+var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google');
 router.get('/auth/google', googleAuth);
 router.get('/api/auth/google/callback', googleAuthCB, function (req, res) {
   res.redirect('/');
@@ -1166,10 +1750,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cors */ "cors");
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
-/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
+/* harmony import */ var cookie_session__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cookie-session */ "../../node_modules/cookie-session/index.js");
+/* harmony import */ var cookie_session__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cookie_session__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! cookie-parser */ "cookie-parser");
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
+/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
+
+
 
 
 
@@ -1206,6 +1796,7 @@ __webpack_require__(/*! dotenv */ "dotenv").config({
   path: path__WEBPACK_IMPORTED_MODULE_7___default.a.resolve(process.cwd(), 'config/keys/.env')
 });
 
+app.use(cookie_parser__WEBPACK_IMPORTED_MODULE_9___default()());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.json());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_5___default.a.urlencoded({
   extended: true
@@ -1216,29 +1807,30 @@ var corsOptionsDelegate = {
     whiteList.indexOf(_origin) !== -1 || !_origin ? cb(null, true) : cb(new Error('Not allowed by CORS'));
   }
 };
-app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
+app.use(cors__WEBPACK_IMPORTED_MODULE_10___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
 
 var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
-var RedisStore = connect_redis__WEBPACK_IMPORTED_MODULE_3___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a);
-app.use(express_session__WEBPACK_IMPORTED_MODULE_1___default()({
-  secret: process.env.SESSION_SECRET_KEY,
-  saveUninitialized: false,
-  store: new RedisStore({
-    client: redis,
-    ttl: 86400000,
-    autoReconnect: true
-  }),
-  cookie: {
-    secure: false,
-    maxAge: 86400000
-  },
-  resave: false
+var RedisStore = connect_redis__WEBPACK_IMPORTED_MODULE_3___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a); // app.use(session({
+//     secret:process.env.SESSION_SECRET_KEY,
+//     saveUninitialized:false,
+//     store:new RedisStore({
+//         client:redis,
+//         ttl: 86400000,
+//         autoReconnect: true
+//     }),
+//     cookie: { secure: false,maxAge:86400000 },
+//     resave:false
+// }))
+
+app.use(cookie_session__WEBPACK_IMPORTED_MODULE_8___default()({
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  keys: ['asfdsfdsvCSDfczxsad']
 }));
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.initialize());
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.session()); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/', _routes_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
-app.use('/', _routes_rootRouter__WEBPACK_IMPORTED_MODULE_10__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
+app.use('/', _routes_userRouter__WEBPACK_IMPORTED_MODULE_11__["default"]);
+app.use('/', _routes_rootRouter__WEBPACK_IMPORTED_MODULE_12__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
 
 /* harmony default export */ __webpack_exports__["default"] = (app);
 
@@ -1368,6 +1960,17 @@ module.exports = require("connect-redis");
 
 /***/ }),
 
+/***/ "cookie-parser":
+/*!********************************!*\
+  !*** external "cookie-parser" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("cookie-parser");
+
+/***/ }),
+
 /***/ "cors":
 /*!***********************!*\
   !*** external "cors" ***!
@@ -1376,6 +1979,39 @@ module.exports = require("connect-redis");
 /***/ (function(module, exports) {
 
 module.exports = require("cors");
+
+/***/ }),
+
+/***/ "crypto":
+/*!*************************!*\
+  !*** external "crypto" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "debug":
+/*!************************!*\
+  !*** external "debug" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("debug");
+
+/***/ }),
+
+/***/ "depd":
+/*!***********************!*\
+  !*** external "depd" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("depd");
 
 /***/ }),
 
@@ -1412,6 +2048,17 @@ module.exports = require("express-session");
 
 /***/ }),
 
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+
 /***/ "ioredis":
 /*!**************************!*\
   !*** external "ioredis" ***!
@@ -1431,6 +2078,17 @@ module.exports = require("ioredis");
 /***/ (function(module, exports) {
 
 module.exports = require("mongoose");
+
+/***/ }),
+
+/***/ "on-headers":
+/*!*****************************!*\
+  !*** external "on-headers" ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("on-headers");
 
 /***/ }),
 

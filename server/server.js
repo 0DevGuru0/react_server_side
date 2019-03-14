@@ -2,8 +2,10 @@ import  express from 'express';
 import  bodyParser from 'body-parser';
 import  rootRouter from './routes/root';
 import proxy from 'express-http-proxy';
+import cookieParser from 'cookie-parser'
 const app = express()
 
+app.use(cookieParser())
 app.use(
     '/api',
     proxy('http://localhost:5000', {

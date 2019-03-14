@@ -5,7 +5,9 @@ import RedisConnect from 'connect-redis';
 import mongoose     from 'mongoose';
 import bodyParser   from 'body-parser';
 import passport     from 'passport';
-import path         from 'path'
+import path         from 'path';
+import cookieSession from 'cookie-session'
+import cookieParser from 'cookie-parser'
 import cors         from 'cors';
 
 import userRouter from '../routes/userRouter';
@@ -28,7 +30,7 @@ const app = express();
 require('dotenv').config({
     path:path.resolve(process.cwd(),'config/keys/.env')
 })
-
+app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
 
@@ -47,18 +49,25 @@ app.use(cors(corsOptionsDelegate))
 
 const redis = new Redis();
 const RedisStore = RedisConnect(session);
-app.use(session({
-    secret:process.env.SESSION_SECRET_KEY,
-    saveUninitialized:false,
-    store:new RedisStore({
-        client:redis,
-        ttl: 86400000,
-        autoReconnect: true
-    }),
-    cookie: { secure: false,maxAge:86400000 },
-    resave:false
-}))
-
+// app.use(session({
+//     secret:process.env.SESSION_SECRET_KEY,
+//     saveUninitialized:false,
+//     store:new RedisStore({
+//         client:redis,
+//         ttl: 86400000,
+//         autoReconnect: true
+//     }),
+//     cookie: { secure: false,maxAge:86400000 },
+//     resave:false
+// }))
+app.use(
+    cookieSession({
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      keys: [
+          'asfdsfdsvCSDfczxsad'
+      ]
+    })
+  );
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START ROUTER CONFIG///////////////////////////

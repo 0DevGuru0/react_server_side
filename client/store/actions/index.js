@@ -18,9 +18,16 @@ export const
     },
 
     fetchCurrentUser = ()=>async (dispatch,getState,api)=>{
-        const User = await api.get('/user/api/current_user');
-        dispatch({
-            type:actionTypes.FETCH_CURRENT_USER,
-            payload:User,
-        })
+        try{
+            const User = await api.get('/current_user');
+            dispatch({
+                type:actionTypes.FETCH_CURRENT_USER,
+                payload:User.data,
+            })
+        }catch(e){
+            dispatch({
+                type:actionTypes.FETCH_CURRENT_USER,
+                payload:false,
+            })
+        }
     }

@@ -3,6 +3,7 @@ import Home from './containers/home';
 import usersList from './containers/usersList';
 import adminsList from './containers/adminsList';
 import Root from './RootPage';
+import NotFoundPage from './containers/notFoundPage'
 
 export default [{
     component:Root,
@@ -20,6 +21,9 @@ export default [{
         {
             path:'/admins',
             component:adminsList
+        },
+        {
+            ...NotFoundPage
         }
     ]
 }];
