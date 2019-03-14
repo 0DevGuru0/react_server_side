@@ -1027,10 +1027,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router();
 router.get('/', function (req, res) {
-  var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/user/api/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/user/api/current_user\">the Current User route</a>\n    </div>\n  ";
+  var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/user/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/user/api/current_user\">the Current User route</a>\n    </div>\n  ";
 
   if (req.user) {
-    adminContent = "\n      <div>\n        You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n        or you can <a href=\"/user/api/logout\">Logout</a>.\n      </div>\n    ";
+    adminContent = "\n      <div>\n        You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n        or you can <a href=\"/user/logout\">Logout</a>.\n      </div>\n    ";
   }
 
   res.send("\n    <div>\n      <h4>Hi!  Welcome to the React SSR API</h4>\n      <div>\n        You can see <a href=\"/users\">the Users route</a>\n      </div>\n      ".concat(adminContent, "\n    </div>\n  "));
@@ -1045,7 +1045,7 @@ router.get('/admins', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__["de
   res.send(admins);
 });
 router.get('/login', function (req, res) {
-  res.send("\n  <html>\n    <body>\n      <a href=\"/user/api/auth/google\">Login via Google</a>\n    </body>\n  </html>");
+  res.send("\n  <html>\n    <body>\n      <a href=\"/user/auth/google\">Login via Google</a>\n    </body>\n  </html>");
 });
 var users = [{
   id: 1,
@@ -1179,7 +1179,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-__webpack_require__(/*! ../services/passport */ "./services/passport.js");
+__webpack_require__(/*! ../services/passport */ "./services/passport.js"); /////////////////START DATABASE CONFIG///////////////////////////
+
+
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connect(process.env.DB_ADDRESS, {
+  useNewUrlParser: true
+});
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('connected', function () {
+  console.log("connection established successfully");
+});
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('error', function (err) {
+  console.log('connection to mongo failed ' + err);
+});
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('disconnected', function () {
+  console.log('mongo db connection closed');
+});
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.set('useCreateIndex', true);
+mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
 
 var app = express__WEBPACK_IMPORTED_MODULE_0___default()(); /////////////////START APP MIDDLEWARE///////////////////////////
 
@@ -1198,22 +1214,6 @@ var corsOptionsDelegate = {
   }
 };
 app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
-/////////////////START DATABASE CONFIG///////////////////////////
-
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connect(process.env.DB_ADDRESS, {
-  useNewUrlParser: true
-});
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('connected', function () {
-  console.log("connection established successfully");
-});
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('error', function (err) {
-  console.log('connection to mongo failed ' + err);
-});
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.connection.on('disconnected', function () {
-  console.log('mongo db connection closed');
-});
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.set('useCreateIndex', true);
-mongoose__WEBPACK_IMPORTED_MODULE_4___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
 
 var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
 var RedisStore = connect_redis__WEBPACK_IMPORTED_MODULE_3___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a);
@@ -1234,7 +1234,7 @@ app.use(express_session__WEBPACK_IMPORTED_MODULE_1___default()({
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.initialize());
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.session()); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/user/api', _router_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
+app.use('/user', _router_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
 app.use('/', _router_rootRouter__WEBPACK_IMPORTED_MODULE_10__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
 
 /* harmony default export */ __webpack_exports__["default"] = (app);

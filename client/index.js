@@ -17,7 +17,7 @@ import reducers from './store/reducers';
 
 
 
-const axiosInstance = axios.create({baseURL:'http://localhost:3000/api'})
+const axiosInstance = axios.create({baseURL:'/api'})
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosInstance)));
 

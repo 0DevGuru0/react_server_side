@@ -320,7 +320,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var Header = function Header(_ref) {
   var user = _ref.user;
-  console.log(user);
 
   var onLogoutClick = function onLogoutClick() {};
 
@@ -335,7 +334,7 @@ var Header = function Header(_ref) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admins"
       }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "/login"
+        href: "/api/user/auth/google"
       }, "Login")));
     }
   };
@@ -624,7 +623,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var axiosInstance = axios__WEBPACK_IMPORTED_MODULE_7___default.a.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: '/api'
 });
 var composeEnhancers = (typeof window === "undefined" ? "undefined" : _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(window)) === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : redux__WEBPACK_IMPORTED_MODULE_4__["compose"];
 var enhancer = composeEnhancers(Object(redux__WEBPACK_IMPORTED_MODULE_4__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_5__["default"].withExtraArgument(axiosInstance)));
@@ -842,7 +841,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var initialState = {
-  user: null
+  user: false
 };
 
 var addUserTOState = function addUserTOState(state, action) {

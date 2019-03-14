@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    user:null
+    user:false
 };
 
 const addUserTOState=(state,action)=>({

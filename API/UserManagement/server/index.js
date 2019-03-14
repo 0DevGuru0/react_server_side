@@ -13,6 +13,16 @@ import rootRouter from '../router/rootRouter';
 
 require('../services/passport');
 
+/////////////////START DATABASE CONFIG///////////////////////////
+mongoose.connect(process.env.DB_ADDRESS,{ useNewUrlParser: true });
+mongoose.connection.on('connected'   ,()=>{console.log("connection established successfully")});
+mongoose.connection.on('error'       ,(err)=>{console.log('connection to mongo failed ' + err)});
+mongoose.connection.on('disconnected',()=>{console.log('mongo db connection closed')})
+mongoose.set('useCreateIndex', true);
+
+mongoose.Promise = global.Promise;
+/////////////////END DATABASE CONFIG///////////////////////////
+
 const app = express();
 /////////////////START APP MIDDLEWARE///////////////////////////
 require('dotenv').config({
@@ -35,15 +45,6 @@ app.use(cors(corsOptionsDelegate))
 
 /////////////////END APP MIDDLEWARE///////////////////////////
 
-/////////////////START DATABASE CONFIG///////////////////////////
-mongoose.connect(process.env.DB_ADDRESS,{ useNewUrlParser: true });
-mongoose.connection.on('connected'   ,()=>{console.log("connection established successfully")});
-mongoose.connection.on('error'       ,(err)=>{console.log('connection to mongo failed ' + err)});
-mongoose.connection.on('disconnected',()=>{console.log('mongo db connection closed')})
-mongoose.set('useCreateIndex', true);
-
-mongoose.Promise = global.Promise;
-/////////////////END DATABASE CONFIG///////////////////////////
 const redis = new Redis();
 const RedisStore = RedisConnect(session);
 app.use(session({
@@ -61,7 +62,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START ROUTER CONFIG///////////////////////////
-app.use('/user/api',userRouter)
+app.use('/user',userRouter)
 app.use('/',rootRouter)
 /////////////////END ROUTER CONFIG///////////////////////////
 

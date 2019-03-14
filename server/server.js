@@ -4,9 +4,9 @@ import  rootRouter from './router/root';
 import proxy from 'express-http-proxy';
 const app = express()
 
-app.use('/api',proxy('http://localhost:5000',{
+app.use('/api',proxy('http://localhost:5000/',{
     proxyReqOptDecorator:(opts)=>{
-        opts.headers['x-forwarded-host'] = "localhost:3000"
+        opts.headers['x-forwarded-host'] = 'localhost:3000';
         return opts
     }
 }))
