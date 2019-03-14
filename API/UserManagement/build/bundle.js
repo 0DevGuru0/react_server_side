@@ -959,10 +959,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./model/user.js":
-/*!***********************!*\
-  !*** ./model/user.js ***!
-  \***********************/
+/***/ "./models/user.js":
+/*!************************!*\
+  !*** ./models/user.js ***!
+  \************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1011,9 +1011,9 @@ var userModel = Object(mongoose__WEBPACK_IMPORTED_MODULE_0__["model"])('user', u
 
 /***/ }),
 
-/***/ "./router/rootRouter.js":
+/***/ "./routes/rootRouter.js":
 /*!******************************!*\
-  !*** ./router/rootRouter.js ***!
+  !*** ./routes/rootRouter.js ***!
   \******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1099,9 +1099,9 @@ var admins = [{
 
 /***/ }),
 
-/***/ "./router/userRouter.js":
+/***/ "./routes/userRouter.js":
 /*!******************************!*\
-  !*** ./router/userRouter.js ***!
+  !*** ./routes/userRouter.js ***!
   \******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1124,6 +1124,9 @@ var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate(
   failureRedirect: '/'
 });
 router.get('/auth/google', googleAuth);
+router.get('/api/auth/google/callback', googleAuthCB, function (req, res) {
+  res.redirect('/');
+});
 router.get('/auth/google/callback', googleAuthCB, function (req, res) {
   res.redirect('/');
 });
@@ -1165,8 +1168,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cors */ "cors");
 /* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _router_userRouter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../router/userRouter */ "./router/userRouter.js");
-/* harmony import */ var _router_rootRouter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../router/rootRouter */ "./router/rootRouter.js");
+/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
+/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
 
 
 
@@ -1234,8 +1237,8 @@ app.use(express_session__WEBPACK_IMPORTED_MODULE_1___default()({
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.initialize());
 app.use(passport__WEBPACK_IMPORTED_MODULE_6___default.a.session()); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/user', _router_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
-app.use('/', _router_rootRouter__WEBPACK_IMPORTED_MODULE_10__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
+app.use('/', _routes_userRouter__WEBPACK_IMPORTED_MODULE_9__["default"]);
+app.use('/', _routes_rootRouter__WEBPACK_IMPORTED_MODULE_10__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
 
 /* harmony default export */ __webpack_exports__["default"] = (app);
 
@@ -1258,7 +1261,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! passport-google-oauth20 */ "passport-google-oauth20");
 /* harmony import */ var passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _model_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../model/user */ "./model/user.js");
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
 
@@ -1276,7 +1279,7 @@ passport__WEBPACK_IMPORTED_MODULE_2___default.a.serializeUser(function (user, do
   done(null, user.id);
 });
 passport__WEBPACK_IMPORTED_MODULE_2___default.a.deserializeUser(function (id, done) {
-  _model_user__WEBPACK_IMPORTED_MODULE_4__["default"].findById(id).then(function (user) {
+  _models_user__WEBPACK_IMPORTED_MODULE_4__["default"].findById(id).then(function (user) {
     done(null, user);
   });
 }); /////////////////// START Google Authentication /////////////////////////
@@ -1299,7 +1302,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _model_user__WEBPACK_IMPORTED_MODULE_4__["default"].findOne({
+            return _models_user__WEBPACK_IMPORTED_MODULE_4__["default"].findOne({
               googleId: profile.id
             });
 
@@ -1315,7 +1318,7 @@ function () {
 
           case 5:
             _context.next = 7;
-            return new _model_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
+            return new _models_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
               Name: profile.displayName,
               Email: profile.emails[0].value,
               password: profile.id,

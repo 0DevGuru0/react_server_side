@@ -17,9 +17,13 @@ import reducers from './store/reducers';
 
 
 
-const axiosInstance = axios.create({baseURL:'/api'})
+const axiosInstance = axios.create({
+    baseURL: '/api'
+  });
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
-const enhancer = composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosInstance)));
+const enhancer = composeEnhancers(
+    applyMiddleware(thunk.withExtraArgument(axiosInstance))
+    );
 
 let DecryptUsersList  = AES.decrypt(window.INITIAL_STATE, 'secret key 123');
 let UsersList_State = JSON.parse(DecryptUsersList.toString(enc.Utf8))

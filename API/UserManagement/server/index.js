@@ -8,8 +8,8 @@ import passport     from 'passport';
 import path         from 'path'
 import cors         from 'cors';
 
-import userRouter from '../router/userRouter';
-import rootRouter from '../router/rootRouter';
+import userRouter from '../routes/userRouter';
+import rootRouter from '../routes/rootRouter';
 
 require('../services/passport');
 
@@ -62,7 +62,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START ROUTER CONFIG///////////////////////////
-app.use('/user',userRouter)
+app.use('/',userRouter)
 app.use('/',rootRouter)
 /////////////////END ROUTER CONFIG///////////////////////////
 

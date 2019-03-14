@@ -337,7 +337,7 @@ var Header = function Header(_ref) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admins"
       }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "/api/user/auth/google"
+        href: "/api/auth/google"
       }, "Login")));
     }
   };
@@ -998,9 +998,9 @@ var getCircularReplacer = function getCircularReplacer() {
 
 /***/ }),
 
-/***/ "./server/router/root.js":
+/***/ "./server/routes/root.js":
 /*!*******************************!*\
-  !*** ./server/router/root.js ***!
+  !*** ./server/routes/root.js ***!
   \*******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1047,7 +1047,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! body-parser */ "body-parser");
 /* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _router_root__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router/root */ "./server/router/root.js");
+/* harmony import */ var _routes_root__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./routes/root */ "./server/routes/root.js");
 /* harmony import */ var express_http_proxy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! express-http-proxy */ "express-http-proxy");
 /* harmony import */ var express_http_proxy__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(express_http_proxy__WEBPACK_IMPORTED_MODULE_3__);
 
@@ -1055,7 +1055,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
-app.use('/api', express_http_proxy__WEBPACK_IMPORTED_MODULE_3___default()('http://localhost:5000/', {
+app.use('/api', express_http_proxy__WEBPACK_IMPORTED_MODULE_3___default()('http://localhost:5000', {
   proxyReqOptDecorator: function proxyReqOptDecorator(opts) {
     opts.headers['x-forwarded-host'] = 'localhost:3000';
     return opts;
@@ -1069,7 +1069,7 @@ app.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.urlencoded({
   extended: true
 }));
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.json());
-app.use('/', _router_root__WEBPACK_IMPORTED_MODULE_2__["default"]);
+app.use('/', _routes_root__WEBPACK_IMPORTED_MODULE_2__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (app);
 
 /***/ }),

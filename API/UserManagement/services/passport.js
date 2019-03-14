@@ -1,6 +1,6 @@
 import passport from 'passport';
 import {Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import User from '../model/user';
+import User from '../models/user';
 import path from 'path'
 
 require('dotenv').config({
@@ -20,7 +20,7 @@ const googleOption = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_AUTH_SUCCESS_CALLBACK,
-    proxy:true
+    proxy: true
 };
 const GoogleAuth = new GoogleStrategy(googleOption,async (accessToken,refreshToken,profile,done)=>{
     const existingUser = await User.findOne({googleId:profile.id});
