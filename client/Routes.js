@@ -6,7 +6,7 @@ import Root from './RootPage';
 import NotFoundPage from './containers/notFoundPage'
 
 export default [{
-    component:Root,
+    ...Root,
     path: '/',
     routes:[
         {
@@ -20,7 +20,7 @@ export default [{
         },
         {
             path:'/admins',
-            component:adminsList
+            ...adminsList
         },
         {
             ...NotFoundPage

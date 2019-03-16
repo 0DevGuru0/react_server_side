@@ -1,16 +1,15 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import * as actionCreator from '../Store/actions';
-// import requireAuth from '../hoc/requireAuth'
+import requireAuth from '../hoc/requireAuth'
 class AdminsListPage extends Component {
     componentDidMount(){
         this.props.FetchAdmins()
     }
     renderAdmins(){
-        console.log(this.props.admins)
-        // if(this.props.admins){
-        //     return this.props.admins.map(admin=><li key={admin.id}>{admin.name}</li>);
-        // }
+        if(this.props.admins.length > 0){
+            return this.props.admins.map(admin=><li key={admin.id}>{admin.name}</li>);
+        }
     }
     render(){
         return(
@@ -31,11 +30,12 @@ const mapDispatchToProps = dispatch=>({
     FetchAdmins:()=>dispatch(actionCreator.fetchAdmins())
 })
 
-const loadData = ({dispatch})=>({
-    FetchAdmins:()=>dispatch(actionCreator.fetchAdmins())
-})
-
+const loadData = ({dispatch})=>(
+    dispatch(actionCreator.fetchAdmins())
+)
 export default {
-    component:connect(mapStateToProps,mapDispatchToProps)(AdminsListPage),
+    component:connect(mapStateToProps,mapDispatchToProps)(
+        requireAuth(AdminsListPage)
+    ),
     loadData
 }

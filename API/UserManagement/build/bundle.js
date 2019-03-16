@@ -1603,16 +1603,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ioredis */ "ioredis");
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_2__);
 
+ // import Redis        from 'ioredis';
 
+var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router(); // const redis= new Redis();
 
-var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router();
-var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
 router.get('/', function (req, res) {
-  var redisId = req.cookies['connect.sid'].split('.')[0].slice(2);
-  console.log(redisId);
+  // const redisId = req.cookies['connect.sid'].split('.')[0].slice(2)
+  // console.log(redisId)
   var adminContent = "\n    <div>\n      You don't appear to be logged in.  You can log in by visiting\n      <a href=\"/auth/google\">the Authentication Route</a>. You could\n      also look at details about yourself at <a href=\"/api/current_user\">the Current User route</a>\n    </div>\n  ";
 
   if (req.user) {
@@ -1808,9 +1806,9 @@ var corsOptionsDelegate = {
   }
 };
 app.use(cors__WEBPACK_IMPORTED_MODULE_10___default()(corsOptionsDelegate)); /////////////////END APP MIDDLEWARE///////////////////////////
-
-var redis = new ioredis__WEBPACK_IMPORTED_MODULE_2___default.a();
-var RedisStore = connect_redis__WEBPACK_IMPORTED_MODULE_3___default()(express_session__WEBPACK_IMPORTED_MODULE_1___default.a); // app.use(session({
+// const redis = new Redis();
+// const RedisStore = RedisConnect(session);
+// app.use(session({
 //     secret:process.env.SESSION_SECRET_KEY,
 //     saveUninitialized:false,
 //     store:new RedisStore({

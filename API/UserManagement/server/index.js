@@ -47,8 +47,8 @@ app.use(cors(corsOptionsDelegate))
 
 /////////////////END APP MIDDLEWARE///////////////////////////
 
-const redis = new Redis();
-const RedisStore = RedisConnect(session);
+// const redis = new Redis();
+// const RedisStore = RedisConnect(session);
 // app.use(session({
 //     secret:process.env.SESSION_SECRET_KEY,
 //     saveUninitialized:false,

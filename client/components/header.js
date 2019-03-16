@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
-import * as actionCreators from '../store/actions'
-class Header extends Component {
-  componentWillMount(){
-    this.props.fetchUser()
-  }
-  onLogoutClick = ()=>{}
-  renderButtons=()=>{
-    if (this.props.user) {
+
+const Header = ({user})=>{
+  const renderButtons=()=>{
+    if (user) {
       return (
-        <li><a href="/api/logout">Logout</a></li>
+        <div>
+          <li><Link to="/admins">Admins</Link></li>
+          <li><a href="/api/logout">Logout</a></li>
+        </div>
       );
     } else {
       return (
@@ -28,7 +27,6 @@ class Header extends Component {
       );
     }
   }
-  render(){
     return (
       <nav>
         <div className="nav-wrapper">
@@ -36,16 +34,12 @@ class Header extends Component {
             Home
           </Link>
           <ul className="right">
-            {this.renderButtons()}
+            {renderButtons()}
           </ul>
         </div>
       </nav>
     );
-  }
 }
 
 const mapStateToProps =({auth})=>({user:auth.user})
-const mapDispatchToProps = dispatch=>({
-  fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser())
-})
-export default connect(mapStateToProps,mapDispatchToProps)(Header)
+export default connect(mapStateToProps,null)(Header);

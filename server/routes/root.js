@@ -9,11 +9,25 @@ const router = express.Router();
 
 router.get('*',(req,res)=>{
     const store = createStore(req)
-    const promise = matchRoutes(routes,req.path).map(({route})=>(
-         route.loadData ? route.loadData(store) : Promise.resolve(null)
-    ))
+    const promise = matchRoutes(routes,req.path).map(({route})=>{
+        return route.loadData ? route.loadData(store) : null;
+    }).map(promise=>{
+        if(promise){
+            return new Promise((resolve,rej)=>{
+                promise.then(resolve).catch(resolve)
+            })
+        }
+    })
+
     Promise.all(promise).then(()=>{
-        res.send(renderer(req,store))
+        console.log(store.getState())
+        let context = {};
+        const pageRender = renderer(req,store,context)
+        // if(context.url){
+        //     return res.redirect(301,context.url);
+        // }
+        if(context.notFound){ res.status(404)  }
+        res.send(pageRender)
     })
 })
 

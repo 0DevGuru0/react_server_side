@@ -1,11 +1,11 @@
 import requireLogin from '../middlewares/requireLogin';
 import express from 'express';
-import Redis        from 'ioredis';
+// import Redis        from 'ioredis';
 const router = express.Router();
-const redis= new Redis();
+// const redis= new Redis();
 router.get('/', (req, res) => {
-  const redisId = req.cookies['connect.sid'].split('.')[0].slice(2)
-  console.log(redisId)
+  // const redisId = req.cookies['connect.sid'].split('.')[0].slice(2)
+  // console.log(redisId)
   let adminContent = `
     <div>
       You don't appear to be logged in.  You can log in by visiting

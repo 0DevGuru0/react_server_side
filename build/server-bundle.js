@@ -100,6 +100,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-config */ "react-router-config");
 /* harmony import */ var react_router_config__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_router_config__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/header */ "./client/components/header.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _store_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store/actions */ "./client/store/actions/index.js");
+
+
 
 
 
@@ -109,7 +114,23 @@ var rootRoute = function rootRoute(_ref) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], null), Object(react_router_config__WEBPACK_IMPORTED_MODULE_1__["renderRoutes"])(route.routes));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (rootRoute);
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    fetchUser: function fetchUser() {
+      return dispatch(_store_actions__WEBPACK_IMPORTED_MODULE_4__["fetchCurrentUser"]());
+    }
+  };
+};
+
+var loadData = function loadData(_ref2) {
+  var dispatch = _ref2.dispatch;
+  return dispatch(_store_actions__WEBPACK_IMPORTED_MODULE_4__["fetchCurrentUser"]());
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  component: Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(null, mapDispatchToProps)(rootRoute),
+  loadData: loadData
+});
 
 /***/ }),
 
@@ -138,8 +159,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([{
-  component: _RootPage__WEBPACK_IMPORTED_MODULE_5__["default"],
+/* harmony default export */ __webpack_exports__["default"] = ([_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _RootPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
   path: '/',
   routes: [{
     component: _containers_home__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -147,11 +167,10 @@ __webpack_require__.r(__webpack_exports__);
     exact: true
   }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/users'
-  }, _containers_usersList__WEBPACK_IMPORTED_MODULE_3__["default"]), {
-    path: '/admins',
-    component: _containers_adminsList__WEBPACK_IMPORTED_MODULE_4__["default"]
-  }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__["default"])]
-}]);
+  }, _containers_usersList__WEBPACK_IMPORTED_MODULE_3__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+    path: '/admins'
+  }, _containers_adminsList__WEBPACK_IMPORTED_MODULE_4__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__["default"])]
+})]);
 
 /***/ }),
 
@@ -248,7 +267,7 @@ var fetchUsers = function fetchUsers() {
                 Admins = _context2.sent;
                 dispatch({
                   type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_ADMINS"],
-                  payload: Admins
+                  payload: Admins.data
                 });
 
               case 4:
@@ -277,33 +296,22 @@ var fetchUsers = function fetchUsers() {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
+                _context3.next = 2;
                 return api.get('/current_user');
 
-              case 3:
+              case 2:
                 User = _context3.sent;
                 dispatch({
                   type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_CURRENT_USER"],
                   payload: User.data
                 });
-                _context3.next = 10;
-                break;
 
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                dispatch({
-                  type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_CURRENT_USER"],
-                  payload: false
-                });
-
-              case 10:
+              case 4:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee3);
       }));
 
       return function (_x7, _x8, _x9) {
@@ -324,116 +332,55 @@ var fetchUsers = function fetchUsers() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "@babel/runtime/helpers/classCallCheck");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "@babel/runtime/helpers/createClass");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "@babel/runtime/helpers/possibleConstructorReturn");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "@babel/runtime/helpers/getPrototypeOf");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "@babel/runtime/helpers/assertThisInitialized");
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "@babel/runtime/helpers/inherits");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "@babel/runtime/helpers/defineProperty");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _store_actions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../store/actions */ "./client/store/actions/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
 
+var Header = function Header(_ref) {
+  var user = _ref.user;
 
-
-
-
-
-
-
-
-var Header =
-/*#__PURE__*/
-function (_Component) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default()(Header, _Component);
-
-  function Header() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, Header);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+  var renderButtons = function renderButtons() {
+    if (user) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/admins"
+      }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "/api/logout"
+      }, "Logout")));
+    } else {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/users"
+      }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/admins"
+      }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "/api/auth/google"
+      }, "Login")));
     }
+  };
 
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, (_getPrototypeOf2 = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(Header)).call.apply(_getPrototypeOf2, [this].concat(args)));
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "nav-wrapper"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    to: "/",
+    className: "brand-logo left"
+  }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+    className: "right"
+  }, renderButtons())));
+};
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "onLogoutClick", function () {});
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "renderButtons", function () {
-      if (_this.props.user) {
-        return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("a", {
-          href: "/api/logout"
-        }, "Logout"));
-      } else {
-        return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
-          to: "/users"
-        }, "Users")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
-          to: "/admins"
-        }, "Admins")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("a", {
-          href: "/api/auth/google"
-        }, "Login")));
-      }
-    });
-
-    return _this;
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Header, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
-      this.props.fetchUser();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("nav", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-        className: "nav-wrapper"
-      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
-        to: "/",
-        className: "brand-logo left"
-      }, "Home"), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("ul", {
-        className: "right"
-      }, this.renderButtons())));
-    }
-  }]);
-
-  return Header;
-}(react__WEBPACK_IMPORTED_MODULE_7__["Component"]);
-
-var mapStateToProps = function mapStateToProps(_ref) {
-  var auth = _ref.auth;
+var mapStateToProps = function mapStateToProps(_ref2) {
+  var auth = _ref2.auth;
   return {
     user: auth.user
   };
 };
 
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    fetchUser: function fetchUser() {
-      return dispatch(_store_actions__WEBPACK_IMPORTED_MODULE_10__["fetchCurrentUser"]());
-    }
-  };
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_9__["connect"])(mapStateToProps, mapDispatchToProps)(Header));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Header));
 
 /***/ }),
 
@@ -461,6 +408,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "react-redux");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store/actions */ "./client/Store/actions/index.js");
+/* harmony import */ var _hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hoc/requireAuth */ "./client/hoc/requireAuth.js");
 
 
 
@@ -468,7 +416,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // import requireAuth from '../hoc/requireAuth'
+
+
 
 var AdminsListPage =
 /*#__PURE__*/
@@ -489,9 +438,13 @@ function (_Component) {
   }, {
     key: "renderAdmins",
     value: function renderAdmins() {
-      console.log(this.props.admins); // if(this.props.admins){
-      //     return this.props.admins.map(admin=><li key={admin.id}>{admin.name}</li>);
-      // }
+      if (this.props.admins.length > 0) {
+        return this.props.admins.map(function (admin) {
+          return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("li", {
+            key: admin.id
+          }, admin.name);
+        });
+      }
     }
   }, {
     key: "render",
@@ -520,15 +473,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 var loadData = function loadData(_ref2) {
   var dispatch = _ref2.dispatch;
-  return {
-    FetchAdmins: function FetchAdmins() {
-      return dispatch(_Store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
-    }
-  };
+  return dispatch(_Store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  component: Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps)(AdminsListPage),
+  component: Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps)(Object(_hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__["default"])(AdminsListPage)),
   loadData: loadData
 });
 
@@ -573,7 +522,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 
-var NotFound = function NotFound() {
+var NotFound = function NotFound(_ref) {
+  var _ref$staticContext = _ref.staticContext,
+      staticContext = _ref$staticContext === void 0 ? {} : _ref$staticContext;
+  staticContext.notFound = true;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Oops,route not found.");
 };
 
@@ -683,6 +635,83 @@ var loadData = function loadData(_ref2) {
 
 /***/ }),
 
+/***/ "./client/hoc/requireAuth.js":
+/*!***********************************!*\
+  !*** ./client/hoc/requireAuth.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "@babel/runtime/helpers/classCallCheck");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "@babel/runtime/helpers/createClass");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "@babel/runtime/helpers/possibleConstructorReturn");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "@babel/runtime/helpers/getPrototypeOf");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "@babel/runtime/helpers/inherits");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _store_actions_index__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../store/actions/index */ "./client/store/actions/index.js");
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (ChildComponent) {
+  var requireAuth =
+  /*#__PURE__*/
+  function (_Component) {
+    _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(requireAuth, _Component);
+
+    function requireAuth() {
+      _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, requireAuth);
+
+      return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(requireAuth).apply(this, arguments));
+    }
+
+    _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(requireAuth, [{
+      key: "render",
+      value: function render() {
+        switch (this.props.auth) {
+          case false:
+            return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Redirect"], {
+              to: "/logout"
+            }));
+
+          default:
+            return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(ChildComponent, this.props);
+        }
+      }
+    }]);
+
+    return requireAuth;
+  }(react__WEBPACK_IMPORTED_MODULE_5__["Component"]);
+
+  var mapStateToProp = function mapStateToProp(_ref) {
+    var auth = _ref.auth;
+    return {
+      auth: auth.user
+    };
+  };
+
+  return Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProp, null)(requireAuth);
+});
+
+/***/ }),
+
 /***/ "./client/store/actions/actionTypes.js":
 /*!*********************************************!*\
   !*** ./client/store/actions/actionTypes.js ***!
@@ -776,7 +805,7 @@ var fetchUsers = function fetchUsers() {
                 Admins = _context2.sent;
                 dispatch({
                   type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_ADMINS"],
-                  payload: Admins
+                  payload: Admins.data
                 });
 
               case 4:
@@ -805,33 +834,22 @@ var fetchUsers = function fetchUsers() {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
+                _context3.next = 2;
                 return api.get('/current_user');
 
-              case 3:
+              case 2:
                 User = _context3.sent;
                 dispatch({
                   type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_CURRENT_USER"],
                   payload: User.data
                 });
-                _context3.next = 10;
-                break;
 
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                dispatch({
-                  type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_CURRENT_USER"],
-                  payload: false
-                });
-
-              case 10:
+              case 4:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee3);
       }));
 
       return function (_x7, _x8, _x9) {
@@ -1092,12 +1110,12 @@ var getCircularReplacer = function getCircularReplacer() {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (function (req, store) {
+/* harmony default export */ __webpack_exports__["default"] = (function (req, store, context) {
   var content = Object(react_dom_server__WEBPACK_IMPORTED_MODULE_3__["renderToString"])(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_5__["Provider"], {
     store: store
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["StaticRouter"], {
     location: req.path,
-    context: {}
+    context: context
   }, Object(react_router_config__WEBPACK_IMPORTED_MODULE_6__["renderRoutes"])(_client_Routes__WEBPACK_IMPORTED_MODULE_2__["default"]))));
   var serializedStore = serialize_javascript__WEBPACK_IMPORTED_MODULE_8___default()(store.getState());
   var hashedUsersList = crypto_js__WEBPACK_IMPORTED_MODULE_7__["AES"].encrypt(serializedStore, 'secret key 123');
@@ -1132,10 +1150,28 @@ router.get('*', function (req, res) {
   var store = Object(_helpers_createStore__WEBPACK_IMPORTED_MODULE_2__["default"])(req);
   var promise = Object(react_router_config__WEBPACK_IMPORTED_MODULE_3__["matchRoutes"])(_client_Routes__WEBPACK_IMPORTED_MODULE_4__["default"], req.path).map(function (_ref) {
     var route = _ref.route;
-    return route.loadData ? route.loadData(store) : Promise.resolve(null);
+    return route.loadData ? route.loadData(store) : null;
+  }).map(function (promise) {
+    if (promise) {
+      return new Promise(function (resolve, rej) {
+        promise.then(resolve).catch(resolve);
+      });
+    }
   });
   Promise.all(promise).then(function () {
-    res.send(Object(_helpers_renderer__WEBPACK_IMPORTED_MODULE_1__["default"])(req, store));
+    console.log(store.getState());
+    var context = {};
+    var pageRender = Object(_helpers_renderer__WEBPACK_IMPORTED_MODULE_1__["default"])(req, store, context);
+
+    if (context.url) {
+      return res.redirect(301, context.url);
+    }
+
+    if (context.notFound) {
+      res.status(404);
+    }
+
+    res.send(pageRender);
   });
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
@@ -1186,17 +1222,6 @@ app.use('/', _routes_root__WEBPACK_IMPORTED_MODULE_2__["default"]);
 
 /***/ }),
 
-/***/ "@babel/runtime/helpers/assertThisInitialized":
-/*!***************************************************************!*\
-  !*** external "@babel/runtime/helpers/assertThisInitialized" ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("@babel/runtime/helpers/assertThisInitialized");
-
-/***/ }),
-
 /***/ "@babel/runtime/helpers/asyncToGenerator":
 /*!**********************************************************!*\
   !*** external "@babel/runtime/helpers/asyncToGenerator" ***!
@@ -1227,17 +1252,6 @@ module.exports = require("@babel/runtime/helpers/classCallCheck");
 /***/ (function(module, exports) {
 
 module.exports = require("@babel/runtime/helpers/createClass");
-
-/***/ }),
-
-/***/ "@babel/runtime/helpers/defineProperty":
-/*!********************************************************!*\
-  !*** external "@babel/runtime/helpers/defineProperty" ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("@babel/runtime/helpers/defineProperty");
 
 /***/ }),
 
