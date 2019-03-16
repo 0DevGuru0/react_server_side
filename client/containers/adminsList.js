@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import * as actionCreator from '../Store/actions';
-import requireAuth from '../hoc/requireAuth'
 class AdminsListPage extends Component {
     componentDidMount(){
         this.props.FetchAdmins()
@@ -34,8 +33,6 @@ const loadData = ({dispatch})=>(
     dispatch(actionCreator.fetchAdmins())
 )
 export default {
-    component:connect(mapStateToProps,mapDispatchToProps)(
-        requireAuth(AdminsListPage)
-    ),
+    component:connect(mapStateToProps,mapDispatchToProps)(AdminsListPage),
     loadData
 }
