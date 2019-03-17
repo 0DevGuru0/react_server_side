@@ -18,11 +18,12 @@ router.get('*',(req,res)=>{
             })
         }
     })
-
     Promise.all(promise).then(()=>{
-        console.log(store.getState())
         let context = {};
         const pageRender = renderer(req,store,context)
+        // if(context.url){
+        //     return res.redirect(301,context.url);
+        // }
         if(context.notFound){ res.status(404)  }
         res.send(pageRender)
     })

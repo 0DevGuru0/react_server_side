@@ -1,6 +1,7 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux'
 import * as actionCreators from '../store/actions'
+import {Helmet} from "react-helmet";
 class UserList extends Component {
     componentDidMount(){
         this.props.fetchUsers()
@@ -10,11 +11,24 @@ class UserList extends Component {
             return this.props.users.map(user=><li className="list-group-item"key={user.id}>{user.name}</li>)
         }
     }
+    head=()=>(
+        <Helmet>
+            <title>{`(${this.props.users.length})_User list`}</title>
+            <meta name="description" content="Helmet application" />
+            <meta property="og:title" content="The Rock" />
+            <meta property="og:type" content="video.movie" />
+            <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
+            <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
+        </Helmet>
+    )
     render(){
         return(
-            <ul className="list-group">
-                {this.renderUsersList()}
-            </ul>
+            <div>
+                {this.head()}
+                <ul className="list-group">
+                    {this.renderUsersList()}
+                </ul>
+            </div>
         )
     }
 }
