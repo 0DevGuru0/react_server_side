@@ -1,11 +1,12 @@
 import {Schema,model} from 'mongoose';
 import validator from 'validator';
+import {compare,genSalt,hash} from 'bcrypt';
 const userSchema = new Schema({
-    Name:{
+    name:{
         type:String,
         required:true
     },
-    Email:{
+    email:{
         type:String,
         required:true,
         unique:true,
@@ -27,13 +28,29 @@ const userSchema = new Schema({
     }
 });
 
-// userSchema.method('comparePassword',function(candidatePass,callback){
+userSchema.method('comparePassword',function(candidatePass,callback){
+    const _user = this
+    compare(candidatePass,_user.password,(err,isMatch)=>{
+        callback(err,isMatch)
+    })
+});
 
-// });
 
-// userSchema.pre('save',function(){
+userSchema.pre('save',function(next){
+    const _user = this;
+    if(!_user.isModified){return next()}
+    genSalt(10,(err,salt)=>{
+        if(!err){
+            hash(_user.password,salt,(err,hash)=>{
+                if(!err){
+                    _user.password = hash;
+                    next();
+                }else{return next('can\'t hash the password,try again')}
+            })
+        }else{return next('some thing went wrong')}
+    })
 
-// });
+});
 
 
 const userModel = model('user',userSchema);

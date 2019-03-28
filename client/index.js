@@ -15,26 +15,49 @@ import {renderRoutes} from 'react-router-config'
 //-----------Internal_import
 import reducers from './store/reducers';
 
+//-----------GraphQL[APOLLO_CLIENT]
+import ApolloClient       from 'apollo-client';
+import { InMemoryCache }  from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import { ApolloProvider } from 'react-apollo';
+import fetch from 'node-fetch';
 
+const client = new ApolloClient({
+    ssrForceFetchDelay: 100,
+    connectToDevTools: true,
+    link: createHttpLink({
+        uri: '/api/graphql',
+        credentials:'same-origin'
+    }),
+    cache: new InMemoryCache({dataIdFromObject:o=>o.id}).restore(window.__APOLLO_STATE__),
+})
 
-const axiosInstance = axios.create({
-    baseURL: '/api'
-  });
+const axiosInstance = axios.create({baseURL: '/api'});
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
-const enhancer = composeEnhancers(
-    applyMiddleware(thunk.withExtraArgument(axiosInstance))
-    );
+const enhancer = composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosInstance)));
 
 let DecryptUsersList  = AES.decrypt(window.INITIAL_STATE, 'secret key 123');
 let UsersList_State = JSON.parse(DecryptUsersList.toString(enc.Utf8))
 
 const store = createStore(reducers,UsersList_State,enhancer)
+function Render(Route){
+    hydrate(
+        <ApolloProvider client={client}>
+            <Provider store={store}>
+                <BrowserRouter>
+                    {renderRoutes(Route)}
+                </BrowserRouter>
+            </Provider>
+        </ApolloProvider>
+        ,document.querySelector('#root')
+    )
+}
 
-hydrate(
-    <Provider store={store}>
-        <BrowserRouter>
-            {renderRoutes(routes)}
-        </BrowserRouter>
-    </Provider>
-    ,document.querySelector('#root')
-)
+Render(routes)
+
+// if(module.hot){
+//     module.hot.accept('./Routes',()=>{
+//         const NewCounter = require('./Routes').default;
+//         Render(NewCounter)
+//     })
+// }

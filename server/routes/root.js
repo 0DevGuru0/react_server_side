@@ -1,13 +1,9 @@
-import express from 'express';
 import renderer from '../helpers/renderer';
 import createStore from '../helpers/createStore';
 import { matchRoutes } from "react-router-config";
-
 import routes from '../../client/Routes'
 
-const router = express.Router();
-
-router.get('*',(req,res)=>{
+export default () => (req,res)=>{
     const store = createStore(req)
     const promise = matchRoutes(routes,req.path).map(({route})=>{
         return route.loadData ? route.loadData(store) : null;
@@ -20,13 +16,10 @@ router.get('*',(req,res)=>{
     })
     Promise.all(promise).then(()=>{
         let context = {};
-        const pageRender = renderer(req,store,context)
-        // if(context.url){
-        //     return res.redirect(301,context.url);
-        // }
-        if(context.notFound){ res.status(404)  }
-        res.send(pageRender)
+        const pageRender = renderer(req,store,context,res)
+        Promise.all([pageRender]).then((value)=>{
+            if(context.notFound){ res.status(404)  }
+            res.send(value[0])
+        })
     })
-})
-
-export default router;
+}

@@ -1,5 +1,7 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
+import classes from './home.css'
+import { hot } from 'react-hot-loader'
 const Home = () => {
   return (
     <div className="center-align" style={{marginTop:'200px'}}>
@@ -11,10 +13,10 @@ const Home = () => {
         <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
         <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
     </Helmet>
-    <h3>Welcome</h3>
-      <p>Check out these awesome features</p>
+    <h3>Welcom tye oh baby</h3>
+      <p className={classes.red}>Check out these awesome features</p>
     </div>
   );
 };
 
-export default Home;
+export default hot(module)(Home);

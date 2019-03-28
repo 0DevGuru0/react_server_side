@@ -1,47 +1,62 @@
 import React  from 'react'
 import routes from '../../client/Routes'
-import {renderToString} from 'react-dom/server'
+
 import {StaticRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import {renderRoutes} from 'react-router-config'
 import {AES} from 'crypto-js';
 import {Helmet} from "react-helmet";
 import serialize from 'serialize-javascript' ;
-const getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key, value) => {
-      if (typeof value === "object" && value !== null) {
-        if(seen.has(value)) return;
-        seen.add(value);
-      }
-      return value;
-    };
-};
-export default (req,store,context)=>{
-    const content = renderToString(
-        <Provider store={store}>
-            <StaticRouter location={req.path} context={context}>
-                {renderRoutes(routes)}
-            </StaticRouter>
-        </Provider>
+
+import  ApolloClient from 'apollo-client';
+import { ApolloProvider, renderToStringWithData  } from 'react-apollo';
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloLink } from 'apollo-link';
+import { errorLink , queryOrMutationLink , getCircularReplacer } from './links';
+
+import fetch from 'node-fetch';
+
+export default async(req,store,context)=>{
+    const links = [errorLink,queryOrMutationLink({
+        fetch,
+        uri: 'http:localhost:3000/api/graphql',
+    })]
+    const client = new ApolloClient({
+        ssrMode: true,
+        link:ApolloLink.from(links),
+        cache: new InMemoryCache()
+    });
+    const component = (
+        <ApolloProvider client={client}>
+            <Provider store={store}>
+                <StaticRouter location={req.path} context={context}>
+                    {renderRoutes(routes)}
+                </StaticRouter>
+            </Provider>
+        </ApolloProvider>
     )
-    let serializedStore = serialize(store.getState())
-    let hashedUsersList = AES.encrypt(serializedStore, 'secret key 123');
-    const helmet = Helmet.renderStatic();
-    return `
-        <html>
-            <head>
-                ${helmet.title.toString()}
-                ${helmet.meta.toString()}
-                ${helmet.link.toString()}
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
-                <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-                <script>window.INITIAL_STATE = ${JSON.stringify(hashedUsersList, getCircularReplacer())}</script>
-            </head>
-            <body>
-                <div id="root">${content}</div>
-                <script src="/public-bundle.js"></script>
-            </body>
-        </html>`
+    return renderToStringWithData(component).then(content=>{
+        let serializedStore = serialize(store.getState())
+        let hashedUsersList = AES.encrypt(serializedStore, 'secret key 123');
+        const helmet        = Helmet.renderStatic();
+        return `
+            <html>
+                <head>
+                    ${helmet.title.toString()}
+                    ${helmet.meta.toString()}
+                    ${helmet.link.toString()}
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+                    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                    <link href="/stylesheets/main.css" rel="stylesheet">
+                    <script>window.INITIAL_STATE = ${JSON.stringify(hashedUsersList, getCircularReplacer())}</script>
+                </head>
+                <body>
+                    <div id="root">${content}</div>
+                    <script src="/public-bundle.js"></script>
+                    <script src="/public-bundle.chunk.js"></script>
+                    <script>window.__APOLLO_STATE__=${JSON.stringify(client.extract(),getCircularReplacer())}</script>
+                </body>
+            </html>`
+    })
 }
 

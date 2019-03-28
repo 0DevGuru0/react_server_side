@@ -21,7 +21,13 @@ const Header = ({user})=>{
             <Link to="/admins">Admins</Link>
           </li>
           <li>
-            <a href="/api/auth/google">Login</a>
+            <Link to="/Signin">SignIn</Link>
+          </li>
+          <li>
+            <Link to="/Signup">SignUp</Link>
+          </li>
+          <li>
+            <a href="/api/auth/google">Login via google</a>
           </li>
         </div>
       );

@@ -1,5 +1,7 @@
+require('@babel/register')
+
 require('dotenv').config()
-import server from'./server/server'
+const server = require('./server/server').default
 
 server.listen(process.env.PORT,()=>{
     console.log(`server is running on port ${process.env.PORT}`)
