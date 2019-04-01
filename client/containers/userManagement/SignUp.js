@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {graphql} from 'react-apollo';
 import SignUp_mutation from '../../Graphql/mutation/Signup';
-// import query from '../../Graphql/query/user'
+import query from '../../Graphql/query/user'
 class SignUp extends Component{
 
    state={
@@ -50,9 +50,9 @@ class SignUp extends Component{
 
 export default {
     component:
-    // graphql(query)(
+    graphql(query)(
         graphql(SignUp_mutation)(
             SignUp
         )
-    // )
+    )
 };

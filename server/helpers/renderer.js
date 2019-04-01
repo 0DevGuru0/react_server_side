@@ -19,7 +19,7 @@ import fetch from 'node-fetch';
 export default async(req,store,context)=>{
     const links = [errorLink,queryOrMutationLink({
         fetch,
-        uri: 'http:localhost:3000/api/graphql',
+        uri: 'http://localhost:3000/api/graphql',
     })]
     const client = new ApolloClient({
         ssrMode: true,

@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {graphql} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
-// import query from '../../Graphql/query/user'
+import query from '../../Graphql/query/user'
 import classes from './signin.css'
 
 class SignIn extends Component{
@@ -19,7 +19,7 @@ class SignIn extends Component{
         const {email,password} = this.state.user
         this.props.mutate({
             variables:{email,password},
-            // refetchQueries:[{query}]
+            refetchQueries:[{query}]
         })
         .then(()=>{
             this.props.history.replace('/')
@@ -49,9 +49,9 @@ class SignIn extends Component{
 
 export default {
     component:
-    // graphql(query)(
+    graphql(query)(
         graphql(SignIn_mutation)(
             SignIn
         )
-    // )
+    )
 };

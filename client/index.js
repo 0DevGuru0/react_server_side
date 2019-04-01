@@ -20,13 +20,12 @@ import ApolloClient       from 'apollo-client';
 import { InMemoryCache }  from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
-import fetch from 'node-fetch';
 
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,
     link: createHttpLink({
-        uri: '/api/graphql',
+        uri: 'http://localhost:3000/api/graphql',
         credentials:'same-origin'
     }),
     cache: new InMemoryCache({dataIdFromObject:o=>o.id}).restore(window.__APOLLO_STATE__),
