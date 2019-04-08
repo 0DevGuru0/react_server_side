@@ -19,6 +19,7 @@ export const queryOrMutationLink = (config = {}) =>
       credentials: 'same-origin',
     })
   );
+
 export const getCircularReplacer = () => {
     const seen = new WeakSet();
     return (key, value) => {

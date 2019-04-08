@@ -8,10 +8,8 @@ import {AES} from 'crypto-js';
 import {Helmet} from "react-helmet";
 import serialize from 'serialize-javascript' ;
 
-import  ApolloClient from 'apollo-client';
+import  {ApolloClient,InMemoryCache,ApolloLink} from 'apollo-boost';
 import { ApolloProvider, renderToStringWithData  } from 'react-apollo';
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloLink } from 'apollo-link';
 import { errorLink , queryOrMutationLink , getCircularReplacer } from './links';
 
 import fetch from 'node-fetch';

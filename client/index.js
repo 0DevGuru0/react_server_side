@@ -16,8 +16,7 @@ import {renderRoutes} from 'react-router-config'
 import reducers from './store/reducers';
 
 //-----------GraphQL[APOLLO_CLIENT]
-import ApolloClient       from 'apollo-client';
-import { InMemoryCache }  from 'apollo-cache-inmemory';
+import { ApolloClient,InMemoryCache } from 'apollo-boost';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 
