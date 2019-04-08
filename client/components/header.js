@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
-
-const Header = ({user})=>{
+import {graphql} from 'react-apollo';
+import query from '../Graphql/query/user'
+const Header = (props)=>{
   const renderButtons=()=>{
-    if (user) {
+    if (props.user || props.data.user) {
       return (
         <div>
           <li><Link to="/admins">Admins</Link></li>
@@ -47,5 +48,11 @@ const Header = ({user})=>{
     );
 }
 
-const mapStateToProps =({auth})=>({user:auth.user})
-export default connect(mapStateToProps,null)(Header);
+const mapStateToProps =({auth})=>({
+  user:auth.user
+})
+export default connect(mapStateToProps,null)(
+  graphql(query)(
+    Header
+  )
+);
