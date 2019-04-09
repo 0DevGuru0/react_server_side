@@ -10,18 +10,20 @@ import serialize from 'serialize-javascript' ;
 
 import  {ApolloClient,InMemoryCache,ApolloLink} from 'apollo-boost';
 import { ApolloProvider, renderToStringWithData  } from 'react-apollo';
-import { errorLink , queryOrMutationLink , getCircularReplacer } from './links';
+import { createHttpLink } from 'apollo-link-http';
+
+import { getCircularReplacer } from './links';
 
 import fetch from 'node-fetch';
 
 export default async(req,store,context)=>{
-    const links = [errorLink,queryOrMutationLink({
-        fetch,
-        uri: 'http://localhost:3000/api/graphql',
-    })]
     const client = new ApolloClient({
         ssrMode: true,
-        link:ApolloLink.from(links),
+        link:createHttpLink({
+            fetch,
+            uri: 'http://localhost:3000/api/graphql',
+            credentials:'same-origin'
+        }),
         cache: new InMemoryCache()
     });
     const component = (

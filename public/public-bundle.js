@@ -112,7 +112,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b1b730486735a8a07fa4";
+/******/ 	var hotCurrentHash = "f5d916e34a563c450491";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1209,15 +1209,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.esm.js");
+/* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Graphql/query/user */ "./client/Graphql/query/user.js");
 
 
 
 
-var Header = function Header(_ref) {
-  var user = _ref.user;
 
+
+var Header = function Header(props) {
   var renderButtons = function renderButtons() {
-    if (user) {
+    if (props.user || props.data.user) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admins"
       }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -1248,14 +1250,14 @@ var Header = function Header(_ref) {
   }, renderButtons())));
 };
 
-var mapStateToProps = function mapStateToProps(_ref2) {
-  var auth = _ref2.auth;
+var mapStateToProps = function mapStateToProps(_ref) {
+  var auth = _ref.auth;
   return {
     user: auth.user
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Header));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Object(react_apollo__WEBPACK_IMPORTED_MODULE_3__["graphql"])(_Graphql_query_user__WEBPACK_IMPORTED_MODULE_4__["default"])(Header)));
 
 /***/ }),
 
@@ -1936,6 +1938,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.esm.js");
+/* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Graphql/query/user */ "./client/Graphql/query/user.js");
+
+
 
 
 
@@ -1958,7 +1964,7 @@ __webpack_require__.r(__webpack_exports__);
     _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(requireAuth, [{
       key: "render",
       value: function render() {
-        switch (this.props.auth) {
+        switch (this.props.auth || this.props.data.user) {
           case false:
             return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, "you Should logIn");
 
@@ -1978,7 +1984,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   };
 
-  return Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProp, null)(requireAuth);
+  return Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProp, null)(Object(react_apollo__WEBPACK_IMPORTED_MODULE_7__["graphql"])(_Graphql_query_user__WEBPACK_IMPORTED_MODULE_8__["default"])(requireAuth));
 });
 
 /***/ }),

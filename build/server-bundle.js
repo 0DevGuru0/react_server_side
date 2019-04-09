@@ -440,15 +440,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-apollo */ "react-apollo");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Graphql/query/user */ "./client/Graphql/query/user.js");
 
 
 
 
-var Header = function Header(_ref) {
-  var user = _ref.user;
 
+
+var Header = function Header(props) {
   var renderButtons = function renderButtons() {
-    if (user) {
+    if (props.user || props.data.user) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admins"
       }, "Admins")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -479,14 +482,14 @@ var Header = function Header(_ref) {
   }, renderButtons())));
 };
 
-var mapStateToProps = function mapStateToProps(_ref2) {
-  var auth = _ref2.auth;
+var mapStateToProps = function mapStateToProps(_ref) {
+  var auth = _ref.auth;
   return {
     user: auth.user
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Header));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Object(react_apollo__WEBPACK_IMPORTED_MODULE_3__["graphql"])(_Graphql_query_user__WEBPACK_IMPORTED_MODULE_4__["default"])(Header)));
 
 /***/ }),
 
@@ -1172,6 +1175,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "react-redux");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-apollo */ "react-apollo");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Graphql/query/user */ "./client/Graphql/query/user.js");
+
+
 
 
 
@@ -1194,7 +1202,7 @@ __webpack_require__.r(__webpack_exports__);
     _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(requireAuth, [{
       key: "render",
       value: function render() {
-        switch (this.props.auth) {
+        switch (this.props.auth || this.props.data.user) {
           case false:
             return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, "you Should logIn");
 
@@ -1214,7 +1222,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   };
 
-  return Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProp, null)(requireAuth);
+  return Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProp, null)(Object(react_apollo__WEBPACK_IMPORTED_MODULE_7__["graphql"])(_Graphql_query_user__WEBPACK_IMPORTED_MODULE_8__["default"])(requireAuth));
 });
 
 /***/ }),
@@ -1680,9 +1688,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_boost__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(apollo_boost__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-apollo */ "react-apollo");
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _links__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./links */ "./server/helpers/links.js");
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! node-fetch */ "node-fetch");
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! apollo-link-http */ "apollo-link-http");
+/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(apollo_link_http__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _links__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./links */ "./server/helpers/links.js");
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! node-fetch */ "node-fetch");
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_14__);
+
 
 
 
@@ -1701,18 +1712,22 @@ __webpack_require__.r(__webpack_exports__);
   var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(req, store, context) {
-    var links, client, component;
+    var client, component;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            links = [_links__WEBPACK_IMPORTED_MODULE_12__["errorLink"], Object(_links__WEBPACK_IMPORTED_MODULE_12__["queryOrMutationLink"])({
-              fetch: node_fetch__WEBPACK_IMPORTED_MODULE_13___default.a,
-              uri: 'http://localhost:3000/api/graphql'
-            })];
+            // const links = [errorLink,queryOrMutationLink({
+            //     fetch,
+            //     uri: 'http://localhost:3000/api/graphql',
+            // })]
             client = new apollo_boost__WEBPACK_IMPORTED_MODULE_10__["ApolloClient"]({
               ssrMode: true,
-              link: apollo_boost__WEBPACK_IMPORTED_MODULE_10__["ApolloLink"].from(links),
+              link: Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_12__["createHttpLink"])({
+                fetch: node_fetch__WEBPACK_IMPORTED_MODULE_14___default.a,
+                uri: 'http://localhost:3000/api/graphql',
+                credentials: 'same-origin'
+              }),
               cache: new apollo_boost__WEBPACK_IMPORTED_MODULE_10__["InMemoryCache"]()
             });
             component = react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_apollo__WEBPACK_IMPORTED_MODULE_11__["ApolloProvider"], {
@@ -1727,10 +1742,10 @@ __webpack_require__.r(__webpack_exports__);
               var serializedStore = serialize_javascript__WEBPACK_IMPORTED_MODULE_9___default()(store.getState());
               var hashedUsersList = crypto_js__WEBPACK_IMPORTED_MODULE_7__["AES"].encrypt(serializedStore, 'secret key 123');
               var helmet = react_helmet__WEBPACK_IMPORTED_MODULE_8__["Helmet"].renderStatic();
-              return "\n            <html>\n                <head>\n                    ".concat(helmet.title.toString(), "\n                    ").concat(helmet.meta.toString(), "\n                    ").concat(helmet.link.toString(), "\n                    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css\">\n                    <link href=\"http://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n                    <link href=\"/stylesheets/main.css\" rel=\"stylesheet\">\n                    <script>window.INITIAL_STATE = ").concat(JSON.stringify(hashedUsersList, Object(_links__WEBPACK_IMPORTED_MODULE_12__["getCircularReplacer"])()), "</script>\n                </head>\n                <body>\n                    <div id=\"root\">").concat(content, "</div>\n                    <script src=\"/public-bundle.js\"></script>\n                    <script src=\"/public-bundle.chunk.js\"></script>\n                    <script>window.__APOLLO_STATE__=").concat(JSON.stringify(client.extract(), Object(_links__WEBPACK_IMPORTED_MODULE_12__["getCircularReplacer"])()), "</script>\n                </body>\n            </html>");
+              return "\n            <html>\n                <head>\n                    ".concat(helmet.title.toString(), "\n                    ").concat(helmet.meta.toString(), "\n                    ").concat(helmet.link.toString(), "\n                    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css\">\n                    <link href=\"http://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n                    <link href=\"/stylesheets/main.css\" rel=\"stylesheet\">\n                    <script>window.INITIAL_STATE = ").concat(JSON.stringify(hashedUsersList, Object(_links__WEBPACK_IMPORTED_MODULE_13__["getCircularReplacer"])()), "</script>\n                </head>\n                <body>\n                    <div id=\"root\">").concat(content, "</div>\n                    <script src=\"/public-bundle.js\"></script>\n                    <script src=\"/public-bundle.chunk.js\"></script>\n                    <script>window.__APOLLO_STATE__=").concat(JSON.stringify(client.extract(), Object(_links__WEBPACK_IMPORTED_MODULE_13__["getCircularReplacer"])()), "</script>\n                </body>\n            </html>");
             }));
 
-          case 4:
+          case 3:
           case "end":
             return _context.stop();
         }
