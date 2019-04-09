@@ -7,7 +7,7 @@
     "start": "npm-run-all --parallel dev:**",
     "dev:client": "rimraf public && webpack --watch --config config/webpack.client.js",
     "dev:server": "rimraf build && webpack --watch --config config/webpack.prod.server.js",
-    "server": "node index"
+    "server": "nodemon index"
   },
   "author": "",
   "license": "ISC",
