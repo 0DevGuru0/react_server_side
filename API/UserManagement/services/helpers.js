@@ -1,6 +1,5 @@
 import passport from 'passport';
 import User from '../models/user';
-
 /*
  *
  * Auth Object contain all logic for authentication

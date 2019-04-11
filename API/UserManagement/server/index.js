@@ -23,6 +23,7 @@ mongoose.connection.on('disconnected',()=>{console.log('mongo db connection clos
 mongoose.set('useCreateIndex', true);
 
 mongoose.Promise = global.Promise;
+
 /////////////////END DATABASE CONFIG///////////////////////////
 const app = express();
 /////////////////START APP MIDDLEWARE///////////////////////////
@@ -43,7 +44,8 @@ const corsOptionsDelegate = {
 }
 app.use(cors(corsOptionsDelegate))
 
-/////////////////END APP MIDDLEWARE///////////////////////////
+///////////////END APP MIDDLEWARE///////////////////////////
+// cache with redis
 app.use(
     cookieSession({
       maxAge: 30 * 24 * 60 * 60 * 1000,
