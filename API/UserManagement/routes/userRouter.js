@@ -1,27 +1,39 @@
 import express from 'express';
 import passport from 'passport'
 import requireLogin from '../middlewares/requireLogin'
+import rootCtr from '../controllers/root'
 
 const router = express.Router();
 
-const googleAuth   = passport.authenticate('google',{scope:['profile','email']})
+const googleAuth = passport.authenticate('google', {
+   scope: ['profile', 'email']
+})
 const googleAuthCB = passport.authenticate('google')
 
-router.get('/auth/google',googleAuth);
-router.get('/api/auth/google/callback',googleAuthCB,(req,res)=>{
-    res.redirect('/');
-})
 
-router.get('/auth/google/callback',googleAuthCB,(req,res)=>{
-   res.redirect('/');
-})
+router.get(
+   '/auth/google',
+   googleAuth
+);
+router.get(
+   '/api/auth/google/callback',
+   googleAuthCB,
+   rootCtr.redirectToRoot
+)
+router.get(
+   '/auth/google/callback',
+   googleAuthCB,
+   rootCtr.redirectToRoot
+)
+router.get(
+   '/logout',
+   requireLogin,
+   rootCtr.redirectToRoot
+)
+router.get(
+   '/current_user',
+   requireLogin,
+   (req, res) => {res.send(req.user)}
+)
 
-router.get('/logout',requireLogin,(req,res)=>{
-   req.logOut();
-   res.redirect('/');
-})
-
-router.get('/current_user',requireLogin,(req,res)=>{
-   res.send(req.user)
-})
 export default router;
