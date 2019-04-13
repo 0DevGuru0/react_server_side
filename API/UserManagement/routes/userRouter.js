@@ -28,7 +28,7 @@ router.get(
 router.get(
    '/logout',
    requireLogin,
-   rootCtr.redirectToRoot
+   rootCtr.logOut
 )
 router.get(
    '/current_user',

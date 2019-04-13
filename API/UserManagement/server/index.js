@@ -3,10 +3,9 @@ import mongoose     from 'mongoose';
 import bodyParser   from 'body-parser';
 import passport     from 'passport';
 import path         from 'path';
-import cookieSession from 'cookie-session'
+import session      from 'express-session';
 import cookieParser from 'cookie-parser'
 import cors         from 'cors';
-
 import userRouter from '../routes/userRouter';
 import rootRouter from '../routes/rootRouter';
 
@@ -45,13 +44,21 @@ const corsOptionsDelegate = {
 app.use(cors(corsOptionsDelegate))
 
 ///////////////END APP MIDDLEWARE///////////////////////////
-// cache with redis
-app.use(
-    cookieSession({
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: ['asfdsfdsvCSDfczxsad']
-    })
-  );
+let RedisStore = require('connect-redis')(session);
+
+app.use(session({
+    secret:"3f9faa8bc0e722172cc0bdafede9f3f217474e47",
+    resave:false,
+    saveUninitialized:false,
+    store:new RedisStore({
+        prefix:"session:auth:"
+    }),
+    cookie:{
+        maxAge:30 * 24 * 60 * 60 * 1000,
+        httpOnly:true,
+    }
+}))
+
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START GRAPHQL CONFIG///////////////////////////
