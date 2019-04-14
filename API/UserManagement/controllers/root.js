@@ -62,8 +62,8 @@ RootController.admins =  (req, res) => {
 RootController.redirectToRoot = (req,res)=>{
      res.redirect('/');
 }
-RootController.logOut = (req,res)=>{
-    req.logout();
+RootController.logOut = async (req,res)=>{
+    await req.logout();
     res.redirect('/');
 }
 export default RootController;
