@@ -1,7 +1,8 @@
 import {
     GraphQLString,
     GraphQLID,
-    GraphQLObjectType
+    GraphQLObjectType,
+    GraphQLBoolean
 } from 'graphql';
 
 const userType = new GraphQLObjectType({
@@ -9,7 +10,8 @@ const userType = new GraphQLObjectType({
     fields:{
         id:{type:GraphQLID},
         name:{ type:GraphQLString} ,
-        email:{type:GraphQLString}
+        email:{type:GraphQLString} ,
+        isVerified:{type:GraphQLBoolean}
     }
 });
 

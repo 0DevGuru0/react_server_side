@@ -25,6 +25,9 @@ const userSchema = new Schema({
     },
     googleId:{
         type:String
+    },
+    isVerified:{
+        type:Boolean
     }
 });
 

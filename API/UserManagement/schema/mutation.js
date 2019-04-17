@@ -23,8 +23,8 @@ const mutation = new GraphQLObjectType({
         SignUp:{
             type:UserType,
             args:{
-                name:{ type:new GraphQLNonNull(GraphQLString) } ,
-                email:{type:new GraphQLNonNull(GraphQLString)},
+                name: { type:new GraphQLNonNull(GraphQLString) } ,
+                email:{ type:new GraphQLNonNull(GraphQLString) },
                 password:{type:new GraphQLNonNull(GraphQLString)}
             },
             resolve(parentValue,{email,password,name},req){
@@ -37,6 +37,24 @@ const mutation = new GraphQLObjectType({
                 let user = req.user
                 req.logout()
                 return user;
+            }
+        },
+        sendRestPassEmail:{
+            type:UserType,
+            args:{
+                email:{type:new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue,{email},req){
+                return Auth.sendRestPassEmail({email,req})
+            }
+        },
+        resetPassword:{
+            type:UserType,
+            args:{
+                email:{type:new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue,{email},req){
+               return Auth.resetPassword({email,req})
             }
         }
     })

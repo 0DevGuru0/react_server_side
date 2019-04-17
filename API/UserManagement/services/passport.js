@@ -29,7 +29,8 @@ const GoogleAuth = new GoogleStrategy(googleOption,async (accessToken,refreshTok
         name:profile.displayName,
         email:profile.emails[0].value,
         password:profile.id,
-        googleId:profile.id
+        googleId:profile.id,
+        isVerified:true
     }).save()
     done(null,newUser);
 });

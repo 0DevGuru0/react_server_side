@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+import User from '../models/user'
 const RootController = {}
 
 const users = [
@@ -27,7 +29,11 @@ RootController.rootPage = (req, res) => {
         adminContent = `
         <div>
             You appear to be logged in, so you can visit <a href="/admins">the Admins route</a>
-            or you can <a href="/logout">Logout</a>.
+            or you can
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" value="${req.csrfToken()}"></input>
+                <button type="submit">Logout</button>
+            </form>
         </div>
         `;
     }
@@ -65,5 +71,37 @@ RootController.redirectToRoot = (req,res)=>{
 RootController.logOut = async (req,res)=>{
     await req.logout();
     res.redirect('/');
+}
+
+
+RootController.emailVerification =  (req,res,next)=>{
+    const {token} = req.query;
+    // Check to see token is valid with specified email
+    jwt.verify(token,'afsan|user|emailVerify|007', { subject: "emailVerification" },(err, decoded)=>{
+        // Check to see can find email
+        if(err){
+            if(err.name == 'TokenExpiredError'){
+                return res.status(500).send('request expired please try again')
+            }else{
+                return res.send({err})
+            }
+        }
+        User.findOneAndUpdate({
+                 email: decoded.email
+             }, {
+                 $set: {
+                     isVerified: true
+                 }
+             }, {
+                 new: true
+             },
+             (err, user) => {
+                 if (err) {
+                     throw new Error('can\'t find Email try again')
+                 }
+                 res.redirect('/')
+             })
+      });
+
 }
 export default RootController;

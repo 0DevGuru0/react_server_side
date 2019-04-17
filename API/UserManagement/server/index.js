@@ -6,6 +6,10 @@ import path         from 'path';
 import session      from 'express-session';
 import cookieParser from 'cookie-parser'
 import cors         from 'cors';
+import csrf         from 'csurf';
+import xssFilter    from 'x-xss-protection';
+import hpp          from 'hpp';
+import helmet       from 'helmet';
 import userRouter from '../routes/userRouter';
 import rootRouter from '../routes/rootRouter';
 
@@ -25,6 +29,9 @@ mongoose.Promise = global.Promise;
 
 /////////////////END DATABASE CONFIG///////////////////////////
 const app = express();
+app.use(helmet())
+app.use(helmet.noSniff())
+app.use(helmet.ieNoOpen())
 /////////////////START APP MIDDLEWARE///////////////////////////
 require('dotenv').config({
     path:path.resolve(process.cwd(),'config/keys/.env')
@@ -32,6 +39,8 @@ require('dotenv').config({
 app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(hpp())
+app.disable('x-powered-by')
 
 const whiteList = [process.env.CORS_APPROVED_ADDRESS,`http://localhost:${process.env.PORT}`];
 const corsOptionsDelegate = {
@@ -58,17 +67,18 @@ app.use(session({
         httpOnly:true,
     }
 }))
-
+// app.use()
+app.use(xssFilter())
 app.use(passport.initialize())
 app.use(passport.session())
 ////////////////START GRAPHQL CONFIG///////////////////////////
 app.use('/graphql',expressGraphql({
     schema,
-    graphiql:true
+    graphiql:true,
 }))
 ////////////////START ROUTER CONFIG///////////////////////////
-app.use('/',userRouter)
-app.use('/',rootRouter)
+app.use('/',csrf(),userRouter)
+app.use('/',csrf(),rootRouter)
 /////////////////END ROUTER CONFIG///////////////////////////
 
 export default app;

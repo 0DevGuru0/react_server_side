@@ -25,7 +25,7 @@ router.get(
    googleAuthCB,
    rootCtr.redirectToRoot
 )
-router.get(
+router.post(
    '/logout',
    requireLogin,
    rootCtr.logOut
@@ -34,6 +34,10 @@ router.get(
    '/current_user',
    requireLogin,
    (req, res) => {res.send(req.user)}
+)
+router.get(
+   '/emailverify',
+   rootCtr.emailVerification
 )
 
 export default router;

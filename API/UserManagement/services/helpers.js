@@ -1,20 +1,20 @@
 import passport from 'passport';
 import User from '../models/user';
+import  sgMail from '@sendgrid/mail';
+import config from '../emails/emailVerify'
 /*
  *
  * Auth Object contain all logic for authentication
  *
 */
-    const Auth = {}
-
-
+const Auth = {}
 Auth.SignUp = ({email,password,name,req})=>{
     if(!email || !password){throw new Error('type all credentials') }
 
     return User.findOne({email})
         .then(user=>{
             if(user){throw new Error('Email is in use')}
-            return new User({email,password,name}).save()
+            return new User({email,password,name,isVerified:false}).save()
         })
         .then(user=>{
             return new Promise((res,rej)=>{
@@ -40,4 +40,29 @@ Auth.SignIn = ({email,password,req})=>{
     })
 }
 
+Auth.sendRestPassEmail = ({email,req})=>{
+
+    if(!email){throw new Error('email should be insert')}
+
+    return User.findOne({email}).then(user=>{
+        if (!user) {throw new Error('user with this email doesn\'t exist')}
+
+        sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+
+        return new Promise((res, rej) => {
+            sgMail.send(config(user), true, (err, result) => {
+                if (err) {
+                    return rej(err)
+                }
+                return res({
+                    email
+                })
+            });
+        })
+    })
+}
+
+Auth.resetPassword = ({email,req})=>{
+
+}
 export default Auth;
