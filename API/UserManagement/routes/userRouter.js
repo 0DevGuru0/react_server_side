@@ -39,5 +39,9 @@ router.get(
    '/emailverify',
    rootCtr.emailVerification
 )
+router.get(
+   '/resetPassword',
+   rootCtr.resetPassword
+)
 
 export default router;

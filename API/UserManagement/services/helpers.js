@@ -1,7 +1,9 @@
 import passport from 'passport';
 import User from '../models/user';
 import  sgMail from '@sendgrid/mail';
-import config from '../emails/emailVerify'
+import Verify_Email_Config from '../emails/emailVerify';
+import Reset_Password_Config from '../emails/resetPassword';
+
 /*
  *
  * Auth Object contain all logic for authentication
@@ -40,7 +42,7 @@ Auth.SignIn = ({email,password,req})=>{
     })
 }
 
-Auth.sendRestPassEmail = ({email,req})=>{
+Auth.sendEmailVerify = ({email,req})=>{
 
     if(!email){throw new Error('email should be insert')}
 
@@ -50,7 +52,7 @@ Auth.sendRestPassEmail = ({email,req})=>{
         sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
 
         return new Promise((res, rej) => {
-            sgMail.send(config(user), true, (err, result) => {
+            sgMail.send(Verify_Email_Config(user), true, (err, result) => {
                 if (err) {
                     return rej(err)
                 }
@@ -62,7 +64,22 @@ Auth.sendRestPassEmail = ({email,req})=>{
     })
 }
 
-Auth.resetPassword = ({email,req})=>{
+Auth.sendResetPassEmail= ({email,req})=>{
+    if(!email){ throw new Error('email should be insert')   }
 
+    return User.findOne({email}).then(user=>{
+        if (!user) {    throw new Error('user with this email doesn\'t exist')  }
+        sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+
+        return new Promise((res, rej) => {
+            sgMail.send(Reset_Password_Config(user), true, (err, result) => {
+                if (err) {
+                    return rej(err)
+                }
+                return res({ email })
+            });
+        })
+    })
 }
+
 export default Auth;

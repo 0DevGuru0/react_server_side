@@ -1,20 +1,19 @@
 const jwt = require('jsonwebtoken');
-
-const emailVerify=(user)=>{
+const resetPassword=(user)=>{
     const request = jwt.sign({
         email:user.email,
         access:"simple_user",
-    },'afsan|user|emailVerify|007',{
+    },'afsan|user|resetPassword|007',{
         expiresIn: 60*60,
-        subject:"emailVerification"
+        subject:"resetPassword"
     })
     return `
     <html>
         <body>
             <div>
-                <h1>Email Verification</h1>
-                <a href='http://localhost:5000/emailverify?token=${request}'>
-                    <button>verifying my account</button>
+                <h1>resetPassword</h1>
+                <a href='http://localhost:3000/resetPassword?token=${request}'>
+                    <button>reset my account Password</button>
                 </a>
             </div>
         </body>
@@ -26,10 +25,10 @@ const text = 'and easy to do anywhere, even with Node.js'
 const config = (user)=>{
     return {
         to      :  user.email,
-        subject :  `Successfully SignedIn[${user.name}]`,
+        subject : `Rest Password`,
         from    :  'af.hadafi@gmail.com',
         text    ,
-        html    :  emailVerify(user)
+        html    :  resetPassword(user)
     }
 }
 export default config;

@@ -245,6 +245,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./containers/notFoundPage */ "./client/containers/notFoundPage.js");
 /* harmony import */ var _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./containers/userManagement/SignIn */ "./client/containers/userManagement/SignIn.js");
 /* harmony import */ var _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./containers/userManagement/SignUp */ "./client/containers/userManagement/SignUp.js");
+/* harmony import */ var _containers_userManagement_resetPassword__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./containers/userManagement/resetPassword */ "./client/containers/userManagement/resetPassword.js");
+
 
 
 
@@ -268,7 +270,9 @@ __webpack_require__.r(__webpack_exports__);
     path: '/signin'
   }, _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/signup'
-  }, _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__["default"]), {
+  }, _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+    path: '/resetPassword'
+  }, _containers_userManagement_resetPassword__WEBPACK_IMPORTED_MODULE_9__["default"]), {
     component: _containers_home__WEBPACK_IMPORTED_MODULE_2__["default"],
     path: '/'
   }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__["default"])]
@@ -1000,6 +1004,72 @@ function (_Component) {
 
 /***/ }),
 
+/***/ "./client/containers/userManagement/resetPassword.js":
+/*!***********************************************************!*\
+  !*** ./client/containers/userManagement/resetPassword.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "@babel/runtime/helpers/classCallCheck");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "@babel/runtime/helpers/createClass");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "@babel/runtime/helpers/possibleConstructorReturn");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "@babel/runtime/helpers/getPrototypeOf");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "@babel/runtime/helpers/inherits");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+ // import { graphql } from 'react-apollo';
+// import userIdentifyByToken from '../../Graphql/mutation/userIdentify_token'
+
+var resetPassword =
+/*#__PURE__*/
+function (_Component) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(resetPassword, _Component);
+
+  function resetPassword() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, resetPassword);
+
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(resetPassword).apply(this, arguments));
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(resetPassword, [{
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      console.log(this.props.location.search); // this.props.mutate({
+      //     variables:{token:this.props.location.search.slice(7)},
+      // })
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var token = this.props.location.search.slice(7);
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h1", null, "ok");
+    }
+  }]);
+
+  return resetPassword;
+}(react__WEBPACK_IMPORTED_MODULE_5__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  component: // graphql(userIdentifyByToken)(
+  resetPassword // )
+
+});
+
+/***/ }),
+
 /***/ "./client/containers/userManagement/signin.css":
 /*!*****************************************************!*\
   !*** ./client/containers/userManagement/signin.css ***!
@@ -1717,10 +1787,6 @@ __webpack_require__.r(__webpack_exports__);
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // const links = [errorLink,queryOrMutationLink({
-            //     fetch,
-            //     uri: 'http://localhost:3000/api/graphql',
-            // })]
             client = new apollo_boost__WEBPACK_IMPORTED_MODULE_10__["ApolloClient"]({
               ssrMode: true,
               link: Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_12__["createHttpLink"])({

@@ -1,1 +1,2223 @@
-!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=28)}([function(e,t){e.exports=require("graphql")},function(e,t){e.exports=require("passport")},function(e,t){e.exports=require("mongoose")},function(e,t,r){"use strict";var n=r(2),o=r(20),i=r.n(o),a=r(9),u=new n.Schema({name:{type:String,required:!0},email:{type:String,required:!0,unique:!0,lowercase:!0,index:!0,validate:{validator:function(e){return i.a.isEmail(e)},message:"{VALUE} is not a valid {PATH}"}},password:{type:String,required:!0,unique:!0,trim:!0},googleId:{type:String},isVerified:{type:Boolean}});u.method("comparePassword",function(e,r){Object(a.compare)(e,this.password,function(e,t){r(e,t)})}),u.pre("save",function(r){var n=this;if(!n.isModified)return r();Object(a.genSalt)(10,function(e,t){if(e)return r("some thing went wrong");Object(a.hash)(n.password,t,function(e,t){if(e)return r("can't hash the password,try again");n.password=t,r()})})});var s=Object(n.model)("user",u);t.a=s},function(e,t){e.exports=require("express")},function(e,t,r){e.exports=r(23)},function(e,t){e.exports=require("path")},function(e,t){function s(e,t,r,n,o,i,a){try{var u=e[i](a),s=u.value}catch(e){return void r(e)}u.done?t(s):Promise.resolve(s).then(n,o)}e.exports=function(u){return function(){var e=this,a=arguments;return new Promise(function(t,r){var n=u.apply(e,a);function o(e){s(n,t,r,o,i,"next",e)}function i(e){s(n,t,r,o,i,"throw",e)}o(void 0)})}}},function(e,t){e.exports=require("helmet")},function(e,t){e.exports=require("bcrypt")},function(e,t){e.exports=require("body-parser")},function(e,t){e.exports=require("express-session")},function(e,t){e.exports=require("csurf")},function(e,t){e.exports=require("@sendgrid/mail")},function(e,t){e.exports=require("dotenv")},function(e,t){e.exports=require("cookie-parser")},function(e,t){e.exports=require("cors")},function(e,t){e.exports=require("x-xss-protection")},function(e,t){e.exports=require("hpp")},function(e,t){e.exports=require("express-graphql")},function(e,t){e.exports=require("validator")},function(e,t){e.exports=require("passport-google-oauth20")},function(e,t){e.exports=require("passport-local")},function(e,t,r){var n=function(){return this||"object"==typeof self&&self}()||Function("return this")(),o=n.regeneratorRuntime&&0<=Object.getOwnPropertyNames(n).indexOf("regeneratorRuntime"),i=o&&n.regeneratorRuntime;if(n.regeneratorRuntime=void 0,e.exports=r(24),o)n.regeneratorRuntime=i;else try{delete n.regeneratorRuntime}catch(e){n.regeneratorRuntime=void 0}},function(_,e){!function(e){"use strict";var s,t=Object.prototype,c=t.hasOwnProperty,r="function"==typeof Symbol?Symbol:{},o=r.iterator||"@@iterator",n=r.asyncIterator||"@@asyncIterator",i=r.toStringTag||"@@toStringTag",a="object"==typeof _,u=e.regeneratorRuntime;if(u)a&&(_.exports=u);else{(u=e.regeneratorRuntime=a?_.exports:{}).wrap=b;var f="suspendedStart",l="suspendedYield",p="executing",d="completed",h={},y={};y[o]=function(){return this};var g=Object.getPrototypeOf,m=g&&g(g(A([])));m&&m!==t&&c.call(m,o)&&(y=m);var v=E.prototype=S.prototype=Object.create(y);x.prototype=v.constructor=E,E.constructor=x,E[i]=x.displayName="GeneratorFunction",u.isGeneratorFunction=function(e){var t="function"==typeof e&&e.constructor;return!!t&&(t===x||"GeneratorFunction"===(t.displayName||t.name))},u.mark=function(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,E):(e.__proto__=E,i in e||(e[i]="GeneratorFunction")),e.prototype=Object.create(v),e},u.awrap=function(e){return{__await:e}},j(O.prototype),O.prototype[n]=function(){return this},u.AsyncIterator=O,u.async=function(e,t,r,n){var o=new O(b(e,t,r,n));return u.isGeneratorFunction(t)?o:o.next().then(function(e){return e.done?e.value:o.next()})},j(v),v[i]="Generator",v[o]=function(){return this},v.toString=function(){return"[object Generator]"},u.keys=function(r){var n=[];for(var e in r)n.push(e);return n.reverse(),function e(){for(;n.length;){var t=n.pop();if(t in r)return e.value=t,e.done=!1,e}return e.done=!0,e}},u.values=A,T.prototype={constructor:T,reset:function(e){if(this.prev=0,this.next=0,this.sent=this._sent=s,this.done=!1,this.delegate=null,this.method="next",this.arg=s,this.tryEntries.forEach(R),!e)for(var t in this)"t"===t.charAt(0)&&c.call(this,t)&&!isNaN(+t.slice(1))&&(this[t]=s)},stop:function(){this.done=!0;var e=this.tryEntries[0].completion;if("throw"===e.type)throw e.arg;return this.rval},dispatchException:function(r){if(this.done)throw r;var n=this;function e(e,t){return i.type="throw",i.arg=r,n.next=e,t&&(n.method="next",n.arg=s),!!t}for(var t=this.tryEntries.length-1;0<=t;--t){var o=this.tryEntries[t],i=o.completion;if("root"===o.tryLoc)return e("end");if(o.tryLoc<=this.prev){var a=c.call(o,"catchLoc"),u=c.call(o,"finallyLoc");if(a&&u){if(this.prev<o.catchLoc)return e(o.catchLoc,!0);if(this.prev<o.finallyLoc)return e(o.finallyLoc)}else if(a){if(this.prev<o.catchLoc)return e(o.catchLoc,!0)}else{if(!u)throw new Error("try statement without catch or finally");if(this.prev<o.finallyLoc)return e(o.finallyLoc)}}}},abrupt:function(e,t){for(var r=this.tryEntries.length-1;0<=r;--r){var n=this.tryEntries[r];if(n.tryLoc<=this.prev&&c.call(n,"finallyLoc")&&this.prev<n.finallyLoc){var o=n;break}}o&&("break"===e||"continue"===e)&&o.tryLoc<=t&&t<=o.finallyLoc&&(o=null);var i=o?o.completion:{};return i.type=e,i.arg=t,o?(this.method="next",this.next=o.finallyLoc,h):this.complete(i)},complete:function(e,t){if("throw"===e.type)throw e.arg;return"break"===e.type||"continue"===e.type?this.next=e.arg:"return"===e.type?(this.rval=this.arg=e.arg,this.method="return",this.next="end"):"normal"===e.type&&t&&(this.next=t),h},finish:function(e){for(var t=this.tryEntries.length-1;0<=t;--t){var r=this.tryEntries[t];if(r.finallyLoc===e)return this.complete(r.completion,r.afterLoc),R(r),h}},catch:function(e){for(var t=this.tryEntries.length-1;0<=t;--t){var r=this.tryEntries[t];if(r.tryLoc===e){var n=r.completion;if("throw"===n.type){var o=n.arg;R(r)}return o}}throw new Error("illegal catch attempt")},delegateYield:function(e,t,r){return this.delegate={iterator:A(e),resultName:t,nextLoc:r},"next"===this.method&&(this.arg=s),h}}}function b(e,t,r,n){var o=t&&t.prototype instanceof S?t:S,i=Object.create(o.prototype),a=new T(n||[]);return i._invoke=function(i,a,u){var s=f;return function(e,t){if(s===p)throw new Error("Generator is already running");if(s===d){if("throw"===e)throw t;return k()}for(u.method=e,u.arg=t;;){var r=u.delegate;if(r){var n=L(r,u);if(n){if(n===h)continue;return n}}if("next"===u.method)u.sent=u._sent=u.arg;else if("throw"===u.method){if(s===f)throw s=d,u.arg;u.dispatchException(u.arg)}else"return"===u.method&&u.abrupt("return",u.arg);s=p;var o=w(i,a,u);if("normal"===o.type){if(s=u.done?d:l,o.arg===h)continue;return{value:o.arg,done:u.done}}"throw"===o.type&&(s=d,u.method="throw",u.arg=o.arg)}}}(e,r,a),i}function w(e,t,r){try{return{type:"normal",arg:e.call(t,r)}}catch(e){return{type:"throw",arg:e}}}function S(){}function x(){}function E(){}function j(e){["next","throw","return"].forEach(function(t){e[t]=function(e){return this._invoke(t,e)}})}function O(s){var t;this._invoke=function(r,n){function e(){return new Promise(function(e,t){!function t(e,r,n,o){var i=w(s[e],s,r);if("throw"!==i.type){var a=i.arg,u=a.value;return u&&"object"==typeof u&&c.call(u,"__await")?Promise.resolve(u.__await).then(function(e){t("next",e,n,o)},function(e){t("throw",e,n,o)}):Promise.resolve(u).then(function(e){a.value=e,n(a)},function(e){return t("throw",e,n,o)})}o(i.arg)}(r,n,e,t)})}return t=t?t.then(e,e):e()}}function L(e,t){var r=e.iterator[t.method];if(r===s){if(t.delegate=null,"throw"===t.method){if(e.iterator.return&&(t.method="return",t.arg=s,L(e,t),"throw"===t.method))return h;t.method="throw",t.arg=new TypeError("The iterator does not provide a 'throw' method")}return h}var n=w(r,e.iterator,t.arg);if("throw"===n.type)return t.method="throw",t.arg=n.arg,t.delegate=null,h;var o=n.arg;return o?o.done?(t[e.resultName]=o.value,t.next=e.nextLoc,"return"!==t.method&&(t.method="next",t.arg=s),t.delegate=null,h):o:(t.method="throw",t.arg=new TypeError("iterator result is not an object"),t.delegate=null,h)}function P(e){var t={tryLoc:e[0]};1 in e&&(t.catchLoc=e[1]),2 in e&&(t.finallyLoc=e[2],t.afterLoc=e[3]),this.tryEntries.push(t)}function R(e){var t=e.completion||{};t.type="normal",delete t.arg,e.completion=t}function T(e){this.tryEntries=[{tryLoc:"root"}],e.forEach(P,this),this.reset(!0)}function A(t){if(t){var e=t[o];if(e)return e.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,n=function e(){for(;++r<t.length;)if(c.call(t,r))return e.value=t[r],e.done=!1,e;return e.value=s,e.done=!0,e};return n.next=n}}return{next:k}}function k(){return{value:s,done:!0}}}(function(){return this||"object"==typeof self&&self}()||Function("return this")())},,function(e,t,r){"use strict";r.r(t);var n=r(5),u=r.n(n),o=r(7),i=r.n(o),a=r(1),s=r.n(a),c=r(21),f=r(3),l=r(6),p=r.n(l),d=r(22),h=r.n(d);r(14).config({path:p.a.resolve(process.cwd(),"config/keys/.env")}),s.a.serializeUser(function(e,t){t(null,e.id)}),s.a.deserializeUser(function(e,t){f.a.findById(e).then(function(e){t(null,e)})});var y={clientID:process.env.GOOGLE_CLIENT_ID,clientSecret:process.env.GOOGLE_CLIENT_SECRET,callbackURL:process.env.GOOGLE_AUTH_SUCCESS_CALLBACK,proxy:!0},g=new c.Strategy(y,function(){var o=i()(u.a.mark(function e(t,r,n,o){var i,a;return u.a.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,f.a.findOne({googleId:n.id});case 2:if(i=e.sent)return e.abrupt("return",o(null,i));e.next=5;break;case 5:return e.next=7,new f.a({name:n.displayName,email:n.emails[0].value,password:n.id,googleId:n.id,isVerified:!0}).save();case 7:a=e.sent,o(null,a);case 9:case"end":return e.stop()}},e)}));return function(e,t,r,n){return o.apply(this,arguments)}}()),m=new h.a({usernameField:"email"},function(e,t,n){f.a.findOne({email:e.toLowerCase()},function(e,r){return e?n(e):r?void r.comparePassword(t,function(e,t){return e?n(e):t?n(null,r):n(null,!1,"Invalid_Credential")}):n(null,!1)})});s.a.use(m),s.a.use(g)},function(e,t){e.exports=require("connect-redis")},function(e,t,r){"use strict";r.r(t);var n=r(4),o=r.n(n),i=r(2),a=r.n(i),u=r(10),s=r.n(u),c=r(1),f=r.n(c),l=r(6),p=r.n(l),d=r(11),h=r.n(d),y=r(15),g=r.n(y),m=r(16),v=r.n(m),b=r(12),w=r.n(b),S=r(17),x=r.n(S),E=r(18),j=r.n(E),O=r(8),L=r.n(O),P=function(e,t,r){e.user?r():t.status(404).send({error:"You must log in!"})},R=r(5),T=r.n(R),A=r(7),k=r.n(A),_=r(43),q=r.n(_),N=r(3),G={},I=[{id:1,name:"Leanne Graham"},{id:2,name:"Ervin Howell"},{id:3,name:"Clementine Bauch"},{id:4,name:"Patricia Lebsack"},{id:5,name:"Chelsey Dietrich"}],B=[{id:1,name:"Kurtis Weissnat"},{id:2,name:"Nicholas Runolfsdottir"},{id:3,name:"Gelann Reichert"},{id:4,name:"Moriah Stanton"},{id:5,name:"Rey Padberg"}];G.rootPage=function(e,t){var r='\n        <div>\n        You don\'t appear to be logged in.  You can log in by visiting\n        <a href="/auth/google">the Authentication Route</a>. You could\n        also look at details about yourself at <a href="/api/current_user">the Current User route</a>\n        </div>\n    ';e.user&&(r='\n        <div>\n            You appear to be logged in, so you can visit <a href="/admins">the Admins route</a>\n            or you can\n            <form action="/logout" method="post">\n                <input type="hidden" name="_csrf" value="'.concat(e.csrfToken(),'"></input>\n                <button type="submit">Logout</button>\n            </form>\n        </div>\n        ')),t.send('\n        <div>\n        <h4>Hi!  Welcome to the React SSR API</h4>\n        <div>\n            You can see <a href="/users">the Users route</a>\n        </div>\n        '.concat(r,"\n        </div>\n    "))},G.usersList=function(e,t){t.send(I)},G.logIn=function(e,t){t.send('\n    <html>\n      <body>\n        <a href="auth/google">Login via Google</a>\n      </body>\n    </html>')},G.admins=function(e,t){t.send(B)},G.redirectToRoot=function(e,t){t.redirect("/")},G.logOut=function(){var r=k()(T.a.mark(function e(t,r){return T.a.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,t.logout();case 2:r.redirect("/");case 3:case"end":return e.stop()}},e)}));return function(e,t){return r.apply(this,arguments)}}(),G.emailVerification=function(e,r,t){var n=e.query.token;q.a.verify(n,"afsan|user|emailVerify|007",{subject:"emailVerification"},function(e,t){if(e)return"TokenExpiredError"==e.name?r.status(500).send("request expired please try again"):r.send({err:e});N.a.findOneAndUpdate({email:t.email},{$set:{isVerified:!0}},{new:!0},function(e,t){if(e)throw new Error("can't find Email try again");r.redirect("/")})})};var V=G,D=o.a.Router(),C=f.a.authenticate("google",{scope:["profile","email"]}),H=f.a.authenticate("google");D.get("/auth/google",C),D.get("/api/auth/google/callback",H,V.redirectToRoot),D.get("/auth/google/callback",H,V.redirectToRoot),D.post("/logout",P,V.logOut),D.get("/current_user",P,function(e,t){t.send(e.user)}),D.get("/emailverify",V.emailVerification);var Q=D,U=o.a.Router();U.get("/",V.rootPage),U.get("/users",V.usersList),U.get("/admins",P,V.admins),U.get("/login",V.logIn);var K=U,M=r(19),$=r.n(M),F=r(0),J=new F.GraphQLObjectType({name:"UserType",fields:{id:{type:F.GraphQLID},name:{type:F.GraphQLString},email:{type:F.GraphQLString},isVerified:{type:F.GraphQLBoolean}}}),Y=new F.GraphQLObjectType({name:"RootQueryType",fields:function(){return{user:{type:J,resolve:function(e,t,r){return r.user}}}}}),z=r(13),W=r.n(z),Z=r(43),X=function(e){return{to:e.email,subject:"Successfully SignedIn[".concat(e.name,"]"),from:"af.hadafi@gmail.com",text:"and easy to do anywhere, even with Node.js",html:function(e){var t=Z.sign({email:e.email,access:"simple_user"},"afsan|user|emailVerify|007",{expiresIn:3600,subject:"emailVerification"});return"\n    <html>\n        <body>\n            <div>\n                <h1>Email Verification</h1>\n                <a href='http://localhost:5000/emailverify?token=".concat(t,"'>\n                    <button>verifying my account</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ")}(e)}},ee={SignUp:function(e){var t=e.email,r=e.password,n=e.name,o=e.req;if(!t||!r)throw new Error("type all credentials");return N.a.findOne({email:t}).then(function(e){if(e)throw new Error("Email is in use");return new N.a({email:t,password:r,name:n,isVerified:!1}).save()}).then(function(n){return new Promise(function(t,r){o.login(n,function(e){return e&&r(e),t(n)})})})},SignIn:function(e){var t=e.email,o=e.password,i=e.req;if(!t&&!o)throw new Error("type all credentials");return new Promise(function(r,n){f.a.authenticate("local",function(e,t){return t?e?n(e):void i.login(t,function(e){return e?n(e):r(t)}):n("you are not registered yet please signUp first")})({body:{email:t,password:o}})})},sendRestPassEmail:function(e){var o=e.email;e.req;if(!o)throw new Error("email should be insert");return N.a.findOne({email:o}).then(function(e){if(!e)throw new Error("user with this email doesn't exist");return W.a.setApiKey(process.env.SEND_GRID_API_KEY),new Promise(function(r,n){W.a.send(X(e),!0,function(e,t){return e?n(e):r({email:o})})})})},resetPassword:function(e){e.email,e.req}},te=ee,re=new F.GraphQLObjectType({name:"MutationObserver",fields:function(){return{SignIn:{type:J,args:{email:{type:new F.GraphQLNonNull(F.GraphQLString)},password:{type:new F.GraphQLNonNull(F.GraphQLString)}},resolve:function(e,t,r){var n=t.password,o=t.email;return te.SignIn({email:o,password:n,req:r})}},SignUp:{type:J,args:{name:{type:new F.GraphQLNonNull(F.GraphQLString)},email:{type:new F.GraphQLNonNull(F.GraphQLString)},password:{type:new F.GraphQLNonNull(F.GraphQLString)}},resolve:function(e,t,r){var n=t.email,o=t.password,i=t.name;return te.SignUp({email:n,password:o,name:i,req:r})}},SignOut:{type:J,resolve:function(e,t,r){var n=r.user;return r.logout(),n}},sendRestPassEmail:{type:J,args:{email:{type:new F.GraphQLNonNull(F.GraphQLString)}},resolve:function(e,t,r){var n=t.email;return te.sendRestPassEmail({email:n,req:r})}},resetPassword:{type:J,args:{email:{type:new F.GraphQLNonNull(F.GraphQLString)}},resolve:function(e,t,r){var n=t.email;return te.resetPassword({email:n,req:r})}}}}}),ne=new F.GraphQLSchema({query:Y,mutation:re});r(26),a.a.connect(process.env.DB_ADDRESS,{useNewUrlParser:!0}),a.a.connection.on("connected",function(){console.log("connection established successfully")}),a.a.connection.on("error",function(e){console.log("connection to mongo failed "+e)}),a.a.connection.on("disconnected",function(){console.log("mongo db connection closed")}),a.a.set("useCreateIndex",!0),a.a.Promise=global.Promise;var oe=o()();oe.use(L()()),oe.use(L.a.noSniff()),oe.use(L.a.ieNoOpen()),r(14).config({path:p.a.resolve(process.cwd(),"config/keys/.env")}),oe.use(g()()),oe.use(s.a.json()),oe.use(s.a.urlencoded({extended:!0})),oe.use(j()()),oe.disable("x-powered-by");var ie=[process.env.CORS_APPROVED_ADDRESS,"http://localhost:".concat(process.env.PORT)],ae={origin:function(e,t){-1===ie.indexOf(e)&&e?t(new Error("Not allowed by CORS")):t(null,!0)}};oe.use(v()(ae));var ue=r(27)(h.a);oe.use(h()({secret:"3f9faa8bc0e722172cc0bdafede9f3f217474e47",resave:!1,saveUninitialized:!1,store:new ue({prefix:"session:auth:"}),cookie:{maxAge:2592e6,httpOnly:!0}})),oe.use(x()()),oe.use(f.a.initialize()),oe.use(f.a.session()),oe.use("/graphql",$()({schema:ne,graphiql:!0})),oe.use("/",w()(),Q),oe.use("/",w()(),K),oe.listen(process.env.PORT,function(){console.log("[UserManagement]_server is running on port ".concat(process.env.PORT))})},function(e,t){e.exports=require("safe-buffer")},function(e,t){e.exports=require("util")},function(e,t){var r=function(e,t){Error.call(this,e),Error.captureStackTrace&&Error.captureStackTrace(this,this.constructor),this.name="JsonWebTokenError",this.message=e,t&&(this.inner=t)};(r.prototype=Object.create(Error.prototype)).constructor=r,e.exports=r},function(e,t,r){var n=r(44),o=r(49);t.ALGORITHMS=["HS256","HS384","HS512","RS256","RS384","RS512","PS256","PS384","PS512","ES256","ES384","ES512"],t.sign=n.sign,t.verify=o.verify,t.decode=o.decode,t.isValid=o.isValid,t.createSign=function(e){return new n(e)},t.createVerify=function(e){return new o(e)}},function(e,t){e.exports=require("stream")},function(e,t){e.exports=require("buffer")},function(e,t,r){var i=r(32);e.exports=function(e,t){t=t||{};var r=i.decode(e,t);if(!r)return null;var n=r.payload;if("string"==typeof n)try{var o=JSON.parse(n);null!==o&&"object"==typeof o&&(n=o)}catch(e){}return!0===t.complete?{header:r.header,payload:n,signature:r.signature}:n}},function(e,t,r){var n=r(29).Buffer,o=r(33);function i(e){if(this.buffer=null,this.writable=!0,this.readable=!0,!e)return this.buffer=n.alloc(0),this;if("function"==typeof e.pipe)return this.buffer=n.alloc(0),e.pipe(this),this;if(e.length||"object"==typeof e)return this.buffer=e,this.writable=!1,process.nextTick(function(){this.emit("end",e),this.readable=!1,this.emit("close")}.bind(this)),this;throw new TypeError("Unexpected data type ("+typeof e+")")}r(30).inherits(i,o),i.prototype.write=function(e){this.buffer=n.concat([this.buffer,n.from(e)]),this.emit("data",e)},i.prototype.end=function(e){e&&this.write(e),this.emit("end",e),this.emit("close"),this.writable=!1,this.readable=!1},e.exports=i},function(e,t,r){var i=r(45),a=r(29).Buffer,u=r(46),s=r(47),n=r(30),o="secret must be a string or buffer",c="key must be a string or a buffer",f="key must be a string, a buffer or an object",l="function"==typeof u.createPublicKey;function p(e){if(!a.isBuffer(e)&&"string"!=typeof e){if(!l)throw g(c);if("object"!=typeof e)throw g(c);if("string"!=typeof e.type)throw g(c);if("string"!=typeof e.asymmetricKeyType)throw g(c);if("function"!=typeof e.export)throw g(c)}}function d(e){if(!a.isBuffer(e)&&"string"!=typeof e&&"object"!=typeof e)throw g(f)}function h(e){return e.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}function y(e){var t=4-(e=e.toString()).length%4;if(4!=t)for(var r=0;r<t;++r)e+="=";return e.replace(/\-/g,"+").replace(/_/g,"/")}function g(e){var t=[].slice.call(arguments,1),r=n.format.bind(n,e).apply(null,t);return new TypeError(r)}function m(e){return function(e){return a.isBuffer(e)||"string"==typeof e}(e)||(e=JSON.stringify(e)),e}function v(n){return function(e,t){!function(e){if(!a.isBuffer(e)){if("string"==typeof e)return;if(!l)throw g(o);if("object"!=typeof e)throw g(o);if("secret"!==e.type)throw g(o);if("function"!=typeof e.export)throw g(o)}}(t),e=m(e);var r=u.createHmac("sha"+n,t);return h((r.update(e),r.digest("base64")))}}function b(o){return function(e,t,r){var n=v(o)(e,r);return i(a.from(t),a.from(n))}}function w(n){return function(e,t){d(t),e=m(e);var r=u.createSign("RSA-SHA"+n);return h((r.update(e),r.sign(t,"base64")))}}function S(o){return function(e,t,r){p(r),e=m(e),t=y(t);var n=u.createVerify("RSA-SHA"+o);return n.update(e),n.verify(r,t,"base64")}}function x(n){return function(e,t){d(t),e=m(e);var r=u.createSign("RSA-SHA"+n);return h((r.update(e),r.sign({key:t,padding:u.constants.RSA_PKCS1_PSS_PADDING,saltLength:u.constants.RSA_PSS_SALTLEN_DIGEST},"base64")))}}function E(o){return function(e,t,r){p(r),e=m(e),t=y(t);var n=u.createVerify("RSA-SHA"+o);return n.update(e),n.verify({key:r,padding:u.constants.RSA_PKCS1_PSS_PADDING,saltLength:u.constants.RSA_PSS_SALTLEN_DIGEST},t,"base64")}}function j(t){var r=w(t);return function(){var e=r.apply(null,arguments);return e=s.derToJose(e,"ES"+t)}}function O(n){var o=S(n);return function(e,t,r){return t=s.joseToDer(t,"ES"+n).toString("base64"),o(e,t,r)}}function L(){return function(){return""}}function P(){return function(e,t){return""===t}}l&&(c+=" or a KeyObject",o+="or a KeyObject"),e.exports=function(e){var t={hs:v,rs:w,ps:x,es:j,none:L},r={hs:b,rs:S,ps:E,es:O,none:P},n=e.match(/^(RS|PS|ES|HS)(256|384|512)$|^(none)$/i);if(!n)throw g('"%s" is not a valid algorithm.\n  Supported algorithms are:\n  "HS256", "HS384", "HS512", "RS256", "RS384", "RS512", "PS256", "PS384", "PS512", "ES256", "ES384", "ES512" and "none".',e);var o=(n[1]||n[3]).toLowerCase(),i=n[2];return{sign:t[o](i),verify:r[o](i)}}},function(e,t,r){var n=r(34).Buffer;e.exports=function(e){return"string"==typeof e?e:"number"==typeof e||n.isBuffer(e)?e.toString():JSON.stringify(e)}},function(e,t,r){var n=r(31),o=function(e,t){n.call(this,e),this.name="NotBeforeError",this.date=t};(o.prototype=Object.create(n.prototype)).constructor=o,e.exports=o},function(e,t,r){var n=r(31),o=function(e,t){n.call(this,e),this.name="TokenExpiredError",this.expiredAt=t};(o.prototype=Object.create(n.prototype)).constructor=o,e.exports=o},function(e,t,r){var o=r(51);e.exports=function(e,t){var r=t||Math.floor(Date.now()/1e3);if("string"!=typeof e)return"number"==typeof e?r+e:void 0;var n=o(e);return void 0!==n?Math.floor(r+n/1e3):void 0}},function(e,t,r){var n=r(52);e.exports=n.satisfies(process.version,"^6.12.0 || >=8.0.0")},function(e,t,r){e.exports={decode:r(35),verify:r(50),sign:r(53),JsonWebTokenError:r(31),NotBeforeError:r(39),TokenExpiredError:r(40)}},function(e,t,r){var n=r(29).Buffer,o=r(36),s=r(37),i=r(33),c=r(38),f=r(30);function l(e,t){return n.from(e,t).toString("base64").replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}function a(e){var t=e.header,r=e.payload,n=e.secret||e.privateKey,o=e.encoding,i=s(t.alg),a=function(e,t,r){r=r||"utf8";var n=l(c(e),"binary"),o=l(c(t),r);return f.format("%s.%s",n,o)}(t,r,o),u=i.sign(a,n);return f.format("%s.%s",a,u)}function u(e){var t=e.secret||e.privateKey||e.key,r=new o(t);this.readable=!0,this.header=e.header,this.encoding=e.encoding,this.secret=this.privateKey=this.key=r,this.payload=new o(e.payload),this.secret.once("close",function(){!this.payload.writable&&this.readable&&this.sign()}.bind(this)),this.payload.once("close",function(){!this.secret.writable&&this.readable&&this.sign()}.bind(this))}f.inherits(u,i),u.prototype.sign=function(){try{var e=a({header:this.header,payload:this.payload.buffer,secret:this.secret.buffer,encoding:this.encoding});return this.emit("done",e),this.emit("data",e),this.emit("end"),this.readable=!1,e}catch(e){this.readable=!1,this.emit("error",e),this.emit("close")}},u.sign=a,e.exports=u},function(e,t,r){"use strict";var o=r(34).Buffer,n=r(34).SlowBuffer;function i(e,t){if(!o.isBuffer(e)||!o.isBuffer(t))return!1;if(e.length!==t.length)return!1;for(var r=0,n=0;n<e.length;n++)r|=e[n]^t[n];return 0===r}(e.exports=i).install=function(){o.prototype.equal=n.prototype.equal=function(e){return i(this,e)}};var a=o.prototype.equal,u=n.prototype.equal;i.restore=function(){o.prototype.equal=a,n.prototype.equal=u}},function(e,t){e.exports=require("crypto")},function(e,t,r){"use strict";var y=r(29).Buffer,g=r(48),m=128;function v(e){if(y.isBuffer(e))return e;if("string"==typeof e)return y.from(e,"base64");throw new TypeError("ECDSA signature must be a Base64 string or a Buffer")}function p(e,t,r){for(var n=0;t+n<r&&0===e[t+n];)++n;return e[t+n]>=m&&--n,n}e.exports={derToJose:function(e,t){e=v(e);var r=g(t),n=r+1,o=e.length,i=0;if(48!==e[i++])throw new Error('Could not find expected "seq"');var a=e[i++];if(a===(1|m)&&(a=e[i++]),o-i<a)throw new Error('"seq" specified length of "'+a+'", only "'+(o-i)+'" remaining');if(2!==e[i++])throw new Error('Could not find expected "int" for "r"');var u=e[i++];if(o-i-2<u)throw new Error('"r" specified length of "'+u+'", only "'+(o-i-2)+'" available');if(n<u)throw new Error('"r" specified length of "'+u+'", max of "'+n+'" is acceptable');var s=i;if(i+=u,2!==e[i++])throw new Error('Could not find expected "int" for "s"');var c=e[i++];if(o-i!==c)throw new Error('"s" specified length of "'+c+'", expected "'+(o-i)+'"');if(n<c)throw new Error('"s" specified length of "'+c+'", max of "'+n+'" is acceptable');var f=i;if((i+=c)!==o)throw new Error('Expected to consume entire buffer, but "'+(o-i)+'" bytes remain');var l=r-u,p=r-c,d=y.allocUnsafe(l+u+p+c);for(i=0;i<l;++i)d[i]=0;e.copy(d,i,s+Math.max(-l,0),s+u);for(var h=i=r;i<h+p;++i)d[i]=0;return e.copy(d,i,f+Math.max(-p,0),f+c),d=function(e){return e.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}(d=d.toString("base64"))},joseToDer:function(e,t){e=v(e);var r=g(t),n=e.length;if(n!==2*r)throw new TypeError('"'+t+'" signatures must be "'+2*r+'" bytes, saw "'+n+'"');var o=p(e,0,r),i=p(e,r,e.length),a=r-o,u=r-i,s=2+a+1+1+u,c=s<m,f=y.allocUnsafe((c?2:3)+s),l=0;return f[l++]=48,c?f[l++]=s:(f[l++]=1|m,f[l++]=255&s),f[l++]=2,f[l++]=a,o<0?(f[l++]=0,l+=e.copy(f,l,0,r)):l+=e.copy(f,l,o,r),f[l++]=2,f[l++]=u,i<0?(f[l++]=0,e.copy(f,l,r)):e.copy(f,l,r+i),f}}},function(e,t,r){"use strict";function n(e){return(e/8|0)+(e%8==0?0:1)}var o={ES256:n(256),ES384:n(384),ES512:n(521)};e.exports=function(e){var t=o[e];if(t)return t;throw new Error('Unknown algorithm "'+e+'"')}},function(e,t,r){var o=r(29).Buffer,n=r(36),a=r(37),i=r(33),u=r(38),s=r(30),c=/^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/;function f(e){if(function(e){return"[object Object]"===Object.prototype.toString.call(e)}(e))return e;try{return JSON.parse(e)}catch(e){return}}function l(e){var t=e.split(".",1)[0];return f(o.from(t,"base64").toString("binary"))}function p(e){return e.split(".")[2]}function d(e){return c.test(e)&&!!l(e)}function h(e,t,r){if(!t){var n=new Error("Missing algorithm parameter for jws.verify");throw n.code="MISSING_ALGORITHM",n}var o=p(e=u(e)),i=function(e){return e.split(".",2).join(".")}(e);return a(t).verify(i,o,r)}function y(e,t){if(t=t||{},!d(e=u(e)))return null;var r=l(e);if(!r)return null;var n=function(e,t){t=t||"utf8";var r=e.split(".")[1];return o.from(r,"base64").toString(t)}(e);return("JWT"===r.typ||t.json)&&(n=JSON.parse(n,t.encoding)),{header:r,payload:n,signature:p(e)}}function g(e){var t=(e=e||{}).secret||e.publicKey||e.key,r=new n(t);this.readable=!0,this.algorithm=e.algorithm,this.encoding=e.encoding,this.secret=this.publicKey=this.key=r,this.signature=new n(e.signature),this.secret.once("close",function(){!this.signature.writable&&this.readable&&this.verify()}.bind(this)),this.signature.once("close",function(){!this.secret.writable&&this.readable&&this.verify()}.bind(this))}s.inherits(g,i),g.prototype.verify=function(){try{var e=h(this.signature.buffer,this.algorithm,this.key.buffer),t=y(this.signature.buffer,this.encoding);return this.emit("done",e,t),this.emit("data",e),this.emit("end"),this.readable=!1,e}catch(e){this.readable=!1,this.emit("error",e),this.emit("close")}},g.decode=y,g.isValid=d,g.verify=h,e.exports=g},function(e,t,r){var y=r(31),g=r(39),m=r(40),n=r(35),v=r(41),o=r(42),b=r(32),w=["RS256","RS384","RS512","ES256","ES384","ES512"],S=["RS256","RS384","RS512"],x=["HS256","HS384","HS512"];o&&(w.splice(3,0,"PS256","PS384","PS512"),S.splice(3,0,"PS256","PS384","PS512")),e.exports=function(s,r,c,e){var f;if("function"!=typeof c||e||(e=c,c={}),c||(c={}),c=Object.assign({},c),f=e||function(e,t){if(e)throw e;return t},c.clockTimestamp&&"number"!=typeof c.clockTimestamp)return f(new y("clockTimestamp must be a number"));if(void 0!==c.nonce&&("string"!=typeof c.nonce||""===c.nonce.trim()))return f(new y("nonce must be a non-empty string"));var l=c.clockTimestamp||Math.floor(Date.now()/1e3);if(!s)return f(new y("jwt must be provided"));if("string"!=typeof s)return f(new y("jwt must be a string"));var p,d=s.split(".");if(3!==d.length)return f(new y("jwt malformed"));try{p=n(s,{complete:!0})}catch(e){return f(e)}if(!p)return f(new y("invalid token"));var t,h=p.header;if("function"==typeof r){if(!e)return f(new y("verify must be called asynchronous if secret or public key is provided as a callback"));t=r}else t=function(e,t){return t(null,r)};return t(h,function(e,t){if(e)return f(new y("error in secret or public key callback: "+e.message));var r,n=""!==d[2].trim();if(!n&&t)return f(new y("jwt signature is required"));if(n&&!t)return f(new y("secret or public key must be provided"));if(n||c.algorithms||(c.algorithms=["none"]),c.algorithms||(c.algorithms=~t.toString().indexOf("BEGIN CERTIFICATE")||~t.toString().indexOf("BEGIN PUBLIC KEY")?w:~t.toString().indexOf("BEGIN RSA PUBLIC KEY")?S:x),!~c.algorithms.indexOf(p.header.alg))return f(new y("invalid algorithm"));try{r=b.verify(s,p.header.alg,t)}catch(e){return f(e)}if(!r)return f(new y("invalid signature"));var o=p.payload;if(void 0!==o.nbf&&!c.ignoreNotBefore){if("number"!=typeof o.nbf)return f(new y("invalid nbf value"));if(o.nbf>l+(c.clockTolerance||0))return f(new g("jwt not active",new Date(1e3*o.nbf)))}if(void 0!==o.exp&&!c.ignoreExpiration){if("number"!=typeof o.exp)return f(new y("invalid exp value"));if(l>=o.exp+(c.clockTolerance||0))return f(new m("jwt expired",new Date(1e3*o.exp)))}if(c.audience){var i=Array.isArray(c.audience)?c.audience:[c.audience];if(!(Array.isArray(o.aud)?o.aud:[o.aud]).some(function(t){return i.some(function(e){return e instanceof RegExp?e.test(t):e===t})}))return f(new y("jwt audience invalid. expected: "+i.join(" or ")))}if(c.issuer&&("string"==typeof c.issuer&&o.iss!==c.issuer||Array.isArray(c.issuer)&&-1===c.issuer.indexOf(o.iss)))return f(new y("jwt issuer invalid. expected: "+c.issuer));if(c.subject&&o.sub!==c.subject)return f(new y("jwt subject invalid. expected: "+c.subject));if(c.jwtid&&o.jti!==c.jwtid)return f(new y("jwt jwtid invalid. expected: "+c.jwtid));if(c.nonce&&o.nonce!==c.nonce)return f(new y("jwt nonce invalid. expected: "+c.nonce));if(c.maxAge){if("number"!=typeof o.iat)return f(new y("iat required when maxAge is specified"));var a=v(c.maxAge,o.iat);if(void 0===a)return f(new y('"maxAge" should be a number of seconds or string representing a timespan eg: "1d", "20h", 60'));if(l>=a+(c.clockTolerance||0))return f(new m("maxAge exceeded",new Date(1e3*a)))}if(!0!==c.complete)return f(null,o);var u=p.signature;return f(null,{header:h,payload:o,signature:u})})}},function(e,t){e.exports=require("ms")},function(e,t){e.exports=require("semver")},function(e,t,r){var f=r(41),n=r(42),l=r(32),o=r(54),i=r(55),a=r(56),u=r(57),s=r(58),c=r(59),p=r(60),d=["RS256","RS384","RS512","ES256","ES384","ES512","HS256","HS384","HS512","none"];n&&d.splice(3,0,"PS256","PS384","PS512");var h={expiresIn:{isValid:function(e){return a(e)||c(e)&&e},message:'"expiresIn" should be a number of seconds or string representing a timespan'},notBefore:{isValid:function(e){return a(e)||c(e)&&e},message:'"notBefore" should be a number of seconds or string representing a timespan'},audience:{isValid:function(e){return c(e)||Array.isArray(e)},message:'"audience" must be a string or array'},algorithm:{isValid:o.bind(null,d),message:'"algorithm" must be a valid string enum value'},header:{isValid:s,message:'"header" must be an object'},encoding:{isValid:c,message:'"encoding" must be a string'},issuer:{isValid:c,message:'"issuer" must be a string'},subject:{isValid:c,message:'"subject" must be a string'},jwtid:{isValid:c,message:'"jwtid" must be a string'},noTimestamp:{isValid:i,message:'"noTimestamp" must be a boolean'},keyid:{isValid:c,message:'"keyid" must be a string'},mutatePayload:{isValid:i,message:'"mutatePayload" must be a boolean'}},y={iat:{isValid:u,message:'"iat" should be a number of seconds'},exp:{isValid:u,message:'"exp" should be a number of seconds'},nbf:{isValid:u,message:'"nbf" should be a number of seconds'}};function g(r,n,o,i){if(!s(o))throw new Error('Expected "'+i+'" to be a plain object.');Object.keys(o).forEach(function(e){var t=r[e];if(t){if(!t.isValid(o[e]))throw new Error(t.message)}else if(!n)throw new Error('"'+e+'" is not allowed in "'+i+'"')})}var m={audience:"aud",issuer:"iss",subject:"sub",jwtid:"jti"},v=["expiresIn","notBefore","noTimestamp","audience","issuer","subject","jwtid"];e.exports=function(r,e,n,t){n="function"==typeof n?(t=n,{}):n||{};var o="object"==typeof r&&!Buffer.isBuffer(r),i=Object.assign({alg:n.algorithm||"HS256",typ:o?"JWT":void 0,kid:n.keyid},n.header);function a(e){if(t)return t(e);throw e}if(!e&&"none"!==n.algorithm)return a(new Error("secretOrPrivateKey must have a value"));if(void 0===r)return a(new Error("payload is required"));if(o){try{!function(e){g(y,!0,e,"payload")}(r)}catch(e){return a(e)}n.mutatePayload||(r=Object.assign({},r))}else{var u=v.filter(function(e){return void 0!==n[e]});if(0<u.length)return a(new Error("invalid "+u.join(",")+" option for "+typeof r+" payload"))}if(void 0!==r.exp&&void 0!==n.expiresIn)return a(new Error('Bad "options.expiresIn" option the payload already has an "exp" property.'));if(void 0!==r.nbf&&void 0!==n.notBefore)return a(new Error('Bad "options.notBefore" option the payload already has an "nbf" property.'));try{!function(e){g(h,!1,e,"options")}(n)}catch(e){return a(e)}var s=r.iat||Math.floor(Date.now()/1e3);if(n.noTimestamp?delete r.iat:o&&(r.iat=s),void 0!==n.notBefore){try{r.nbf=f(n.notBefore,s)}catch(e){return a(e)}if(void 0===r.nbf)return a(new Error('"notBefore" should be a number of seconds or string representing a timespan eg: "1d", "20h", 60'))}if(void 0!==n.expiresIn&&"object"==typeof r){try{r.exp=f(n.expiresIn,s)}catch(e){return a(e)}if(void 0===r.exp)return a(new Error('"expiresIn" should be a number of seconds or string representing a timespan eg: "1d", "20h", 60'))}Object.keys(m).forEach(function(e){var t=m[e];if(void 0!==n[e]){if(void 0!==r[t])return a(new Error('Bad "options.'+e+'" option. The payload already has an "'+t+'" property.'));r[t]=n[e]}});var c=n.encoding||"utf8";if("function"!=typeof t)return l.sign({header:i,payload:r,secret:e,encoding:c});t=t&&p(t),l.createSign({header:i,privateKey:e,payload:r,encoding:c}).once("error",t).once("done",function(e){t(null,e)})}},function(e,t){var i=1/0,r=9007199254740991,a=17976931348623157e292,u=NaN,s="[object Arguments]",n="[object Function]",o="[object GeneratorFunction]",c="[object String]",f="[object Symbol]",l=/^\s+|\s+$/g,p=/^[-+]0x[0-9a-f]+$/i,d=/^0b[01]+$/i,h=/^0o[0-7]+$/i,y=/^(?:0|[1-9]\d*)$/,g=parseInt;function m(e){return e!=e}function v(t,e){return function(e,t){for(var r=-1,n=e?e.length:0,o=Array(n);++r<n;)o[r]=t(e[r],r,e);return o}(e,function(e){return t[e]})}var b,w,S=Object.prototype,x=S.hasOwnProperty,E=S.toString,j=S.propertyIsEnumerable,O=(b=Object.keys,w=Object,function(e){return b(w(e))}),L=Math.max;function P(e,t){var r=A(e)||function(e){return function(e){return q(e)&&k(e)}(e)&&x.call(e,"callee")&&(!j.call(e,"callee")||E.call(e)==s)}(e)?function(e,t){for(var r=-1,n=Array(e);++r<e;)n[r]=t(r);return n}(e.length,String):[],n=r.length,o=!!n;for(var i in e)!t&&!x.call(e,i)||o&&("length"==i||T(i,n))||r.push(i);return r}function R(e){if(!function(e){var t=e&&e.constructor,r="function"==typeof t&&t.prototype||S;return e===r}(e))return O(e);var t=[];for(var r in Object(e))x.call(e,r)&&"constructor"!=r&&t.push(r);return t}function T(e,t){return!!(t=null==t?r:t)&&("number"==typeof e||y.test(e))&&-1<e&&e%1==0&&e<t}var A=Array.isArray;function k(e){return null!=e&&function(e){return"number"==typeof e&&-1<e&&e%1==0&&e<=r}(e.length)&&!function(e){var t=_(e)?E.call(e):"";return t==n||t==o}(e)}function _(e){var t=typeof e;return!!e&&("object"==t||"function"==t)}function q(e){return!!e&&"object"==typeof e}e.exports=function(e,t,r,n){e=k(e)?e:function(e){return e?v(e,function(e){return k(e)?P(e):R(e)}(e)):[]}(e),r=r&&!n?function(e){var t=function(e){return e?(e=function(e){if("number"==typeof e)return e;if(function(e){return"symbol"==typeof e||q(e)&&E.call(e)==f}(e))return u;if(_(e)){var t="function"==typeof e.valueOf?e.valueOf():e;e=_(t)?t+"":t}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(l,"");var r=d.test(e);return r||h.test(e)?g(e.slice(2),r?2:8):p.test(e)?u:+e}(e))!==i&&e!==-i?e==e?e:0:(e<0?-1:1)*a:0===e?e:0}(e),r=t%1;return t==t?r?t-r:t:0}(r):0;var o=e.length;return r<0&&(r=L(o+r,0)),function(e){return"string"==typeof e||!A(e)&&q(e)&&E.call(e)==c}(e)?r<=o&&-1<e.indexOf(t,r):!!o&&-1<function(e,t,r){if(t!=t)return function(e,t,r,n){for(var o=e.length,i=r+(n?1:-1);n?i--:++i<o;)if(t(e[i],i,e))return i;return-1}(e,m,r);for(var n=r-1,o=e.length;++n<o;)if(e[n]===t)return n;return-1}(e,t,r)}},function(e,t){var r=Object.prototype.toString;e.exports=function(e){return!0===e||!1===e||function(e){return!!e&&"object"==typeof e}(e)&&"[object Boolean]"==r.call(e)}},function(e,t){var n=1/0,o=17976931348623157e292,i=NaN,a="[object Symbol]",u=/^\s+|\s+$/g,s=/^[-+]0x[0-9a-f]+$/i,c=/^0b[01]+$/i,f=/^0o[0-7]+$/i,l=parseInt,p=Object.prototype.toString;function d(e){var t=typeof e;return!!e&&("object"==t||"function"==t)}e.exports=function(e){return"number"==typeof e&&e==function(e){var t=function(e){return e?(e=function(e){if("number"==typeof e)return e;if(function(e){return"symbol"==typeof e||function(e){return!!e&&"object"==typeof e}(e)&&p.call(e)==a}(e))return i;if(d(e)){var t="function"==typeof e.valueOf?e.valueOf():e;e=d(t)?t+"":t}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(u,"");var r=c.test(e);return r||f.test(e)?l(e.slice(2),r?2:8):s.test(e)?i:+e}(e))!==n&&e!==-n?e==e?e:0:(e<0?-1:1)*o:0===e?e:0}(e),r=t%1;return t==t?r?t-r:t:0}(e)}},function(e,t){var r=Object.prototype.toString;e.exports=function(e){return"number"==typeof e||function(e){return!!e&&"object"==typeof e}(e)&&"[object Number]"==r.call(e)}},function(e,t){var r,n,o=Function.prototype,i=Object.prototype,a=o.toString,u=i.hasOwnProperty,s=a.call(Object),c=i.toString,f=(r=Object.getPrototypeOf,n=Object,function(e){return r(n(e))});e.exports=function(e){if(!function(e){return!!e&&"object"==typeof e}(e)||"[object Object]"!=c.call(e)||function(e){var t=!1;if(null!=e&&"function"!=typeof e.toString)try{t=!!(e+"")}catch(e){}return t}(e))return!1;var t=f(e);if(null===t)return!0;var r=u.call(t,"constructor")&&t.constructor;return"function"==typeof r&&r instanceof r&&a.call(r)==s}},function(e,t){var r=Object.prototype.toString,n=Array.isArray;e.exports=function(e){return"string"==typeof e||!n(e)&&function(e){return!!e&&"object"==typeof e}(e)&&"[object String]"==r.call(e)}},function(e,t){var n="Expected a function",o=1/0,i=17976931348623157e292,a=NaN,u="[object Symbol]",s=/^\s+|\s+$/g,c=/^[-+]0x[0-9a-f]+$/i,f=/^0b[01]+$/i,l=/^0o[0-7]+$/i,p=parseInt,d=Object.prototype.toString;function r(e,t){var r;if("function"!=typeof t)throw new TypeError(n);return e=function(e){var t=function(e){return e?(e=function(e){if("number"==typeof e)return e;if(function(e){return"symbol"==typeof e||function(e){return!!e&&"object"==typeof e}(e)&&d.call(e)==u}(e))return a;if(h(e)){var t="function"==typeof e.valueOf?e.valueOf():e;e=h(t)?t+"":t}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(s,"");var r=f.test(e);return r||l.test(e)?p(e.slice(2),r?2:8):c.test(e)?a:+e}(e))!==o&&e!==-o?e==e?e:0:(e<0?-1:1)*i:0===e?e:0}(e),r=t%1;return t==t?r?t-r:t:0}(e),function(){return 0<--e&&(r=t.apply(this,arguments)),e<=1&&(t=void 0),r}}function h(e){var t=typeof e;return!!e&&("object"==t||"function"==t)}e.exports=function(e){return r(2,e)}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "../../node_modules/@babel/runtime/helpers/asyncToGenerator.js":
+/*!*********************************************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
+  \*********************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+
+/***/ }),
+
+/***/ "../../node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime-module.js":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime-module.js ***!
+  \********************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// This method of obtaining a reference to the global object needs to be
+// kept identical to the way it is obtained in runtime.js
+var g = (function() {
+  return this || (typeof self === "object" && self);
+})() || Function("return this")();
+
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
+var oldRuntime = hadRuntime && g.regeneratorRuntime;
+
+// Force reevalutation of runtime.js.
+g.regeneratorRuntime = undefined;
+
+module.exports = __webpack_require__(/*! ./runtime */ "../../node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js");
+
+if (hadRuntime) {
+  // Restore the original runtime.
+  g.regeneratorRuntime = oldRuntime;
+} else {
+  // Remove the global property added by runtime.js.
+  try {
+    delete g.regeneratorRuntime;
+  } catch(e) {
+    g.regeneratorRuntime = undefined;
+  }
+}
+
+
+/***/ }),
+
+/***/ "../../node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js ***!
+  \*************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+!(function(global) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
+    }
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
+    return;
+  }
+
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  runtime.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  runtime.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  runtime.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  runtime.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  runtime.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+})(
+  // In sloppy mode, unbound `this` refers to the global object, fallback to
+  // Function constructor if we're in global strict mode. That is sadly a form
+  // of indirect eval which violates Content Security Policy.
+  (function() {
+    return this || (typeof self === "object" && self);
+  })() || Function("return this")()
+);
+
+
+/***/ }),
+
+/***/ "../../node_modules/@babel/runtime/regenerator/index.js":
+/*!**************************************************************************************************************************************************!*\
+  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/regenerator/index.js ***!
+  \**************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "../../node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime-module.js");
+
+
+/***/ }),
+
+/***/ "./controllers/root.js":
+/*!*****************************!*\
+  !*** ./controllers/root.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "../../node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../../node_modules/@babel/runtime/helpers/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+
+
+
+
+var RootController = {};
+var users = [{
+  id: 1,
+  name: 'Leanne Graham'
+}, {
+  id: 2,
+  name: 'Ervin Howell'
+}, {
+  id: 3,
+  name: 'Clementine Bauch'
+}, {
+  id: 4,
+  name: 'Patricia Lebsack'
+}, {
+  id: 5,
+  name: 'Chelsey Dietrich'
+}];
+var admins = [{
+  id: 1,
+  name: 'Kurtis Weissnat'
+}, {
+  id: 2,
+  name: 'Nicholas Runolfsdottir'
+}, {
+  id: 3,
+  name: 'Gelann Reichert'
+}, {
+  id: 4,
+  name: 'Moriah Stanton'
+}, {
+  id: 5,
+  name: 'Rey Padberg'
+}];
+
+RootController.rootPage = function (req, res) {
+  var adminContent = "\n        <div>\n        You don't appear to be logged in.  You can log in by visiting\n        <a href=\"/auth/google\">the Authentication Route</a>. You could\n        also look at details about yourself at <a href=\"/api/current_user\">the Current User route</a>\n        </div>\n    ";
+
+  if (req.user) {
+    adminContent = "\n        <div>\n            You appear to be logged in, so you can visit <a href=\"/admins\">the Admins route</a>\n            or you can\n            <form action=\"/logout\" method=\"post\">\n                <input type=\"hidden\" name=\"_csrf\" value=\"".concat(req.csrfToken(), "\"></input>\n                <button type=\"submit\">Logout</button>\n            </form>\n        </div>\n        ");
+  }
+
+  res.send("\n        <div>\n        <h4>Hi!  Welcome to the React SSR API</h4>\n        <div>\n            You can see <a href=\"/users\">the Users route</a>\n        </div>\n        ".concat(adminContent, "\n        </div>\n    "));
+};
+
+RootController.usersList = function (req, res) {
+  res.send(users);
+};
+
+RootController.logIn = function (req, res) {
+  res.send("\n    <html>\n      <body>\n        <a href=\"auth/google\">Login via Google</a>\n      </body>\n    </html>");
+};
+
+RootController.admins = function (req, res) {
+  res.send(admins);
+};
+
+RootController.redirectToRoot = function (req, res) {
+  res.redirect('/');
+};
+
+RootController.logOut =
+/*#__PURE__*/
+function () {
+  var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(req, res) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return req.logout();
+
+          case 2:
+            res.redirect('/');
+
+          case 3:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function (_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+RootController.emailVerification = function (req, res, next) {
+  var token = req.query.token; // Check to see token is valid with specified email
+
+  jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default.a.verify(token, 'afsan|user|emailVerify|007', {
+    subject: "emailVerification"
+  }, function (err, decoded) {
+    // Check to see can find email
+    if (err) {
+      if (err.name == 'TokenExpiredError') {
+        return res.status(500).send('request expired please try again');
+      } else {
+        return res.send({
+          err: err
+        });
+      }
+    }
+
+    _models_user__WEBPACK_IMPORTED_MODULE_3__["default"].findOneAndUpdate({
+      email: decoded.email
+    }, {
+      $set: {
+        isVerified: true
+      }
+    }, {
+      new: true
+    }, function (err, user) {
+      if (err) {
+        throw new Error('can\'t find Email try again');
+      }
+
+      res.redirect('/');
+    });
+  });
+};
+
+RootController.resetPassword = function (req, res, next) {
+  var token = req.query.token; // Check to see token is valid with specified email
+
+  jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default.a.verify(token, 'afsan|user|resetPassword|007', {
+    subject: "resetPassword"
+  }, function (err, decoded) {
+    // Check to see can find email
+    if (err) {
+      if (err.name == 'TokenExpiredError') {
+        return res.status(500).send('request expired please try again');
+      } else {
+        return res.send({
+          err: err
+        });
+      }
+    }
+
+    res.send({
+      email: decoded.email
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (RootController);
+
+/***/ }),
+
+/***/ "./emails/emailVerify.js":
+/*!*******************************!*\
+  !*** ./emails/emailVerify.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var jwt = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+
+var emailVerify = function emailVerify(user) {
+  var request = jwt.sign({
+    email: user.email,
+    access: "simple_user"
+  }, 'afsan|user|emailVerify|007', {
+    expiresIn: 60 * 60,
+    subject: "emailVerification"
+  });
+  return "\n    <html>\n        <body>\n            <div>\n                <h1>Email Verification</h1>\n                <a href='http://localhost:5000/emailverify?token=".concat(request, "'>\n                    <button>verifying my account</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
+};
+
+var text = 'and easy to do anywhere, even with Node.js';
+
+var config = function config(user) {
+  return {
+    to: user.email,
+    subject: "Successfully SignedIn[".concat(user.name, "]"),
+    from: 'af.hadafi@gmail.com',
+    text: text,
+    html: emailVerify(user)
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (config);
+
+/***/ }),
+
+/***/ "./emails/resetPassword.js":
+/*!*********************************!*\
+  !*** ./emails/resetPassword.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var jwt = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+
+var resetPassword = function resetPassword(user) {
+  var request = jwt.sign({
+    email: user.email,
+    access: "simple_user"
+  }, 'afsan|user|resetPassword|007', {
+    expiresIn: 60 * 60,
+    subject: "resetPassword"
+  });
+  return "\n    <html>\n        <body>\n            <div>\n                <h1>resetPassword</h1>\n                <a href='http://localhost:3000/resetPassword?token=".concat(request, "'>\n                    <button>reset my account Password</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
+};
+
+var text = 'and easy to do anywhere, even with Node.js';
+
+var config = function config(user) {
+  return {
+    to: user.email,
+    subject: "Rest Password",
+    from: 'af.hadafi@gmail.com',
+    text: text,
+    html: resetPassword(user)
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (config);
+
+/***/ }),
+
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./server */ "./server/index.js");
+
+_server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, function () {
+  console.log("[UserManagement]_server is running on port ".concat(process.env.PORT));
+});
+
+/***/ }),
+
+/***/ "./middlewares/requireLogin.js":
+/*!*************************************!*\
+  !*** ./middlewares/requireLogin.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (req, res, next) {
+  req.user ? next() : res.status(404).send({
+    error: 'You must log in!'
+  });
+});
+
+/***/ }),
+
+/***/ "./models/user.js":
+/*!************************!*\
+  !*** ./models/user.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "mongoose");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! validator */ "validator");
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(validator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bcrypt */ "bcrypt");
+/* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bcrypt__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__["Schema"]({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    index: true,
+    validate: {
+      validator: function validator(val) {
+        return validator__WEBPACK_IMPORTED_MODULE_1___default.a.isEmail(val);
+      },
+      message: '{VALUE} is not a valid {PATH}'
+    }
+  },
+  password: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  googleId: {
+    type: String
+  },
+  isVerified: {
+    type: Boolean
+  }
+});
+userSchema.method('comparePassword', function (candidatePass, callback) {
+  var _user = this;
+
+  Object(bcrypt__WEBPACK_IMPORTED_MODULE_2__["compare"])(candidatePass, _user.password, function (err, isMatch) {
+    callback(err, isMatch);
+  });
+});
+userSchema.pre('save', function (next) {
+  var _user = this;
+
+  if (!_user.isModified) {
+    return next();
+  }
+
+  Object(bcrypt__WEBPACK_IMPORTED_MODULE_2__["genSalt"])(10, function (err, salt) {
+    if (!err) {
+      Object(bcrypt__WEBPACK_IMPORTED_MODULE_2__["hash"])(_user.password, salt, function (err, hash) {
+        if (!err) {
+          _user.password = hash;
+          next();
+        } else {
+          return next('can\'t hash the password,try again');
+        }
+      });
+    } else {
+      return next('some thing went wrong');
+    }
+  });
+});
+var userModel = Object(mongoose__WEBPACK_IMPORTED_MODULE_0__["model"])('user', userSchema);
+/* harmony default export */ __webpack_exports__["default"] = (userModel);
+
+/***/ }),
+
+/***/ "./routes/rootRouter.js":
+/*!******************************!*\
+  !*** ./routes/rootRouter.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _controllers_root__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/root */ "./controllers/root.js");
+
+
+
+var router = express__WEBPACK_IMPORTED_MODULE_1___default.a.Router();
+router.get('/', _controllers_root__WEBPACK_IMPORTED_MODULE_2__["default"].rootPage);
+router.get('/users', _controllers_root__WEBPACK_IMPORTED_MODULE_2__["default"].usersList);
+router.get('/admins', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_0__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_2__["default"].admins);
+router.get('/login', _controllers_root__WEBPACK_IMPORTED_MODULE_2__["default"].logIn);
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "./routes/userRouter.js":
+/*!******************************!*\
+  !*** ./routes/userRouter.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
+/* harmony import */ var _controllers_root__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/root */ "./controllers/root.js");
+
+
+
+
+var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
+var googleAuth = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google', {
+  scope: ['profile', 'email']
+});
+var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('google');
+router.get('/auth/google', googleAuth);
+router.get('/api/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
+router.get('/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
+router.post('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].logOut);
+router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
+  res.send(req.user);
+});
+router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].emailVerification);
+router.get('/resetPassword', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].resetPassword);
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "./schema/index.js":
+/*!*************************!*\
+  !*** ./schema/index.js ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./schema/types/index.js");
+/* harmony import */ var _mutation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutation */ "./schema/mutation.js");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! graphql */ "graphql");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var Schema = new graphql__WEBPACK_IMPORTED_MODULE_2__["GraphQLSchema"]({
+  query: _types__WEBPACK_IMPORTED_MODULE_0__["default"],
+  mutation: _mutation__WEBPACK_IMPORTED_MODULE_1__["default"]
+});
+/* harmony default export */ __webpack_exports__["default"] = (Schema);
+
+/***/ }),
+
+/***/ "./schema/mutation.js":
+/*!****************************!*\
+  !*** ./schema/mutation.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _types_userType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./types/userType */ "./schema/types/userType.js");
+/* harmony import */ var _services_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/helpers */ "./services/helpers.js");
+
+
+
+var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
+  name: "MutationObserver",
+  fields: function fields() {
+    return {
+      SignIn: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          email: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          },
+          password: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref, req) {
+          var password = _ref.password,
+              email = _ref.email;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].SignIn({
+            email: email,
+            password: password,
+            req: req
+          });
+        }
+      },
+      SignUp: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          name: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          },
+          email: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          },
+          password: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref2, req) {
+          var email = _ref2.email,
+              password = _ref2.password,
+              name = _ref2.name;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].SignUp({
+            email: email,
+            password: password,
+            name: name,
+            req: req
+          });
+        }
+      },
+      SignOut: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        resolve: function resolve(parentValue, args, req) {
+          var user = req.user;
+          req.logout();
+          return user;
+        }
+      },
+      sendEmailVerify: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          email: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref3, req) {
+          var email = _ref3.email;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].sendEmailVerify({
+            email: email,
+            req: req
+          });
+        }
+      },
+      sendResetPassEmail: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          email: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref4, req) {
+          var email = _ref4.email;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].sendResetPassEmail({
+            email: email,
+            req: req
+          });
+        }
+      }
+    };
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (mutation);
+
+/***/ }),
+
+/***/ "./schema/types/index.js":
+/*!*******************************!*\
+  !*** ./schema/types/index.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _userType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./userType */ "./schema/types/userType.js");
+
+
+var RootQueryType = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
+  name: "RootQueryType",
+  fields: function fields() {
+    return {
+      user: {
+        type: _userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        resolve: function resolve(parentValue, args, req) {
+          return req.user;
+        }
+      }
+    };
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (RootQueryType);
+
+/***/ }),
+
+/***/ "./schema/types/userType.js":
+/*!**********************************!*\
+  !*** ./schema/types/userType.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
+
+var userType = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
+  name: "UserType",
+  fields: {
+    id: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLID"]
+    },
+    name: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"]
+    },
+    email: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"]
+    },
+    isVerified: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLBoolean"]
+    }
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (userType);
+
+/***/ }),
+
+/***/ "./server/index.js":
+/*!*************************!*\
+  !*** ./server/index.js ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mongoose */ "mongoose");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! body-parser */ "body-parser");
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! express-session */ "express-session");
+/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(express_session__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! cookie-parser */ "cookie-parser");
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! csurf */ "csurf");
+/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(csurf__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! x-xss-protection */ "x-xss-protection");
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(x_xss_protection__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! hpp */ "hpp");
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(hpp__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! helmet */ "helmet");
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
+/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! express-graphql */ "express-graphql");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+__webpack_require__(/*! ../services/passport */ "./services/passport.js"); /////////////////START DATABASE CONFIG///////////////////////////
+
+
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.connect(process.env.DB_ADDRESS, {
+  useNewUrlParser: true
+});
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.connection.on('connected', function () {
+  console.log("connection established successfully");
+});
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.connection.on('error', function (err) {
+  console.log('connection to mongo failed ' + err);
+});
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.connection.on('disconnected', function () {
+  console.log('mongo db connection closed');
+});
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.set('useCreateIndex', true);
+mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
+
+var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
+app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default()());
+app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default.a.noSniff());
+app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default.a.ieNoOpen()); /////////////////START APP MIDDLEWARE///////////////////////////
+
+__webpack_require__(/*! dotenv */ "dotenv").config({
+  path: path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve(process.cwd(), 'config/keys/.env')
+});
+
+app.use(cookie_parser__WEBPACK_IMPORTED_MODULE_6___default()());
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({
+  extended: true
+}));
+app.use(hpp__WEBPACK_IMPORTED_MODULE_10___default()());
+app.disable('x-powered-by');
+var whiteList = [process.env.CORS_APPROVED_ADDRESS, "http://localhost:".concat(process.env.PORT)];
+var corsOptionsDelegate = {
+  origin: function origin(_origin, cb) {
+    whiteList.indexOf(_origin) !== -1 || !_origin ? cb(null, true) : cb(new Error('Not allowed by CORS'));
+  }
+};
+app.use(cors__WEBPACK_IMPORTED_MODULE_7___default()(corsOptionsDelegate)); ///////////////END APP MIDDLEWARE///////////////////////////
+
+var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_5___default.a);
+
+app.use(express_session__WEBPACK_IMPORTED_MODULE_5___default()({
+  secret: "3f9faa8bc0e722172cc0bdafede9f3f217474e47",
+  resave: false,
+  saveUninitialized: false,
+  store: new RedisStore({
+    prefix: "session:auth:"
+  }),
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true
+  }
+})); // app.use()
+
+app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default()());
+app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.initialize());
+app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session()); ////////////////START GRAPHQL CONFIG///////////////////////////
+
+app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_14___default()({
+  schema: _schema__WEBPACK_IMPORTED_MODULE_15__["default"],
+  graphiql: true
+})); ////////////////START ROUTER CONFIG///////////////////////////
+
+app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__["default"]);
+app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
+
+/* harmony default export */ __webpack_exports__["default"] = (app);
+
+/***/ }),
+
+/***/ "./services/helpers.js":
+/*!*****************************!*\
+  !*** ./services/helpers.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @sendgrid/mail */ "@sendgrid/mail");
+/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sendgrid_mail__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _emails_emailVerify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../emails/emailVerify */ "./emails/emailVerify.js");
+/* harmony import */ var _emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../emails/resetPassword */ "./emails/resetPassword.js");
+
+
+
+
+
+/*
+ *
+ * Auth Object contain all logic for authentication
+ *
+*/
+
+var Auth = {};
+
+Auth.SignUp = function (_ref) {
+  var email = _ref.email,
+      password = _ref.password,
+      name = _ref.name,
+      req = _ref.req;
+
+  if (!email || !password) {
+    throw new Error('type all credentials');
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+    email: email
+  }).then(function (user) {
+    if (user) {
+      throw new Error('Email is in use');
+    }
+
+    return new _models_user__WEBPACK_IMPORTED_MODULE_1__["default"]({
+      email: email,
+      password: password,
+      name: name,
+      isVerified: false
+    }).save();
+  }).then(function (user) {
+    return new Promise(function (res, rej) {
+      req.login(user, function (err) {
+        if (err) {
+          rej(err);
+        }
+
+        return res(user);
+      });
+    });
+  });
+};
+
+Auth.SignIn = function (_ref2) {
+  var email = _ref2.email,
+      password = _ref2.password,
+      req = _ref2.req;
+
+  if (!email && !password) {
+    throw new Error('type all credentials');
+  }
+
+  ;
+  return new Promise(function (res, rej) {
+    passport__WEBPACK_IMPORTED_MODULE_0___default.a.authenticate('local', function (err, user) {
+      if (!user) {
+        return rej('you are not registered yet please signUp first');
+      }
+
+      if (err) {
+        return rej(err);
+      }
+
+      req.login(user, function (err) {
+        if (err) {
+          return rej(err);
+        }
+
+        return res(user);
+      });
+    })({
+      body: {
+        email: email,
+        password: password
+      }
+    });
+  });
+};
+
+Auth.sendEmailVerify = function (_ref3) {
+  var email = _ref3.email,
+      req = _ref3.req;
+
+  if (!email) {
+    throw new Error('email should be insert');
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+    email: email
+  }).then(function (user) {
+    if (!user) {
+      throw new Error('user with this email doesn\'t exist');
+    }
+
+    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
+    return new Promise(function (res, rej) {
+      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.send(Object(_emails_emailVerify__WEBPACK_IMPORTED_MODULE_3__["default"])(user), true, function (err, result) {
+        if (err) {
+          return rej(err);
+        }
+
+        return res({
+          email: email
+        });
+      });
+    });
+  });
+};
+
+Auth.sendResetPassEmail = function (_ref4) {
+  var email = _ref4.email,
+      req = _ref4.req;
+
+  if (!email) {
+    throw new Error('email should be insert');
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+    email: email
+  }).then(function (user) {
+    if (!user) {
+      throw new Error('user with this email doesn\'t exist');
+    }
+
+    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
+    return new Promise(function (res, rej) {
+      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.send(Object(_emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__["default"])(user), true, function (err, result) {
+        if (err) {
+          return rej(err);
+        }
+
+        return res({
+          email: email
+        });
+      });
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Auth);
+
+/***/ }),
+
+/***/ "./services/passport.js":
+/*!******************************!*\
+  !*** ./services/passport.js ***!
+  \******************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "../../node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../../node_modules/@babel/runtime/helpers/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! passport-google-oauth20 */ "passport-google-oauth20");
+/* harmony import */ var passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var passport_local__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! passport-local */ "passport-local");
+/* harmony import */ var passport_local__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(passport_local__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+
+__webpack_require__(/*! dotenv */ "dotenv").config({
+  path: path__WEBPACK_IMPORTED_MODULE_5___default.a.resolve(process.cwd(), 'config/keys/.env')
+});
+
+passport__WEBPACK_IMPORTED_MODULE_2___default.a.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+passport__WEBPACK_IMPORTED_MODULE_2___default.a.deserializeUser(function (id, done) {
+  _models_user__WEBPACK_IMPORTED_MODULE_4__["default"].findById(id).then(function (user) {
+    done(null, user);
+  });
+}); /////////////////// Google Authentication /////////////////////////
+
+var googleOption = {
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_AUTH_SUCCESS_CALLBACK,
+  proxy: true
+};
+var GoogleAuth = new passport_google_oauth20__WEBPACK_IMPORTED_MODULE_3__["Strategy"](googleOption,
+/*#__PURE__*/
+function () {
+  var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(accessToken, refreshToken, profile, done) {
+    var existingUser, newUser;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return _models_user__WEBPACK_IMPORTED_MODULE_4__["default"].findOne({
+              googleId: profile.id
+            });
+
+          case 2:
+            existingUser = _context.sent;
+
+            if (!existingUser) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt("return", done(null, existingUser));
+
+          case 5:
+            _context.next = 7;
+            return new _models_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
+              name: profile.displayName,
+              email: profile.emails[0].value,
+              password: profile.id,
+              googleId: profile.id,
+              isVerified: true
+            }).save();
+
+          case 7:
+            newUser = _context.sent;
+            done(null, newUser);
+
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function (_x, _x2, _x3, _x4) {
+    return _ref.apply(this, arguments);
+  };
+}()); /////////////////// Local Authentication ///////////////////////////
+
+var LocalOption = {
+  usernameField: 'email'
+};
+var LocalAuth = new passport_local__WEBPACK_IMPORTED_MODULE_6___default.a(LocalOption, function (email, password, done) {
+  _models_user__WEBPACK_IMPORTED_MODULE_4__["default"].findOne({
+    email: email.toLowerCase()
+  }, function (err, user) {
+    if (err) {
+      return done(err);
+    }
+
+    if (!user) {
+      return done(null, false);
+    }
+
+    user.comparePassword(password, function (err, isMatch) {
+      if (err) {
+        return done(err);
+      }
+
+      if (isMatch) {
+        return done(null, user);
+      }
+
+      return done(null, false, 'Invalid_Credential');
+    });
+  });
+});
+passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(LocalAuth);
+passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(GoogleAuth);
+
+/***/ }),
+
+/***/ "@sendgrid/mail":
+/*!*********************************!*\
+  !*** external "@sendgrid/mail" ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@sendgrid/mail");
+
+/***/ }),
+
+/***/ "bcrypt":
+/*!*************************!*\
+  !*** external "bcrypt" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "body-parser":
+/*!******************************!*\
+  !*** external "body-parser" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("body-parser");
+
+/***/ }),
+
+/***/ "connect-redis":
+/*!********************************!*\
+  !*** external "connect-redis" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("connect-redis");
+
+/***/ }),
+
+/***/ "cookie-parser":
+/*!********************************!*\
+  !*** external "cookie-parser" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("cookie-parser");
+
+/***/ }),
+
+/***/ "cors":
+/*!***********************!*\
+  !*** external "cors" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("cors");
+
+/***/ }),
+
+/***/ "csurf":
+/*!************************!*\
+  !*** external "csurf" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("csurf");
+
+/***/ }),
+
+/***/ "dotenv":
+/*!*************************!*\
+  !*** external "dotenv" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("dotenv");
+
+/***/ }),
+
+/***/ "express":
+/*!**************************!*\
+  !*** external "express" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("express");
+
+/***/ }),
+
+/***/ "express-graphql":
+/*!**********************************!*\
+  !*** external "express-graphql" ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("express-graphql");
+
+/***/ }),
+
+/***/ "express-session":
+/*!**********************************!*\
+  !*** external "express-session" ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+
+/***/ "graphql":
+/*!**************************!*\
+  !*** external "graphql" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("graphql");
+
+/***/ }),
+
+/***/ "helmet":
+/*!*************************!*\
+  !*** external "helmet" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("helmet");
+
+/***/ }),
+
+/***/ "hpp":
+/*!**********************!*\
+  !*** external "hpp" ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("hpp");
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/*!*******************************!*\
+  !*** external "jsonwebtoken" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("jsonwebtoken");
+
+/***/ }),
+
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("mongoose");
+
+/***/ }),
+
+/***/ "passport":
+/*!***************************!*\
+  !*** external "passport" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("passport");
+
+/***/ }),
+
+/***/ "passport-google-oauth20":
+/*!******************************************!*\
+  !*** external "passport-google-oauth20" ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("passport-google-oauth20");
+
+/***/ }),
+
+/***/ "passport-local":
+/*!*********************************!*\
+  !*** external "passport-local" ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("passport-local");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ "validator":
+/*!****************************!*\
+  !*** external "validator" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("validator");
+
+/***/ }),
+
+/***/ "x-xss-protection":
+/*!***********************************!*\
+  !*** external "x-xss-protection" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("x-xss-protection");
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=bundle.js.map

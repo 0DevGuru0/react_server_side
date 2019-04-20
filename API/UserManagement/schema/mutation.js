@@ -39,22 +39,22 @@ const mutation = new GraphQLObjectType({
                 return user;
             }
         },
-        sendRestPassEmail:{
+        sendEmailVerify:{
             type:UserType,
             args:{
                 email:{type:new GraphQLNonNull(GraphQLString)}
             },
             resolve(parentValue,{email},req){
-                return Auth.sendRestPassEmail({email,req})
+                return Auth.sendEmailVerify({email,req})
             }
         },
-        resetPassword:{
+        sendResetPassEmail:{
             type:UserType,
             args:{
                 email:{type:new GraphQLNonNull(GraphQLString)}
             },
             resolve(parentValue,{email},req){
-               return Auth.resetPassword({email,req})
+               return Auth.sendResetPassEmail({email,req})
             }
         }
     })
