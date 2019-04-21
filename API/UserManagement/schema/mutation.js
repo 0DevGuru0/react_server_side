@@ -56,6 +56,16 @@ const mutation = new GraphQLObjectType({
             resolve(parentValue,{email},req){
                return Auth.sendResetPassEmail({email,req})
             }
+        },
+        updateUserPassword:{
+            type:UserType,
+            args:{
+                email:{type:new GraphQLNonNull(GraphQLString)},
+                password:{type:new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue,{email,password},req){
+                return Auth.updateUserPassword({email,password,req})
+            }
         }
     })
 });

@@ -1070,12 +1070,10 @@ RootController.emailVerification = function (req, res, next) {
 };
 
 RootController.resetPassword = function (req, res, next) {
-  var token = req.query.token; // Check to see token is valid with specified email
-
+  var token = req.query.token;
   jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default.a.verify(token, 'afsan|user|resetPassword|007', {
     subject: "resetPassword"
   }, function (err, decoded) {
-    // Check to see can find email
     if (err) {
       if (err.name == 'TokenExpiredError') {
         return res.status(500).send('request expired please try again');
@@ -1153,7 +1151,7 @@ var resetPassword = function resetPassword(user) {
     expiresIn: 60 * 60,
     subject: "resetPassword"
   });
-  return "\n    <html>\n        <body>\n            <div>\n                <h1>resetPassword</h1>\n                <a href='http://localhost:3000/resetPassword?token=".concat(request, "'>\n                    <button>reset my account Password</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
+  return "\n    <html>\n        <body>\n            <div>\n                <h1>resetPassword</h1>\n                <a href='http://localhost:3000/resetPassword/".concat(request, "'>\n                    <button>reset my account Password</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
 };
 
 var text = 'and easy to do anywhere, even with Node.js';
@@ -1477,6 +1475,26 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
             req: req
           });
         }
+      },
+      updateUserPassword: {
+        type: _types_userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          email: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          },
+          password: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref5, req) {
+          var email = _ref5.email,
+              password = _ref5.password;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].updateUserPassword({
+            email: email,
+            password: password,
+            req: req
+          });
+        }
       }
     };
   }
@@ -1497,6 +1515,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
 /* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _userType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./userType */ "./schema/types/userType.js");
+/* harmony import */ var _services_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/helpers */ "./services/helpers.js");
+
 
 
 var RootQueryType = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
@@ -1507,6 +1527,21 @@ var RootQueryType = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"
         type: _userType__WEBPACK_IMPORTED_MODULE_1__["default"],
         resolve: function resolve(parentValue, args, req) {
           return req.user;
+        }
+      },
+      identifyUserByToken: {
+        type: _userType__WEBPACK_IMPORTED_MODULE_1__["default"],
+        args: {
+          token: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref, req) {
+          var token = _ref.token;
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].identifyUserByToken({
+            token: token,
+            req: req
+          });
         }
       }
     };
@@ -1693,6 +1728,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sendgrid_mail__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _emails_emailVerify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../emails/emailVerify */ "./emails/emailVerify.js");
 /* harmony import */ var _emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../emails/resetPassword */ "./emails/resetPassword.js");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -1827,12 +1865,61 @@ Auth.sendResetPassEmail = function (_ref4) {
     return new Promise(function (res, rej) {
       _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.send(Object(_emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__["default"])(user), true, function (err, result) {
         if (err) {
-          return rej(err);
+          return rej(err.message);
         }
 
         return res({
           email: email
         });
+      });
+    });
+  });
+};
+
+Auth.identifyUserByToken = function (_ref5) {
+  var token = _ref5.token,
+      req = _ref5.req;
+  return new Promise(function (res, rej) {
+    return jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default.a.verify(token, 'afsan|user|resetPassword|007', {
+      subject: "resetPassword"
+    }, function (err, decoded) {
+      if (err) {
+        if (err.name == 'TokenExpiredError') {
+          return rej('request expired please try again');
+        } else {
+          console.log(err);
+          return rej(err);
+        }
+      }
+
+      res({
+        email: decoded.email
+      });
+    });
+  });
+};
+
+Auth.updateUserPassword = function (_ref6) {
+  var email = _ref6.email,
+      password = _ref6.password,
+      req = _ref6.req;
+  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+    email: email
+  }).then(function (user, err) {
+    if (err) {
+      throw new Error('something went wrong,try again');
+    }
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.password = password;
+    return user.save();
+  }).then(function (user) {
+    return new Promise(function (res, rej) {
+      return res({
+        email: email
       });
     });
   });

@@ -1,8 +1,9 @@
 import passport from 'passport';
 import User from '../models/user';
-import  sgMail from '@sendgrid/mail';
+import sgMail from '@sendgrid/mail';
 import Verify_Email_Config from '../emails/emailVerify';
 import Reset_Password_Config from '../emails/resetPassword';
+import jwt from 'jsonwebtoken';
 
 /*
  *
@@ -74,12 +75,43 @@ Auth.sendResetPassEmail= ({email,req})=>{
         return new Promise((res, rej) => {
             sgMail.send(Reset_Password_Config(user), true, (err, result) => {
                 if (err) {
-                    return rej(err)
+                    return rej(err.message)
                 }
                 return res({ email })
             });
         })
     })
 }
+
+Auth.identifyUserByToken =({token,req})=>{
+    return new Promise((res, rej) => {
+        return jwt.verify(token,'afsan|user|resetPassword|007', { subject: "resetPassword" },(err, decoded)=>{
+            if(err){
+                if(err.name == 'TokenExpiredError'){
+                    return rej('request expired please try again')
+                }else{
+                    console.log(err)
+                    return rej(err)
+                }
+            }
+            res({email:decoded.email})
+        })
+    })
+}
+
+Auth.updateUserPassword=({email,password,req})=>{
+    return User.findOne({email}).then((user,err)=>{
+        if(err)     {throw new Error('something went wrong,try again')}
+        if(!user)   {throw new Error('User not found')}
+
+        user.password = password;
+        return user.save();
+    }).then(user=>{
+        return new Promise((res,rej)=>{
+            return res({email})
+        })
+    })
+}
+
 
 export default Auth;

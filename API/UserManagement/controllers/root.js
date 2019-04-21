@@ -106,9 +106,7 @@ RootController.emailVerification =  (req,res,next)=>{
 }
 RootController.resetPassword =  (req,res,next)=>{
     const {token} = req.query;
-    // Check to see token is valid with specified email
     jwt.verify(token,'afsan|user|resetPassword|007', { subject: "resetPassword" },(err, decoded)=>{
-        // Check to see can find email
         if(err){
             if(err.name == 'TokenExpiredError'){
                 return res.status(500).send('request expired please try again')

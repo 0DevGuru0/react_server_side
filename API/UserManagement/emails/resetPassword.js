@@ -12,7 +12,7 @@ const resetPassword=(user)=>{
         <body>
             <div>
                 <h1>resetPassword</h1>
-                <a href='http://localhost:3000/resetPassword?token=${request}'>
+                <a href='http://localhost:3000/resetPassword/${request}'>
                     <button>reset my account Password</button>
                 </a>
             </div>
