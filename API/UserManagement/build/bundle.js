@@ -1339,7 +1339,7 @@ var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate(
 router.get('/auth/google', googleAuth);
 router.get('/api/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
 router.get('/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
-router.post('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].logOut);
+router.get('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].logOut);
 router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
   res.send(req.user);
 });
