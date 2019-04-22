@@ -147,6 +147,36 @@ function _templateObject() {
 
 /***/ }),
 
+/***/ "./client/Graphql/mutation/sendRequestToRestPass.js":
+/*!**********************************************************!*\
+  !*** ./client/Graphql/mutation/sendRequestToRestPass.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/taggedTemplateLiteral */ "@babel/runtime/helpers/taggedTemplateLiteral");
+/* harmony import */ var _babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql-tag */ "graphql-tag");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function _templateObject() {
+  var data = _babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0___default()(["\n    mutation sendRequest($Email:String!){\n        sendResetPassEmail(email:$Email){\n            email\n        }\n    }\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+
+/* harmony default export */ __webpack_exports__["default"] = (graphql_tag__WEBPACK_IMPORTED_MODULE_1___default()(_templateObject()));
+
+/***/ }),
+
 /***/ "./client/Graphql/mutation/updateUserPassword.js":
 /*!*******************************************************!*\
   !*** ./client/Graphql/mutation/updateUserPassword.js ***!
@@ -193,7 +223,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function _templateObject() {
-  var data = _babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0___default()(["\n    {\n        user{\n            id\n            email\n            name\n        }\n    }\n"]);
+  var data = _babel_runtime_helpers_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_0___default()(["\n    {\n        user{\n            id\n            email\n            name\n            isVerified\n        }\n    }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -305,7 +335,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./containers/notFoundPage */ "./client/containers/notFoundPage.js");
 /* harmony import */ var _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./containers/userManagement/SignIn */ "./client/containers/userManagement/SignIn.js");
 /* harmony import */ var _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./containers/userManagement/SignUp */ "./client/containers/userManagement/SignUp.js");
-/* harmony import */ var _containers_userManagement_resetPassword__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./containers/userManagement/resetPassword */ "./client/containers/userManagement/resetPassword.js");
+/* harmony import */ var _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/resetPassword */ "./client/containers/userManagement/resetPassword/resetPassword.js");
+/* harmony import */ var _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/requestToReset */ "./client/containers/userManagement/resetPassword/requestToReset.js");
+
 
 
 
@@ -331,8 +363,10 @@ __webpack_require__.r(__webpack_exports__);
   }, _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/signup'
   }, _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+    path: '/request_resetPass'
+  }, _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_10__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/resetPassword'
-  }, _containers_userManagement_resetPassword__WEBPACK_IMPORTED_MODULE_9__["default"]), {
+  }, _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_9__["default"]), {
     component: _containers_home__WEBPACK_IMPORTED_MODULE_2__["default"],
     path: '/'
   }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__["default"])]
@@ -489,6 +523,18 @@ var fetchUsers = function fetchUsers() {
 
 /***/ }),
 
+/***/ "./client/components/header.css":
+/*!**************************************!*\
+  !*** ./client/components/header.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"emailVerify":"header__emailVerify--1OOm_"};
+
+/***/ }),
+
 /***/ "./client/components/header.js":
 /*!*************************************!*\
   !*** ./client/components/header.js ***!
@@ -507,6 +553,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-apollo */ "react-apollo");
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Graphql/query/user */ "./client/Graphql/query/user.js");
+/* harmony import */ var _header_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./header.css */ "./client/components/header.css");
+/* harmony import */ var _header_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_header_css__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -536,14 +585,26 @@ var Header = function Header(props) {
     }
   };
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  var emailVerify = function emailVerify() {
+    if (props.data.user && props.user) {
+      if (!props.user.isVerified || !props.data.user.isVerified) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: _header_css__WEBPACK_IMPORTED_MODULE_5___default.a.emailVerify
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "please confirm your email verify", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "/emailVerify"
+        }, "Send Request To My Email")));
+      }
+    }
+  };
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, emailVerify(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "nav-wrapper"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/",
     className: "brand-logo left"
   }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "right"
-  }, renderButtons())));
+  }, renderButtons()))));
 };
 
 var mapStateToProps = function mapStateToProps(_ref) {
@@ -847,6 +908,18 @@ function (_Component) {
       });
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), "showErrors", function () {
+      var errors = [];
+
+      _this.state.errors.map(function (err, i) {
+        return errors.push(react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("li", {
+          key: i
+        }, err));
+      });
+
+      return errors;
+    });
+
     return _this;
   }
 
@@ -857,7 +930,9 @@ function (_Component) {
 
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: _signin_css__WEBPACK_IMPORTED_MODULE_12___default.a.container
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        className: _signin_css__WEBPACK_IMPORTED_MODULE_12___default.a.errorBox
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", null, this.showErrors())), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
         onSubmit: this.submitHandler
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("label", null, "Email:"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
         type: "email",
@@ -887,7 +962,9 @@ function (_Component) {
         name: "action"
       }, "Submit", react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("i", {
         className: "material-icons right"
-      }, "send"))));
+      }, "send"))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("a", {
+        href: "/request_resetPass"
+      }, "forgot your password?"));
     }
   }]);
 
@@ -1000,6 +1077,18 @@ function (_Component) {
       });
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), "showErrors", function () {
+      var errors = [];
+
+      _this.state.errors.map(function (err, i) {
+        return errors.push(react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("li", {
+          key: i
+        }, err));
+      });
+
+      return errors;
+    });
+
     return _this;
   }
 
@@ -1010,7 +1099,7 @@ function (_Component) {
 
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "container"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", null, this.showErrors())), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
         onSubmit: this.submitHandler
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("label", null, "Name"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
         id: "first_name",
@@ -1064,10 +1153,10 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./client/containers/userManagement/resetPassword.js":
-/*!***********************************************************!*\
-  !*** ./client/containers/userManagement/resetPassword.js ***!
-  \***********************************************************/
+/***/ "./client/containers/userManagement/resetPassword/requestToReset.js":
+/*!**************************************************************************!*\
+  !*** ./client/containers/userManagement/resetPassword/requestToReset.js ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1091,8 +1180,172 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-apollo */ "react-apollo");
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _Graphql_query_userIdentify_token__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../Graphql/query/userIdentify_token */ "./client/Graphql/query/userIdentify_token.js");
-/* harmony import */ var _Graphql_mutation_updateUserPassword__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../Graphql/mutation/updateUserPassword */ "./client/Graphql/mutation/updateUserPassword.js");
+/* harmony import */ var _Graphql_mutation_sendRequestToRestPass__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../Graphql/mutation/sendRequestToRestPass */ "./client/Graphql/mutation/sendRequestToRestPass.js");
+/* harmony import */ var _requestToRest_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./requestToRest.css */ "./client/containers/userManagement/resetPassword/requestToRest.css");
+/* harmony import */ var _requestToRest_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_requestToRest_css__WEBPACK_IMPORTED_MODULE_10__);
+
+
+
+
+
+
+
+
+
+
+
+
+var requestToReset =
+/*#__PURE__*/
+function (_Component) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default()(requestToReset, _Component);
+
+  function requestToReset(props) {
+    var _this;
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, requestToReset);
+
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(requestToReset).call(this, props));
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "sendRequestToEmail", function (e) {
+      e.preventDefault();
+
+      if (_this.state.email !== '') {
+        _this.props.mutate({
+          variables: {
+            Email: _this.state.email
+          }
+        }).then(function () {
+          _this.setState({
+            success: "you are successfully send request to ".concat(_this.state.email),
+            errors: []
+          });
+        }).catch(function (e) {
+          var errors = e.graphQLErrors.map(function (err) {
+            return err.message;
+          });
+
+          _this.setState({
+            errors: errors,
+            success: ''
+          });
+        });
+      } else {
+        _this.setState({
+          errors: ['please type your email,to send request'],
+          success: ''
+        });
+      }
+    });
+
+    _this.state = {
+      email: '',
+      errors: [],
+      success: ''
+    };
+    return _this;
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(requestToReset, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var successMessage = function successMessage() {
+        if (_this2.state.success !== '') {
+          return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+            className: _requestToRest_css__WEBPACK_IMPORTED_MODULE_10___default.a.successMsg
+          }, _this2.state.success);
+        }
+      };
+
+      var errorMessage = function errorMessage() {
+        if (_this2.state.errors.length > 0) {
+          return _this2.state.errors.map(function (el, i) {
+            return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+              className: _requestToRest_css__WEBPACK_IMPORTED_MODULE_10___default.a.errorMsg,
+              key: i
+            }, el);
+          });
+        }
+      };
+
+      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: _requestToRest_css__WEBPACK_IMPORTED_MODULE_10___default.a.container
+      }, successMessage(), errorMessage(), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("form", {
+        onSubmit: this.sendRequestToEmail
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("label", {
+        id: "email"
+      }, "Email Address"), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("input", {
+        type: "email",
+        name: "email",
+        id: "email",
+        placeholder: "Email Address...",
+        onChange: function onChange(e) {
+          _this2.setState({
+            email: e.target.value
+          });
+        },
+        value: this.state.email
+      }), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("button", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("i", {
+        className: "material-icons"
+      }, "send"), "Send Request")));
+    }
+  }]);
+
+  return requestToReset;
+}(react__WEBPACK_IMPORTED_MODULE_7__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  component: Object(react_apollo__WEBPACK_IMPORTED_MODULE_8__["graphql"])(_Graphql_mutation_sendRequestToRestPass__WEBPACK_IMPORTED_MODULE_9__["default"])(requestToReset)
+});
+
+/***/ }),
+
+/***/ "./client/containers/userManagement/resetPassword/requestToRest.css":
+/*!**************************************************************************!*\
+  !*** ./client/containers/userManagement/resetPassword/requestToRest.css ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"container":"requestToRest__container--3sVwv","successMsg":"requestToRest__successMsg--2CG-E","errorMsg":"requestToRest__errorMsg--5Vdwo"};
+
+/***/ }),
+
+/***/ "./client/containers/userManagement/resetPassword/resetPassword.js":
+/*!*************************************************************************!*\
+  !*** ./client/containers/userManagement/resetPassword/resetPassword.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "@babel/runtime/helpers/classCallCheck");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "@babel/runtime/helpers/createClass");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "@babel/runtime/helpers/possibleConstructorReturn");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "@babel/runtime/helpers/getPrototypeOf");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "@babel/runtime/helpers/assertThisInitialized");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "@babel/runtime/helpers/inherits");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "@babel/runtime/helpers/defineProperty");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-apollo */ "react-apollo");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _Graphql_query_userIdentify_token__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../Graphql/query/userIdentify_token */ "./client/Graphql/query/userIdentify_token.js");
+/* harmony import */ var _Graphql_mutation_updateUserPassword__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../Graphql/mutation/updateUserPassword */ "./client/Graphql/mutation/updateUserPassword.js");
+/* harmony import */ var _requestToRest_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./requestToRest.css */ "./client/containers/userManagement/resetPassword/requestToRest.css");
+/* harmony import */ var _requestToRest_css__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_requestToRest_css__WEBPACK_IMPORTED_MODULE_11__);
+
 
 
 
@@ -1120,10 +1373,12 @@ function (_Component) {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "formHandler", function (e) {
       e.preventDefault();
 
-      if (_this.state.password == _this.state.password_copy) {
+      if (_this.state.password == '' || _this.state.password_copy == '') {
+        _this.setState({
+          errors: ['please fill all credentials']
+        });
+      } else if (_this.state.password == _this.state.password_copy) {
         if (_this.props.data.identifyUserByToken) {
-          console.log(_this.props.data.identifyUserByToken.email);
-
           _this.props.mutate({
             variables: {
               Email: _this.props.data.identifyUserByToken.email,
@@ -1131,14 +1386,42 @@ function (_Component) {
             }
           }).then(function () {
             _this.props.history.replace('/signin');
+          }).catch(function (e) {
+            var errors = e.graphQLErrors.map(function (err) {
+              return err.message;
+            });
+
+            _this.setState({
+              errors: errors
+            });
           });
         }
+      } else {
+        _this.setState({
+          errors: ['passwords don\'t match with each other, please try again ']
+        });
+      }
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "showErrors", function () {
+      var errors = [];
+
+      if (_this.state.errors.length > 0) {
+        _this.state.errors.map(function (err, i) {
+          return errors.push(react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+            className: _requestToRest_css__WEBPACK_IMPORTED_MODULE_11___default.a.errorMsg,
+            key: i
+          }, err));
+        });
+
+        return errors;
       }
     });
 
     _this.state = {
       password: '',
-      password_copy: ''
+      password_copy: '',
+      errors: []
     };
     return _this;
   }
@@ -1148,7 +1431,9 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h1", null, "Reset Password"), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("form", {
+      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: _requestToRest_css__WEBPACK_IMPORTED_MODULE_11___default.a.container
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h4", null, "Reset Password"), this.showErrors(), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("form", {
         onSubmit: this.formHandler
       }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("input", {
         name: "password",
@@ -1168,7 +1453,9 @@ function (_Component) {
         },
         value: this.state.password_copy,
         placeholder: "repeat Password"
-      }), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("button", null, "resetPassword")));
+      }), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("button", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("i", {
+        className: "material-icons"
+      }, "send"), " resetPassword")));
     }
   }]);
 
@@ -1197,7 +1484,7 @@ function (_Component) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"container":"signin__container--3fD1p"};
+module.exports = {"container":"signin__container--3fD1p","errorBox":"signin__errorBox---_BEP"};
 
 /***/ }),
 

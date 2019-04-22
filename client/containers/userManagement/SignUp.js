@@ -26,9 +26,19 @@ class SignUp extends Component{
             this.setState({errors});
         })
     }
+    showErrors = ()=>{
+        const errors = []
+        this.state.errors.map( (err,i)=>errors.push(<li key={i}>{err}</li>) )
+        return errors
+    }
     render(){
         return(
             <div className='container'>
+             <div>
+                <ul>
+                    {this.showErrors()}
+                </ul>
+            </div>
                 <form onSubmit={this.submitHandler}>
                     <label>Name</label>
                     <input id="first_name" type="text" value={this.state.user.name} onChange={val=>this.setState({ user:{...this.state.user, name:val.target.value }})}/>

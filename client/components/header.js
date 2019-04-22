@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import query from '../Graphql/query/user'
+import classes from './header.css';
 const Header = (props)=>{
   const renderButtons=()=>{
     if (props.user || props.data.user) {
@@ -34,7 +35,20 @@ const Header = (props)=>{
       );
     }
   }
-    return (
+  const emailVerify = ()=>{
+    if(props.data.user && props.user){
+        if(!props.user.isVerified || !props.data.user.isVerified){
+          return <div className={classes.emailVerify}>
+              <p>
+                please confirm your email verify<a href="/emailVerify">Send Request To My Email</a>
+              </p>
+            </div>
+          }
+      }
+  }
+    return (<div>
+
+      {emailVerify()}
       <nav>
         <div className="nav-wrapper">
           <Link to="/" className="brand-logo left">
@@ -45,6 +59,7 @@ const Header = (props)=>{
           </ul>
         </div>
       </nav>
+    </div>
     );
 }
 

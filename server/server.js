@@ -24,11 +24,11 @@ app.use('/api',proxy('http://localhost:5000', {
 }));
 
 
-// const compiler = webpack(webpackClientConfig);
-// const webpackDevMiddleware = require('webpack-dev-middleware')(compiler)
-// const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
-// app.use(webpackDevMiddleware)
-// app.use(webpackHotMiddleware)
+const compiler = webpack(webpackClientConfig);
+const webpackDevMiddleware = require('webpack-dev-middleware')(compiler)
+const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
+app.use(webpackDevMiddleware)
+app.use(webpackHotMiddleware)
 
 
 // webpack([
