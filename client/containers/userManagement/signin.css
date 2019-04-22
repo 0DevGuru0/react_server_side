@@ -1,4 +1,19 @@
-.container{
+.container {
     margin: 0 auto;
-    padding: 30px;
+    padding: 10rem;
+}
+
+.errorBox {
+    background: rgba(255, 0, 63, 0.5);
+    width: 50%;
+    margin: auto;
+    margin-bottom: 10px;
+    border-radius: 17px;
+
+}
+
+.errorBox li {
+    padding: 12px 20px;
+    color: white;
+    text-shadow: 1px 1px 3px black;
 }

@@ -3,15 +3,14 @@ import {graphql} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
 import query from '../../Graphql/query/user'
 import classes from './signin.css'
-
 class SignIn extends Component{
 
-    state={
-        user:{
-            email:'',
-            password:''
+    state = {
+        user: {
+            email: '',
+            password: ''
         },
-        errors:[]
+        errors: []
     }
 
     submitHandler = (e)=>{
@@ -28,9 +27,19 @@ class SignIn extends Component{
             this.setState({errors});
         })
     }
+    showErrors = ()=>{
+        const errors = []
+        this.state.errors.map( (err,i)=>errors.push(<li key={i}>{err}</li>) )
+        return errors
+    }
     render(){
         return(
             <div className={classes.container}>
+            <div className={classes.errorBox}>
+                <ul>
+                    {this.showErrors()}
+                </ul>
+            </div>
                 <form onSubmit={this.submitHandler}>
                     <label>Email:</label>
                     <input type="email" placeholder="type your email..." value={this.state.user.email} onChange={val=>this.setState({ user:{...this.state.user, email:val.target.value }})}/>
@@ -42,6 +51,7 @@ class SignIn extends Component{
                         <i className="material-icons right">send</i>
                     </button>
                 </form>
+                <a href="/request_resetPass">forgot your password?</a>
             </div>
         )
     }
