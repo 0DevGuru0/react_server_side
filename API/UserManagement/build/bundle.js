@@ -1113,7 +1113,7 @@ var emailVerify = function emailVerify(user) {
     expiresIn: 60 * 60,
     subject: "emailVerification"
   });
-  return "\n    <html>\n        <body>\n            <div>\n                <h1>Email Verification</h1>\n                <a href='http://localhost:5000/emailverify?token=".concat(request, "'>\n                    <button>verifying my account</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
+  return "\n    <html>\n        <body>\n            <div>\n                <h1>Email Verification</h1>\n                <a href='http://localhost:3000/api/emailverify?token=".concat(request, "'>\n                    <button>verifying my account</button>\n                </a>\n            </div>\n        </body>\n    </html>\n    ");
 };
 
 var text = 'and easy to do anywhere, even with Node.js';
@@ -1343,7 +1343,7 @@ router.get('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["de
 router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
   res.send(req.user);
 });
-router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].emailVerification);
+router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].emailVerification, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
 router.get('/resetPassword', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].resetPassword);
 /* harmony default export */ __webpack_exports__["default"] = (router);
 

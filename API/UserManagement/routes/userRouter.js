@@ -38,6 +38,7 @@ router.get(
 router.get(
    '/emailverify',
    rootCtr.emailVerification
+   ,rootCtr.redirectToRoot
 )
 router.get(
    '/resetPassword',
