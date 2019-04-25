@@ -25,14 +25,17 @@ const googleOption = {
 const GoogleAuth = new GoogleStrategy(googleOption,async (accessToken,refreshToken,profile,done)=>{
     const existingUser = await User.findOne({googleId:profile.id});
     if(existingUser){ return done(null,existingUser) }
-    const newUser = await new User({
-        name:profile.displayName,
-        email:profile.emails[0].value,
-        password:profile.id,
-        googleId:profile.id,
-        isVerified:true
-    }).save()
-    done(null,newUser);
+        const newUser = new User({
+            name:profile.displayName,
+            email:profile.emails[0].value,
+            password:profile.id,
+            googleId:profile.id,
+            isVerified:true
+        })
+        newUser.save((err,user,row)=>{
+            if(err){return done(err,null)}
+            done(null,user);
+        })
 });
 /////////////////// Local Authentication ///////////////////////////
 const LocalOption = {usernameField:'email'}

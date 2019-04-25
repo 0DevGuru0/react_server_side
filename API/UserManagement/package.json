@@ -11,18 +11,23 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/helpers": "^6.3.0",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
     "connect-redis": "^3.4.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "csurf": "^1.10.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "express-session": "^1.15.6",
     "graphql": "^14.1.1",
+    "helmet": "^3.16.0",
+    "hpp": "^0.2.2",
     "ioredis": "^4.6.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.18",
     "npm-run-all": "^4.1.5",
     "passport": "^0.4.0",
@@ -30,7 +35,8 @@
     "passport-local": "^1.0.0",
     "redis": "^2.8.0",
     "validator": "^10.11.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "x-xss-protection": "^1.1.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.3.4",

@@ -25,6 +25,11 @@ router.get(
    googleAuthCB,
    rootCtr.redirectToRoot
 )
+router.post(
+   '/logout',
+   requireLogin,
+   rootCtr.logOut
+)
 router.get(
    '/logout',
    requireLogin,

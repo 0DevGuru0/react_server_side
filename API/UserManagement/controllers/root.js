@@ -2,13 +2,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user'
 const RootController = {}
 
-const users = [
-    { id: 1, name: 'Leanne Graham' },
-    { id: 2, name: 'Ervin Howell' },
-    { id: 3, name: 'Clementine Bauch' },
-    { id: 4, name: 'Patricia Lebsack' },
-    { id: 5, name: 'Chelsey Dietrich' }
-];
 const admins = [
     { id: 1, name: 'Kurtis Weissnat' },
     { id: 2, name: 'Nicholas Runolfsdottir' },
@@ -48,8 +41,16 @@ RootController.rootPage = (req, res) => {
     `);
 }
 
-RootController.usersList = (req, res) => {
-    res.send(users);
+RootController.usersList = (req, res,next) => {
+    User.find().limit(5).then((users)=>{
+        if(!users){return 'no user has been registered yet'}
+        let Users = users.map( ( {_id,name,email,isVerified} )=>{
+            return {_id,name,email,isVerified}
+        })
+        res.send(Users);
+    }).catch(e=>{
+        next(new Error(e))
+    })
 }
 
 RootController.logIn = (req, res) => {
@@ -97,7 +98,7 @@ RootController.emailVerification =  (req,res,next)=>{
              },
              (err, user) => {
                  if (err) {
-                     throw new Error('can\'t find Email try again')
+                     next(new Error('can\'t find Email try again'))
                  }
                  res.redirect('/')
              })

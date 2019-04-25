@@ -4,6 +4,7 @@ import {compare,genSalt,hash} from 'bcrypt';
 const userSchema = new Schema({
     name:{
         type:String,
+        trim:true,
         required:true
     },
     email:{
@@ -12,6 +13,7 @@ const userSchema = new Schema({
         unique:true,
         lowercase:true,
         index:true,
+        trim:true,
         validate:{
             validator:val=>validator.isEmail(val),
             message: '{VALUE} is not a valid {PATH}'

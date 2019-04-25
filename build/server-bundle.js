@@ -1023,6 +1023,7 @@ function (_Component) {
         var errors = e.graphQLErrors.map(function (err) {
           return err.message;
         });
+        errors = errors[0].split(',');
 
         _this.setState({
           errors: errors
@@ -1130,6 +1131,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _Graphql_mutation_Signup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../Graphql/mutation/Signup */ "./client/Graphql/mutation/Signup.js");
 /* harmony import */ var _Graphql_query_user__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../Graphql/query/user */ "./client/Graphql/query/user.js");
+/* harmony import */ var _signup_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./signup.css */ "./client/containers/userManagement/signup.css");
+/* harmony import */ var _signup_css__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_signup_css__WEBPACK_IMPORTED_MODULE_12__);
+
 
 
 
@@ -1192,6 +1196,7 @@ function (_Component) {
         var errors = e.graphQLErrors.map(function (err) {
           return err.message;
         });
+        errors = errors[0].split(',');
 
         _this.setState({
           errors: errors
@@ -1220,8 +1225,10 @@ function (_Component) {
       var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: "container"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", null, this.showErrors())), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
+        className: _signup_css__WEBPACK_IMPORTED_MODULE_12___default.a.container
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        className: _signup_css__WEBPACK_IMPORTED_MODULE_12___default.a.errorBox
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", null, this.showErrors())), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("form", {
         onSubmit: this.submitHandler
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("label", null, "Name"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
         id: "first_name",
@@ -1235,6 +1242,7 @@ function (_Component) {
           });
         }
       }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("label", null, "Email:"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
+        id: "email",
         type: "email",
         placeholder: "type your email...",
         value: this.state.user.email,
@@ -1246,6 +1254,7 @@ function (_Component) {
           });
         }
       }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("label", null, "Password:"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
+        id: "password",
         name: "password",
         type: "password",
         value: this.state.user.password,
@@ -1607,6 +1616,18 @@ function (_Component) {
 
 // removed by extract-text-webpack-plugin
 module.exports = {"container":"signin__container--3fD1p","errorBox":"signin__errorBox---_BEP"};
+
+/***/ }),
+
+/***/ "./client/containers/userManagement/signup.css":
+/*!*****************************************************!*\
+  !*** ./client/containers/userManagement/signup.css ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"container":"signup__container--9K7C4","errorBox":"signup__errorBox--2447J"};
 
 /***/ }),
 

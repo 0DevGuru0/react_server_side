@@ -946,22 +946,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var RootController = {};
-var users = [{
-  id: 1,
-  name: 'Leanne Graham'
-}, {
-  id: 2,
-  name: 'Ervin Howell'
-}, {
-  id: 3,
-  name: 'Clementine Bauch'
-}, {
-  id: 4,
-  name: 'Patricia Lebsack'
-}, {
-  id: 5,
-  name: 'Chelsey Dietrich'
-}];
 var admins = [{
   id: 1,
   name: 'Kurtis Weissnat'
@@ -989,8 +973,28 @@ RootController.rootPage = function (req, res) {
   res.send("\n        <div>\n        <h4>Hi!  Welcome to the React SSR API</h4>\n        <div>\n            You can see <a href=\"/users\">the Users route</a>\n        </div>\n        ".concat(adminContent, "\n        </div>\n    "));
 };
 
-RootController.usersList = function (req, res) {
-  res.send(users);
+RootController.usersList = function (req, res, next) {
+  _models_user__WEBPACK_IMPORTED_MODULE_3__["default"].find().limit(5).then(function (users) {
+    if (!users) {
+      return 'no user has been registered yet';
+    }
+
+    var Users = users.map(function (_ref) {
+      var _id = _ref._id,
+          name = _ref.name,
+          email = _ref.email,
+          isVerified = _ref.isVerified;
+      return {
+        _id: _id,
+        name: name,
+        email: email,
+        isVerified: isVerified
+      };
+    });
+    res.send(Users);
+  }).catch(function (e) {
+    next(new Error(e));
+  });
 };
 
 RootController.logIn = function (req, res) {
@@ -1008,7 +1012,7 @@ RootController.redirectToRoot = function (req, res) {
 RootController.logOut =
 /*#__PURE__*/
 function () {
-  var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
+  var _ref2 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(req, res) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1030,7 +1034,7 @@ function () {
   }));
 
   return function (_x, _x2) {
-    return _ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
 }();
 
@@ -1061,7 +1065,7 @@ RootController.emailVerification = function (req, res, next) {
       new: true
     }, function (err, user) {
       if (err) {
-        throw new Error('can\'t find Email try again');
+        next(new Error('can\'t find Email try again'));
       }
 
       res.redirect('/');
@@ -1225,6 +1229,7 @@ __webpack_require__.r(__webpack_exports__);
 var userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__["Schema"]({
   name: {
     type: String,
+    trim: true,
     required: true
   },
   email: {
@@ -1233,6 +1238,7 @@ var userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__["Schema"]({
     unique: true,
     lowercase: true,
     index: true,
+    trim: true,
     validate: {
       validator: function validator(val) {
         return validator__WEBPACK_IMPORTED_MODULE_1___default.a.isEmail(val);
@@ -1339,6 +1345,7 @@ var googleAuthCB = passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate(
 router.get('/auth/google', googleAuth);
 router.get('/api/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
 router.get('/auth/google/callback', googleAuthCB, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
+router.post('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].logOut);
 router.get('/logout', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].logOut);
 router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__["default"], function (req, res) {
   res.send(req.user);
@@ -1622,6 +1629,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! express-graphql */ "express-graphql");
 /* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_14__);
 /* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+
 
 
 
@@ -1679,7 +1688,7 @@ var corsOptionsDelegate = {
     whiteList.indexOf(_origin) !== -1 || !_origin ? cb(null, true) : cb(new Error('Not allowed by CORS'));
   }
 };
-app.use(cors__WEBPACK_IMPORTED_MODULE_7___default()(corsOptionsDelegate)); ///////////////END APP MIDDLEWARE///////////////////////////
+app.use(cors__WEBPACK_IMPORTED_MODULE_7___default()(corsOptionsDelegate)); /////////////// CACHE IMPLEMENTING ///////////////////////////
 
 var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_5___default.a);
 
@@ -1694,8 +1703,7 @@ app.use(express_session__WEBPACK_IMPORTED_MODULE_5___default()({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true
   }
-})); // app.use()
-
+}));
 app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default()());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.initialize());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session()); ////////////////START GRAPHQL CONFIG///////////////////////////
@@ -1706,8 +1714,17 @@ app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_14___default()({
 })); ////////////////START ROUTER CONFIG///////////////////////////
 
 app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__["default"]);
-app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__["default"]); /////////////////END ROUTER CONFIG///////////////////////////
+app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__["default"]); /////////////////START ERROR HANDLING///////////////////////////
 
+app.use(function (req, res, next) {
+  res.status(404).send('404');
+});
+app.use(function (err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.status(err.status || 500);
+  res.send(err.message);
+});
 /* harmony default export */ __webpack_exports__["default"] = (app);
 
 /***/ }),
@@ -1721,15 +1738,18 @@ app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_rootRouter_
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! passport */ "passport");
-/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
-/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @sendgrid/mail */ "@sendgrid/mail");
-/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sendgrid_mail__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _emails_emailVerify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../emails/emailVerify */ "./emails/emailVerify.js");
-/* harmony import */ var _emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../emails/resetPassword */ "./emails/resetPassword.js");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! validator */ "validator");
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(validator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! passport */ "passport");
+/* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @sendgrid/mail */ "@sendgrid/mail");
+/* harmony import */ var _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_sendgrid_mail__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _emails_emailVerify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../emails/emailVerify */ "./emails/emailVerify.js");
+/* harmony import */ var _emails_resetPassword__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../emails/resetPassword */ "./emails/resetPassword.js");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -1737,9 +1757,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /*
- *
  * Auth Object contain all logic for authentication
- *
 */
 
 var Auth = {};
@@ -1749,19 +1767,35 @@ Auth.SignUp = function (_ref) {
       password = _ref.password,
       name = _ref.name,
       req = _ref.req;
+  var errors = [];
 
-  if (!email || !password) {
-    throw new Error('type all credentials');
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(email) || validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(password)) {
+    errors.push('type all credentials');
   }
 
-  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmail(email)) {
+    errors.push('type valid Email');
+  }
+
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isLength(password, {
+    min: 6,
+    max: 24
+  })) {
+    errors.push('password should be in 6 to 24 char range');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
     email: email
   }).then(function (user) {
     if (user) {
       throw new Error('Email is in use');
     }
 
-    return new _models_user__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    return new _models_user__WEBPACK_IMPORTED_MODULE_2__["default"]({
       email: email,
       password: password,
       name: name,
@@ -1777,6 +1811,8 @@ Auth.SignUp = function (_ref) {
         return res(user);
       });
     });
+  }).catch(function (e) {
+    throw new Error(e);
   });
 };
 
@@ -1784,14 +1820,22 @@ Auth.SignIn = function (_ref2) {
   var email = _ref2.email,
       password = _ref2.password,
       req = _ref2.req;
+  var errors = [];
 
-  if (!email && !password) {
-    throw new Error('type all credentials');
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(email) || validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(password)) {
+    errors.push('type all credentials');
   }
 
-  ;
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmail(email)) {
+    errors.push('type valid Email');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+
   return new Promise(function (res, rej) {
-    passport__WEBPACK_IMPORTED_MODULE_0___default.a.authenticate('local', function (err, user) {
+    passport__WEBPACK_IMPORTED_MODULE_1___default.a.authenticate('local', function (err, user) {
       if (!user) {
         return rej('you are not registered yet please signUp first');
       }
@@ -1819,21 +1863,30 @@ Auth.SignIn = function (_ref2) {
 Auth.sendEmailVerify = function (_ref3) {
   var email = _ref3.email,
       req = _ref3.req;
+  var errors = [];
 
-  if (!email) {
-    throw new Error('email should be insert');
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(email)) {
+    errors.push('email should be insert');
   }
 
-  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmail(email)) {
+    errors.push('type valid Email');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
     email: email
   }).then(function (user) {
-    if (!user) {
+    if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(user)) {
       throw new Error('user with this email doesn\'t exist');
     }
 
-    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
+    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
     return new Promise(function (res, rej) {
-      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.send(Object(_emails_emailVerify__WEBPACK_IMPORTED_MODULE_3__["default"])(user), true, function (err, result) {
+      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3___default.a.send(Object(_emails_emailVerify__WEBPACK_IMPORTED_MODULE_4__["default"])(user), true, function (err, result) {
         if (err) {
           return rej(err);
         }
@@ -1843,27 +1896,38 @@ Auth.sendEmailVerify = function (_ref3) {
         });
       });
     });
+  }).catch(function (e) {
+    throw new Error(e);
   });
 };
 
 Auth.sendResetPassEmail = function (_ref4) {
   var email = _ref4.email,
       req = _ref4.req;
+  var errors = [];
 
-  if (!email) {
-    throw new Error('email should be insert');
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(email)) {
+    errors.push('email should be insert');
   }
 
-  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmail(email)) {
+    errors.push('type valid Email');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
     email: email
   }).then(function (user) {
-    if (!user) {
+    if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(user)) {
       throw new Error('user with this email doesn\'t exist');
     }
 
-    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
+    _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3___default.a.setApiKey(process.env.SEND_GRID_API_KEY);
     return new Promise(function (res, rej) {
-      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_2___default.a.send(Object(_emails_resetPassword__WEBPACK_IMPORTED_MODULE_4__["default"])(user), true, function (err, result) {
+      _sendgrid_mail__WEBPACK_IMPORTED_MODULE_3___default.a.send(Object(_emails_resetPassword__WEBPACK_IMPORTED_MODULE_5__["default"])(user), true, function (err, result) {
         if (err) {
           return rej(err.message);
         }
@@ -1873,21 +1937,28 @@ Auth.sendResetPassEmail = function (_ref4) {
         });
       });
     });
+  }).catch(function (e) {
+    throw new Error(e);
   });
 };
 
 Auth.identifyUserByToken = function (_ref5) {
   var token = _ref5.token,
       req = _ref5.req;
+
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(token)) {
+    throw new Error('token has not been received.');
+  }
+
+  token = validator__WEBPACK_IMPORTED_MODULE_0___default.a.trim(token);
   return new Promise(function (res, rej) {
-    return jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default.a.verify(token, 'afsan|user|resetPassword|007', {
+    return jsonwebtoken__WEBPACK_IMPORTED_MODULE_6___default.a.verify(token, 'afsan|user|resetPassword|007', {
       subject: "resetPassword"
     }, function (err, decoded) {
       if (err) {
         if (err.name == 'TokenExpiredError') {
           return rej('request expired please try again');
         } else {
-          console.log(err);
           return rej(err);
         }
       }
@@ -1903,7 +1974,28 @@ Auth.updateUserPassword = function (_ref6) {
   var email = _ref6.email,
       password = _ref6.password,
       req = _ref6.req;
-  return _models_user__WEBPACK_IMPORTED_MODULE_1__["default"].findOne({
+  var errors = [];
+
+  if (validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(email) || validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmpty(password)) {
+    errors.push('type all credentials');
+  }
+
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isEmail(email)) {
+    errors.push('type valid Email');
+  }
+
+  if (!validator__WEBPACK_IMPORTED_MODULE_0___default.a.isLength(password, {
+    min: 6,
+    max: 24
+  })) {
+    errors.push('password should be in 6 to 24 char range');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+
+  return _models_user__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
     email: email
   }).then(function (user, err) {
     if (err) {
@@ -1917,11 +2009,11 @@ Auth.updateUserPassword = function (_ref6) {
     user.password = password;
     return user.save();
   }).then(function (user) {
-    return new Promise(function (res, rej) {
-      return res({
-        email: email
-      });
+    Promise.resolve({
+      email: email
     });
+  }).catch(function (e) {
+    throw new Error(e);
   });
 };
 
@@ -2005,20 +2097,22 @@ function () {
             return _context.abrupt("return", done(null, existingUser));
 
           case 5:
-            _context.next = 7;
-            return new _models_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
+            newUser = new _models_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
               name: profile.displayName,
               email: profile.emails[0].value,
               password: profile.id,
               googleId: profile.id,
               isVerified: true
-            }).save();
+            });
+            newUser.save(function (err, user, row) {
+              if (err) {
+                return done(err, null);
+              }
+
+              done(null, user);
+            });
 
           case 7:
-            newUser = _context.sent;
-            done(null, newUser);
-
-          case 9:
           case "end":
             return _context.stop();
         }

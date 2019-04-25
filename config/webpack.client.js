@@ -10,7 +10,7 @@ module.exports = {
     entry: [
         "@babel/runtime/regenerator",
         // "react-hot-loader/patch",
-        // "webpack-hot-middleware/client?reload=true&noInfo=true",
+        "webpack-hot-middleware/client?reload=true&noInfo=false",
         "./client/index.js"
     ],
     output: {

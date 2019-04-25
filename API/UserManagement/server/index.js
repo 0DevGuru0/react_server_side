@@ -10,12 +10,12 @@ import csrf         from 'csurf';
 import xssFilter    from 'x-xss-protection';
 import hpp          from 'hpp';
 import helmet       from 'helmet';
-import userRouter from '../routes/userRouter';
-import rootRouter from '../routes/rootRouter';
+import userRouter   from '../routes/userRouter';
+import rootRouter   from '../routes/rootRouter';
 
 import expressGraphql from 'express-graphql';
 import schema         from '../schema';
-
+import User from '../models/user'
 require('../services/passport');
 
 /////////////////START DATABASE CONFIG///////////////////////////
@@ -52,7 +52,7 @@ const corsOptionsDelegate = {
 }
 app.use(cors(corsOptionsDelegate))
 
-///////////////END APP MIDDLEWARE///////////////////////////
+/////////////// CACHE IMPLEMENTING ///////////////////////////
 let RedisStore = require('connect-redis')(session);
 
 app.use(session({
@@ -67,7 +67,6 @@ app.use(session({
         httpOnly:true,
     }
 }))
-// app.use()
 app.use(xssFilter())
 app.use(passport.initialize())
 app.use(passport.session())
@@ -79,6 +78,17 @@ app.use('/graphql',expressGraphql({
 ////////////////START ROUTER CONFIG///////////////////////////
 app.use('/',csrf(),userRouter)
 app.use('/',csrf(),rootRouter)
-/////////////////END ROUTER CONFIG///////////////////////////
+/////////////////START ERROR HANDLING///////////////////////////
+app.use((req, res, next)=>{
+    res.status(404).send('404');
+});
+
+app.use((err, req, res, next)=>{
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.status(err.status||500);
+    res.send(err.message);
+});
+
 
 export default app;
