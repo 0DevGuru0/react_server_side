@@ -49,5 +49,5 @@ router.get(
    '/resetPassword',
    rootCtr.resetPassword
 )
-
+router.get('/usersListPdf',rootCtr.printUsers)
 export default router;

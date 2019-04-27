@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/user'
+import User from '../models/user';
+import PDFDocument from 'pdfkit'
+
 const RootController = {}
 
 const admins = [
@@ -34,15 +36,17 @@ RootController.rootPage = (req, res) => {
         <div>
         <h4>Hi!  Welcome to the React SSR API</h4>
         <div>
+        <form action="/userslistpdf" method="get">
+        <button>usersListPdf</button>
+        </form>
             You can see <a href="/users">the Users route</a>
         </div>
         ${adminContent}
         </div>
     `);
 }
-
 RootController.usersList = (req, res,next) => {
-    User.find().limit(5).then((users)=>{
+    User.find().then((users)=>{
         if(!users){return 'no user has been registered yet'}
         let Users = users.map( ( {_id,name,email,isVerified} )=>{
             return {_id,name,email,isVerified}
@@ -52,7 +56,6 @@ RootController.usersList = (req, res,next) => {
         next(new Error(e))
     })
 }
-
 RootController.logIn = (req, res) => {
     res.send(`
     <html>
@@ -61,11 +64,9 @@ RootController.logIn = (req, res) => {
       </body>
     </html>`);
 }
-
 RootController.admins =  (req, res) => {
     res.send(admins);
 }
-
 RootController.redirectToRoot = (req,res)=>{
      res.redirect('/');
 }
@@ -73,8 +74,6 @@ RootController.logOut = async (req,res)=>{
     await req.logout();
     res.redirect('/');
 }
-
-
 RootController.emailVerification =  (req,res,next)=>{
     const {token} = req.query;
     // Check to see token is valid with specified email
@@ -119,5 +118,39 @@ RootController.resetPassword =  (req,res,next)=>{
     })
 
 }
+RootController.printUsers =  (req,res,next)=>{
+    res.setHeader('Content-Type','application/pdf');
+    res.setHeader('Content-Disposition','inline;filename="usersList"');
+    User.find().then(async (users)=>{
+        if(!users){return 'no user has been registered yet'}
+        // const pdfDoc = new PDFDocument()
+        // pdfDoc.pipe(res);
+        // users = JSON.stringify(users)
+        // pdfDoc.fontSize(26).text('UsersList',{underline:true})
+        // pdfDoc.text('------------------------------------------------')
+        // users.forEach((user,i)=>pdfDoc.text(i+')'+user.email+'---'+user.name))
+        // console.log('ok')
+        // pdfDoc.end();
+        const pdfDoc = new PDFDocument();
+        res.setHeader('Content-Type', 'application/pdf');
+        let invoiceName = 'userslist'
+        res.setHeader(
+          'Content-Disposition',
+          'inline; filename="' + invoiceName + '"'
+        );
+        pdfDoc.pipe(res);
 
+        pdfDoc.fontSize(26).text('Invoice', {
+          underline: true
+        });
+        pdfDoc.text('-----------------------');
+        users = users.map(user=>{return{name:user.name,email:user.email}})
+        console.log(users)
+        users.forEach(user => {
+             pdfDoc.text(i+')'+user.email+'---'+user.name)
+        });
+        pdfDoc.text('---');
+        pdfDoc.end();
+    }).catch(e=>{ next(new Error(e)) })
+}
 export default RootController;
