@@ -19,13 +19,18 @@ import reducers from './store/reducers';
 import { ApolloClient,InMemoryCache } from 'apollo-boost';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
+import https from 'https'
+
 
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,
     link: createHttpLink({
-        uri: 'http://localhost:3000/api/graphql',
-        credentials:'same-origin'
+        uri: 'https://localhost:3000/api/graphql',
+        credentials:'same-origin',
+        fetchOptions:{
+            agent: new https.Agent({ rejectUnauthorized: false }),
+        }
     }),
     cache: new InMemoryCache({dataIdFromObject:o=>o.id}).restore(window.__APOLLO_STATE__),
 })

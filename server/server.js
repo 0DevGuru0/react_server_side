@@ -16,7 +16,7 @@ app.use(cookieParser())
 
 app.use('/api',proxy('http://localhost:5000', {
   proxyReqOptDecorator(opts) {
-    opts.headers['x-forwarded-host'] = 'localhost:3000';
+    opts.headers['x-forwarded-host'] = 'https://localhost:3000';
     return opts;
   }
 }));

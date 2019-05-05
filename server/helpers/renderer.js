@@ -11,7 +11,7 @@ import serialize from 'serialize-javascript' ;
 import  {ApolloClient,InMemoryCache,ApolloLink} from 'apollo-boost';
 import { ApolloProvider, renderToStringWithData  } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
-
+import https from 'https'
 import { getCircularReplacer } from './links';
 
 import fetch from 'node-fetch';
@@ -21,8 +21,11 @@ export default async(req,store,context)=>{
         ssrMode: true,
         link:createHttpLink({
             fetch,
-            uri: 'http://localhost:3000/api/graphql',
-            credentials:'same-origin'
+            uri: 'https://localhost:3000/api/graphql',
+            credentials:'same-origin',
+            fetchOptions:{
+                agent: new https.Agent({ rejectUnauthorized: false }),
+            }
         }),
         cache: new InMemoryCache()
     });

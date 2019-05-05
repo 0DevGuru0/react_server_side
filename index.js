@@ -6,7 +6,7 @@ const server = require('./server/server').default
 
 const privateKey  = fs.readFileSync('server.key');
 const certificate = fs.readFileSync('server.cert');
-console.log(process.env)
+
 https.createServer({
     key: privateKey,
     cert: certificate

@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon index",
     "build":"npm-run-all --parallel dev:**",
-    "dev:client": "rimraf public && webpack --watch --config config/webpack.client.js",
-    "dev:server": "rimraf build && webpack --watch --config config/webpack.prod.server.js"
+    "dev:client": "rimraf public && webpack --config config/webpack.client.js",
+    "dev:server": "rimraf build && webpack --config config/webpack.prod.server.js"
   },
   "author": "",
   "license": "ISC",
