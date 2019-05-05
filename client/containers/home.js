@@ -13,7 +13,7 @@ const Home = () => {
         <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
         <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
     </Helmet>
-    <h3>Welcom tye oh baby</h3>
+    <h3>Welcome to you</h3>
       <p className={classes.red}>Check out these awesome features</p>
     </div>
   );

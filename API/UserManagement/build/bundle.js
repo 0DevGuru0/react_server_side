@@ -169,6 +169,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var RootController = {};
+var PAGE_LIMIT_COUNT = 10;
 var admins = [{
   id: 1,
   name: 'Kurtis Weissnat'
@@ -197,7 +198,22 @@ RootController.rootPage = function (req, res) {
 };
 
 RootController.usersList = function (req, res, next) {
-  _models_user__WEBPACK_IMPORTED_MODULE_3__["default"].find().then(function (users) {
+  var page = +req.query.page;
+  var totalUsers;
+
+  if (page < 1) {
+    page = 1;
+  }
+
+  _models_user__WEBPACK_IMPORTED_MODULE_3__["default"].find().countDocuments().then(function (usersCount) {
+    totalUsers = usersCount;
+
+    if (page > Math.ceil(totalUsers / PAGE_LIMIT_COUNT)) {
+      page = Math.ceil(totalUsers / PAGE_LIMIT_COUNT);
+    }
+
+    return _models_user__WEBPACK_IMPORTED_MODULE_3__["default"].find().skip((page - 1) * PAGE_LIMIT_COUNT).limit(PAGE_LIMIT_COUNT);
+  }).then(function (users) {
     if (!users) {
       return 'no user has been registered yet';
     }
@@ -214,7 +230,17 @@ RootController.usersList = function (req, res, next) {
         isVerified: isVerified
       };
     });
-    res.send(Users);
+    var hasNextPage = PAGE_LIMIT_COUNT * page < totalUsers;
+    var hasPreviousPage = page > 1;
+    var lastPage = Math.ceil(totalUsers / PAGE_LIMIT_COUNT);
+    res.send({
+      Users: Users,
+      totalUsers: totalUsers,
+      hasNextPage: hasNextPage,
+      hasPreviousPage: hasPreviousPage,
+      currentPage: page,
+      lastPage: lastPage
+    });
   }).catch(function (e) {
     next(new Error(e));
   });
@@ -339,14 +365,6 @@ RootController.printUsers = function (req, res, next) {
               return _context2.abrupt("return", 'no user has been registered yet');
 
             case 2:
-              // const pdfDoc = new PDFDocument()
-              // pdfDoc.pipe(res);
-              // users = JSON.stringify(users)
-              // pdfDoc.fontSize(26).text('UsersList',{underline:true})
-              // pdfDoc.text('------------------------------------------------')
-              // users.forEach((user,i)=>pdfDoc.text(i+')'+user.email+'---'+user.name))
-              // console.log('ok')
-              // pdfDoc.end();
               pdfDoc = new pdfkit__WEBPACK_IMPORTED_MODULE_4___default.a();
               res.setHeader('Content-Type', 'application/pdf');
               invoiceName = 'userslist';
@@ -362,14 +380,13 @@ RootController.printUsers = function (req, res, next) {
                   email: user.email
                 };
               });
-              console.log(users);
               users.forEach(function (user) {
                 pdfDoc.text(i + ')' + user.email + '---' + user.name);
               });
               pdfDoc.text('---');
               pdfDoc.end();
 
-            case 14:
+            case 13:
             case "end":
               return _context2.stop();
           }
@@ -478,6 +495,34 @@ __webpack_require__.r(__webpack_exports__);
 
 _server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, function () {
   console.log("[UserManagement]_server is running on port ".concat(process.env.PORT));
+});
+
+var io = __webpack_require__(/*! ./webSocket/socket */ "./webSocket/socket.js").getIO();
+
+io.on('connection', function (socket) {
+  console.log("Client connected // id:[".concat(JSON.stringify(socket.handshake.time), "]"));
+  io.emit('client', '[UserManagement]server is connected successfully');
+  socket.emit('users', 'UsersList');
+
+  if (socket.request.session.name !== undefined) {
+    socket.emit('name', socket.request.session.name);
+    io.emit('event', socket.request.session.name + 'has joined!');
+  }
+
+  socket.on('name', function (name) {
+    socket.request.session.name = name;
+    socket.request.session.save();
+    socket.broadcast.emit('event', name + 'say hello!');
+  });
+  socket.on('result', function (data) {
+    console.log(data);
+  });
+});
+
+var usersSocket = __webpack_require__(/*! ./webSocket/socket */ "./webSocket/socket.js").nameSpace('/users');
+
+usersSocket.on('connection', function (socket) {
+  socket.emit('users', 'user is connected to list');
 });
 
 /***/ }),
@@ -902,26 +947,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! express-session */ "express-session");
-/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(express_session__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! cookie-parser */ "cookie-parser");
-/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! cors */ "cors");
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! csurf */ "csurf");
-/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(csurf__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! x-xss-protection */ "x-xss-protection");
-/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(x_xss_protection__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! hpp */ "hpp");
-/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(hpp__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! helmet */ "helmet");
-/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
-/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! express-graphql */ "express-graphql");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! express-session */ "express-session");
+/* harmony import */ var express_session__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(express_session__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! cookie-parser */ "cookie-parser");
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! csurf */ "csurf");
+/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(csurf__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! x-xss-protection */ "x-xss-protection");
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(x_xss_protection__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! hpp */ "hpp");
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(hpp__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! helmet */ "helmet");
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
+/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! express-graphql */ "express-graphql");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! socket.io-redis */ "socket.io-redis");
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(socket_io_redis__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! morgan */ "morgan");
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ioredis */ "ioredis");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+
+
+
+
+
+
 
 
 
@@ -959,20 +1022,29 @@ mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.set('useCreateIndex', true);
 mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
 
 var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
-app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default()());
-app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default.a.noSniff());
-app.use(helmet__WEBPACK_IMPORTED_MODULE_11___default.a.ieNoOpen()); /////////////////START APP MIDDLEWARE///////////////////////////
+app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default()());
+app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.noSniff());
+app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.ieNoOpen());
+var logDirectory = path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve('./logs');
+fs__WEBPACK_IMPORTED_MODULE_5___default.a.existsSync(logDirectory) || fs__WEBPACK_IMPORTED_MODULE_5___default.a.mkdirSync(logDirectory);
+var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_20___default()('access.log', {
+  interval: '1d',
+  path: logDirectory
+});
+app.use(morgan__WEBPACK_IMPORTED_MODULE_19___default()('combined', {
+  stream: accessLogStream
+})); /////////////////START APP MIDDLEWARE///////////////////////////
 
 __webpack_require__(/*! dotenv */ "dotenv").config({
   path: path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve(process.cwd(), 'config/keys/.env')
 });
 
-app.use(cookie_parser__WEBPACK_IMPORTED_MODULE_6___default()());
+app.use(cookie_parser__WEBPACK_IMPORTED_MODULE_7___default()());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({
   extended: true
 }));
-app.use(hpp__WEBPACK_IMPORTED_MODULE_10___default()());
+app.use(hpp__WEBPACK_IMPORTED_MODULE_11___default()());
 app.disable('x-powered-by');
 var whiteList = [process.env.CORS_APPROVED_ADDRESS, "http://localhost:".concat(process.env.PORT)];
 var corsOptionsDelegate = {
@@ -980,11 +1052,15 @@ var corsOptionsDelegate = {
     whiteList.indexOf(_origin) !== -1 || !_origin ? cb(null, true) : cb(new Error('Not allowed by CORS'));
   }
 };
-app.use(cors__WEBPACK_IMPORTED_MODULE_7___default()(corsOptionsDelegate)); /////////////// CACHE IMPLEMENTING ///////////////////////////
+app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////////////// CACHE IMPLEMENTING ///////////////////////////
 
-var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_5___default.a);
+var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_6___default.a);
 
-app.use(express_session__WEBPACK_IMPORTED_MODULE_5___default()({
+var server = http__WEBPACK_IMPORTED_MODULE_17___default.a.createServer(app);
+
+var io = __webpack_require__(/*! ../webSocket/socket */ "./webSocket/socket.js").init(server);
+
+var expressSession = express_session__WEBPACK_IMPORTED_MODULE_6___default()({
   secret: "3f9faa8bc0e722172cc0bdafede9f3f217474e47",
   resave: false,
   saveUninitialized: false,
@@ -995,18 +1071,26 @@ app.use(express_session__WEBPACK_IMPORTED_MODULE_5___default()({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true
   }
-}));
-app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default()());
+});
+app.use(expressSession);
+app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_10___default()());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.initialize());
-app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session()); ////////////////START GRAPHQL CONFIG///////////////////////////
+app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session());
+io.use(function (socket, next) {
+  expressSession(socket.request, {}, next);
+});
+io.adapter(socket_io_redis__WEBPACK_IMPORTED_MODULE_18___default()({
+  host: 'localhost',
+  port: 6379
+})); ////////////////START GRAPHQL CONFIG///////////////////////////
 
-app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_14___default()({
-  schema: _schema__WEBPACK_IMPORTED_MODULE_15__["default"],
+app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_15___default()({
+  schema: _schema__WEBPACK_IMPORTED_MODULE_16__["default"],
   graphiql: true
 })); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__["default"]);
-app.use('/', csurf__WEBPACK_IMPORTED_MODULE_8___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__["default"]); /////////////////START ERROR HANDLING///////////////////////////
+app.use('/', csurf__WEBPACK_IMPORTED_MODULE_9___default()(), _routes_userRouter__WEBPACK_IMPORTED_MODULE_13__["default"]);
+app.use('/', csurf__WEBPACK_IMPORTED_MODULE_9___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_14__["default"]); /////////////////START ERROR HANDLING///////////////////////////
 
 app.use(function (req, res, next) {
   res.status(404).send('404');
@@ -1017,7 +1101,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.send(err.message);
 });
-/* harmony default export */ __webpack_exports__["default"] = (app);
+/* harmony default export */ __webpack_exports__["default"] = (server);
 
 /***/ }),
 
@@ -1450,6 +1534,35 @@ passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(GoogleAuth);
 
 /***/ }),
 
+/***/ "./webSocket/socket.js":
+/*!*****************************!*\
+  !*** ./webSocket/socket.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var io;
+
+exports.init = function (server) {
+  io = __webpack_require__(/*! socket.io */ "socket.io")(server);
+  return io;
+};
+
+exports.nameSpace = function (name) {
+  io.of(name);
+  return io;
+};
+
+exports.getIO = function () {
+  if (!io) {
+    throw new Error('Socket.io not initialized!');
+  }
+
+  return io;
+};
+
+/***/ }),
+
 /***/ "@sendgrid/mail":
 /*!*********************************!*\
   !*** external "@sendgrid/mail" ***!
@@ -1571,6 +1684,17 @@ module.exports = require("express-session");
 
 /***/ }),
 
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+
 /***/ "graphql":
 /*!**************************!*\
   !*** external "graphql" ***!
@@ -1604,6 +1728,28 @@ module.exports = require("hpp");
 
 /***/ }),
 
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "ioredis":
+/*!**************************!*\
+  !*** external "ioredis" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("ioredis");
+
+/***/ }),
+
 /***/ "jsonwebtoken":
 /*!*******************************!*\
   !*** external "jsonwebtoken" ***!
@@ -1623,6 +1769,17 @@ module.exports = require("jsonwebtoken");
 /***/ (function(module, exports) {
 
 module.exports = require("mongoose");
+
+/***/ }),
+
+/***/ "morgan":
+/*!*************************!*\
+  !*** external "morgan" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("morgan");
 
 /***/ }),
 
@@ -1689,6 +1846,39 @@ module.exports = require("pdfkit");
 /***/ (function(module, exports) {
 
 module.exports = require("regenerator-runtime");
+
+/***/ }),
+
+/***/ "rotating-file-stream":
+/*!***************************************!*\
+  !*** external "rotating-file-stream" ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("rotating-file-stream");
+
+/***/ }),
+
+/***/ "socket.io":
+/*!****************************!*\
+  !*** external "socket.io" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io");
+
+/***/ }),
+
+/***/ "socket.io-redis":
+/*!**********************************!*\
+  !*** external "socket.io-redis" ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io-redis");
 
 /***/ }),
 

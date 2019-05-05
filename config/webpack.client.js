@@ -6,6 +6,7 @@ const path = require('path'),
     UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
     name: "client",
+    target:'web',
     mode: "development",
     entry: [
         "@babel/runtime/regenerator",

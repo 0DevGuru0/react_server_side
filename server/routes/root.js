@@ -5,8 +5,9 @@ import routes from '../../client/Routes'
 
 export default () => (req,res)=>{
     const store = createStore(req)
+    const page = req.query.page || 1;
     const promise = matchRoutes(routes,req.path).map(({route})=>{
-        return route.loadData ? route.loadData(store) : null;
+        return route.loadData ? route.loadData(store,page) : null;
     }).map(promise=>{
         if(promise){
             return new Promise((resolve,rej)=>{

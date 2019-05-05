@@ -1,0 +1,28 @@
+.paginationList li{
+    float: left;
+    margin-right: 42px;
+}
+.pageList{
+
+}
+
+.activePage{
+background:red;
+}
+
+.lastPage{
+
+}
+
+.nextPage{
+
+}
+
+.previousPage{
+
+}
+
+.paginationContainer{
+    overflow: hidden;
+    border: 1px solid #262626;
+}

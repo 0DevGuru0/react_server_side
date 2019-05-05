@@ -1,11 +1,11 @@
 import * as actionTypes from './actionTypes'
 
 export const
-    fetchUsers = ()=> async (dispatch,getState,api)=>{
-        const Users = await api.get('/users');
+    fetchUsers = (pageNum)=> async (dispatch,getState,api)=>{
+        const collection = await api.get(`/users?page=${pageNum}`);
         dispatch({
             type:actionTypes.FETCH_USERS,
-            payload:Users.data
+            payload:collection.data
         })
     },
 

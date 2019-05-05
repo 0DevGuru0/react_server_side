@@ -3,7 +3,7 @@ import User from '../models/user';
 import PDFDocument from 'pdfkit'
 
 const RootController = {}
-
+const PAGE_LIMIT_COUNT = 10;
 const admins = [
     { id: 1, name: 'Kurtis Weissnat' },
     { id: 2, name: 'Nicholas Runolfsdottir' },
@@ -46,15 +46,35 @@ RootController.rootPage = (req, res) => {
     `);
 }
 RootController.usersList = (req, res,next) => {
-    User.find().then((users)=>{
-        if(!users){return 'no user has been registered yet'}
-        let Users = users.map( ( {_id,name,email,isVerified} )=>{
-            return {_id,name,email,isVerified}
-        })
-        res.send(Users);
-    }).catch(e=>{
-        next(new Error(e))
+    let page = +req.query.page
+    let totalUsers;
+    if(page<1){ page = 1 }
+    User.find()
+    .countDocuments()
+    .then(usersCount=>{
+        totalUsers = usersCount;
+        if(page>Math.ceil(totalUsers/PAGE_LIMIT_COUNT)){
+            page = Math.ceil(totalUsers/PAGE_LIMIT_COUNT);
+        }
+        return User.find()
+            .skip( ( page-1 ) * PAGE_LIMIT_COUNT )
+            .limit(PAGE_LIMIT_COUNT)
     })
+    .then((users)=>{
+        if(!users){return 'no user has been registered yet'}
+        let Users = users.map( ( {_id,name,email,isVerified} )=>{ return {_id,name,email,isVerified} })
+        let hasNextPage     = PAGE_LIMIT_COUNT * page < totalUsers
+        let hasPreviousPage = page > 1;
+        let lastPage        = Math.ceil(totalUsers/PAGE_LIMIT_COUNT)
+        res.send({
+            Users,
+            totalUsers,
+            hasNextPage,
+            hasPreviousPage,
+            currentPage:page,
+            lastPage
+        });
+    }).catch(e=>{ next( new Error(e) ) })
 }
 RootController.logIn = (req, res) => {
     res.send(`
@@ -123,14 +143,6 @@ RootController.printUsers =  (req,res,next)=>{
     res.setHeader('Content-Disposition','inline;filename="usersList"');
     User.find().then(async (users)=>{
         if(!users){return 'no user has been registered yet'}
-        // const pdfDoc = new PDFDocument()
-        // pdfDoc.pipe(res);
-        // users = JSON.stringify(users)
-        // pdfDoc.fontSize(26).text('UsersList',{underline:true})
-        // pdfDoc.text('------------------------------------------------')
-        // users.forEach((user,i)=>pdfDoc.text(i+')'+user.email+'---'+user.name))
-        // console.log('ok')
-        // pdfDoc.end();
         const pdfDoc = new PDFDocument();
         res.setHeader('Content-Type', 'application/pdf');
         let invoiceName = 'userslist'
@@ -145,7 +157,6 @@ RootController.printUsers =  (req,res,next)=>{
         });
         pdfDoc.text('-----------------------');
         users = users.map(user=>{return{name:user.name,email:user.email}})
-        console.log(users)
         users.forEach(user => {
              pdfDoc.text(i+')'+user.email+'---'+user.name)
         });

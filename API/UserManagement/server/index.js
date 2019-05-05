@@ -3,6 +3,7 @@ import mongoose     from 'mongoose';
 import bodyParser   from 'body-parser';
 import passport     from 'passport';
 import path         from 'path';
+import fs           from 'fs';
 import session      from 'express-session';
 import cookieParser from 'cookie-parser'
 import cors         from 'cors';
@@ -12,9 +13,13 @@ import hpp          from 'hpp';
 import helmet       from 'helmet';
 import userRouter   from '../routes/userRouter';
 import rootRouter   from '../routes/rootRouter';
-
 import expressGraphql from 'express-graphql';
 import schema         from '../schema';
+import http         from 'http';
+import redisAdapter from 'socket.io-redis';
+import morgan from 'morgan';
+import rfs from 'rotating-file-stream';
+import Redis from 'ioredis'
 import User from '../models/user'
 require('../services/passport');
 
@@ -32,6 +37,13 @@ const app = express();
 app.use(helmet())
 app.use(helmet.noSniff())
 app.use(helmet.ieNoOpen())
+var logDirectory = path.resolve('./logs')
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+let accessLogStream = rfs('access.log',{
+    interval:'1d',
+    path:logDirectory
+})
+app.use(morgan('combined', { stream: accessLogStream }))
 /////////////////START APP MIDDLEWARE///////////////////////////
 require('dotenv').config({
     path:path.resolve(process.cwd(),'config/keys/.env')
@@ -54,8 +66,9 @@ app.use(cors(corsOptionsDelegate))
 
 /////////////// CACHE IMPLEMENTING ///////////////////////////
 let RedisStore = require('connect-redis')(session);
-
-app.use(session({
+let server = http.createServer(app)
+const io = require('../webSocket/socket').init(server);
+const expressSession = session({
     secret:"3f9faa8bc0e722172cc0bdafede9f3f217474e47",
     resave:false,
     saveUninitialized:false,
@@ -66,10 +79,14 @@ app.use(session({
         maxAge:30 * 24 * 60 * 60 * 1000,
         httpOnly:true,
     }
-}))
+})
+app.use(expressSession)
+
 app.use(xssFilter())
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session());
+io.use((socket,next)=>{expressSession(socket.request,{},next)});
+io.adapter(redisAdapter({ host: 'localhost', port: 6379 }));
 ////////////////START GRAPHQL CONFIG///////////////////////////
 app.use('/graphql',expressGraphql({
     schema,
@@ -91,4 +108,4 @@ app.use((err, req, res, next)=>{
 });
 
 
-export default app;
+export default server;

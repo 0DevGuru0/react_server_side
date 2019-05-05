@@ -5,6 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     name:"server",
+    target: "node",
     mode: "development",
     entry: ["./server/routes/root.js"],
     externals: [nodeExternals()],
@@ -15,7 +16,6 @@ module.exports = {
 		path: path.resolve(__dirname, '../build'),
 		libraryTarget: 'commonjs2'
     },
-    target: "node",
     module: {
         rules: [{
                 test: /js?$/,
