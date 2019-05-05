@@ -12,10 +12,6 @@ export default [{
     ...Root,
     path: '/',
     routes:[
-        // {
-        //     component:Home,
-        //     path:'/index.html',
-        // },
         {
             path:'/users',
             ...usersList

@@ -8,7 +8,7 @@ import {AES} from 'crypto-js';
 import {Helmet} from "react-helmet";
 import serialize from 'serialize-javascript' ;
 
-import  {ApolloClient,InMemoryCache,ApolloLink} from 'apollo-boost';
+import  {ApolloClient,InMemoryCache} from 'apollo-boost';
 import { ApolloProvider, renderToStringWithData  } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import https from 'https'
@@ -21,7 +21,7 @@ export default async(req,store,context)=>{
         ssrMode: true,
         link:createHttpLink({
             fetch,
-            uri: 'https://localhost:3000/api/graphql',
+            uri: `${process.env.hostAddress}/api/graphql`,
             credentials:'same-origin',
             fetchOptions:{
                 agent: new https.Agent({ rejectUnauthorized: false }),

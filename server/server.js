@@ -1,10 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import proxy from 'express-http-proxy';
-import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
-import webpack from 'webpack';
-import expressStaticGzip from 'express-static-gzip';
+import express            from 'express';
+import bodyParser         from 'body-parser';
+import proxy              from 'express-http-proxy';
+import cookieParser       from 'cookie-parser';
+import helmet             from 'helmet';
+import webpack            from 'webpack';
+import expressStaticGzip  from 'express-static-gzip';
+
 import webpackClientConfig from '../config/webpack.client';
 import webpackServerConfig from '../config/webpack.prod.server';
 
@@ -14,9 +15,9 @@ app.use(helmet())
 
 app.use(cookieParser())
 
-app.use('/api',proxy('http://localhost:5000', {
+app.use('/api',proxy(process.env.userManagementHost, {
   proxyReqOptDecorator(opts) {
-    opts.headers['x-forwarded-host'] = 'https://localhost:3000';
+    opts.headers['x-forwarded-host'] = process.env.hostAddress;
     return opts;
   }
 }));
@@ -28,10 +29,12 @@ app.use('/',expressStaticGzip('./public',{
 
 
 
-const compiler = webpack([webpackClientConfig,webpackServerConfig])
-const webpackDevMiddleware =  require('webpack-dev-middleware')(compiler,{serverSideRender: true})
+const compiler = webpack([webpackClientConfig, webpackServerConfig])
+const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
+  serverSideRender: true
+})
 const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
-const webpackHotMiddleware =  require('webpack-hot-middleware')(compiler)
+const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
 app.use(webpackDevMiddleware)
 app.use(webpackHotMiddleware)
 app.use(webpackHotServerMiddleware(compiler));

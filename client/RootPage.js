@@ -7,7 +7,7 @@ import openSocket from 'socket.io-client'
 
 class rootRoute extends Component {
     componentDidMount(){
-        let socket = openSocket('http://localhost:5000/')
+        let socket = openSocket(process.env.userManagementHost)
         socket.on('connect',()=>{
             socket.on('client',(res)=>{
                 console.log(res)

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export default (req)=>{
     const axiosInstance = axios.create({
-        baseURL:'http://localhost:5000',
+        baseURL:process.env.userManagementHost,
         headers: { cookie: req.get('cookie') || '' }
     });
     const store = createStore(reducers,
