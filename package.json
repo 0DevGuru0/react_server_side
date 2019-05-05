@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel dev:**",
+    "start": "nodemon index",
+    "build":"npm-run-all --parallel dev:**",
     "dev:client": "rimraf public && webpack --watch --config config/webpack.client.js",
-    "dev:server": "rimraf build && webpack --watch --config config/webpack.prod.server.js",
-    "server": "nodemon index"
+    "dev:server": "rimraf build && webpack --watch --config config/webpack.prod.server.js"
   },
   "author": "",
   "license": "ISC",
