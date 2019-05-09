@@ -3,10 +3,11 @@ const path = require('path'),
     BrotliPlugin = require('brotli-webpack-plugin'),
     CompressionPlugin = require('compression-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    MiniCssExtractPlugin = require('mini-css-extract-plugin'),
     UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
     name: "client",
-    target:'web',
+    target: 'web',
     mode: "development",
     entry: [
         "@babel/runtime/regenerator",
@@ -57,6 +58,13 @@ module.exports = {
     },
     module: {
         rules: [{
+                test: /\.(png|svg|jpg|gif)$/,
+                loader: require.resolve('file-loader'),
+                options: {
+                    name: 'images/[name].[hash:8].[ext]',
+                },
+            },
+            {
                 test: /.js$/,
                 exclude: /node_modules/,
                 use: [{
@@ -68,14 +76,44 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: require.resolve('css-loader'),
-                        options: {
-                            modules: true,
-                            localIdentName: '[name]__[local]--[hash:base64:5]'
+                            loader: require.resolve('css-loader'),
+                            options: {
+                                modules: true,
+                                localIdentName: '[name]__[local]--[hash:base64:5]',
+                                importLoaders: 1
+                            }
+                        },
+                        {
+                            loader: require.resolve('postcss-loader'),
                         }
-                    }]
+                    ]
                 })
-
+            },
+            {
+                test: /\.(sc|sa)ss$/,
+                exclude: /node_modules/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                            loader: require.resolve('css-loader'),
+                            options: {
+                                modules: true,
+                                localIdentName: '[name]__[local]--[hash:base64:5]',
+                                importLoaders: 2
+                            }
+                        },
+                        {
+                            loader: require.resolve('postcss-loader'),
+                            options: {
+                                ident: 'postcss',
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: require.resolve("sass-loader")
+                        }
+                    ]
+                })
             },
         ]
     },
@@ -89,6 +127,10 @@ module.exports = {
             test: /\.(js|css|html|svg)$/,
             threshold: 10240,
             minRatio: 0.8,
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name]_sass.css',
+            chunkFilename: '[id]_sass.css',
         }),
         new ExtractTextPlugin('stylesheets/[name].css')
     ]

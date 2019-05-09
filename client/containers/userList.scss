@@ -1,0 +1,62 @@
+.paginationList {
+    overflow: hidden;
+}
+
+.paginationList li {
+    float: left;
+    margin-right: 42px;
+}
+
+.pageList {}
+
+.activePage {
+    padding: 0 10px;
+    color: white;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background: resemble-image(url('images/image.png'));
+}
+
+.list_group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: "Montserrat"
+}
+
+.list_group_item {
+    flex: 1;
+}
+
+.nextPage {}
+
+.previousPage {}
+
+.paginationContainer {
+    overflow: hidden;
+    border: 1px solid #262626;
+}
+
+.intrinsic {
+    display: block;
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding-top: 100%;
+    background: #f0f0f0;
+
+    &.intrinsic__square {
+        padding-top: 100%;
+    }
+    .intrinsic_item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

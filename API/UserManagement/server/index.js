@@ -13,14 +13,14 @@ import hpp          from 'hpp';
 import helmet       from 'helmet';
 import userRouter   from '../routes/userRouter';
 import rootRouter   from '../routes/rootRouter';
-import expressGraphql from 'express-graphql';
-import schema         from '../schema';
 import http         from 'http';
 import redisAdapter from 'socket.io-redis';
-import morgan from 'morgan';
-import rfs from 'rotating-file-stream';
-import Redis from 'ioredis'
-import User from '../models/user'
+import morgan       from 'morgan';
+import rfs          from 'rotating-file-stream';
+import Redis        from 'ioredis'
+import User         from '../models/user'
+import expressGraphql from 'express-graphql';
+import schema         from '../schema';
 require('../services/passport');
 
 /////////////////START DATABASE CONFIG///////////////////////////

@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import {connect} from 'react-redux'
 import * as actionCreators from '../store/actions'
 import {Helmet} from "react-helmet";
-import classes from './userList.css';
+import classes from './userList.scss';
 import paginationList from '../components/pagination';
 class UserList extends Component {
     componentDidMount(){
@@ -21,7 +21,7 @@ class UserList extends Component {
     }
     renderUsersList(){
         if(this.props.users !== null){
-             return this.props.users.map(user=><li className="list-group-item" key={user._id}>{user.name}</li>)
+             return this.props.users.map(user=><li className={classes.list_group_item} key={user._id}>{user.name}</li>)
         }
     }
     head=()=>{
@@ -51,9 +51,13 @@ class UserList extends Component {
     render(){
         return(
             <div>
+                <picture className={[classes.intrinsic,classes.intrinsic__square].join(' ')}>
+                    <source media="(min-width: 500px)" srcSet="https://im.rediff.com/getahead/2017/mar/31kerala8.jpg"/>
+                    <img className={classes.intrinsic_item} srcSet="https://media.wpri.com/nxs-wpritv-media-us-east-1/photo/2018/11/21/pic%20of%20the%20day%20nov%2021_1542802532936.jpg_62805245_ver1.0_640_360.jpg" alt=""/>
+                </picture>
                 <h2>UsersList:</h2>
                 {this.head()}
-                <ul className="list-group">
+                <ul className={classes.list_group}>
                     {this.renderUsersList()}
                 </ul>
                 <div className={classes.paginationContainer}>

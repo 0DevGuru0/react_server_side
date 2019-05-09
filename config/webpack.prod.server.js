@@ -1,7 +1,8 @@
-const path = require('path');
-const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
+const path = require('path'),
+    webpack = require('webpack'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    postcssPresetEnv = require('postcss-preset-env'),
+    nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     name:"server",
@@ -17,7 +18,8 @@ module.exports = {
 		libraryTarget: 'commonjs2'
     },
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /js?$/,
                 exclude: /node_modules/,
                 use: [{
@@ -48,12 +50,34 @@ module.exports = {
 						}
 					}
 				]
-			},
+            },
+            {
+                test: /\.(sc|sa)ss$/,
+                exclude: /node_modules/,
+                use: ExtractTextPlugin.extract({
+                    fallback:'style-loader',
+                    use:[{
+                        loader: require.resolve('css-loader'),
+                        options: {
+                            modules: true,
+                            localIdentName: '[name]__[local]--[hash:base64:5]',
+                            importLoaders:2
+                        },
+                    },
+                    {
+                        loader:require.resolve('postcss-loader'),
+                        options:{
+                            ident:"postcss",
+                        }
+                    },
+                    { loader: require.resolve("sass-loader") }
+                ]
+                })
+            }
         ]
     },
     plugins:[
         new ExtractTextPlugin('stylesheets/[name].css'),
         new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
-
     ]
 };

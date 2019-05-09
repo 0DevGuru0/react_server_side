@@ -112,7 +112,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "a11e0a7cf853eb4f067f";
+/******/ 	var hotCurrentHash = "cde6231a51ebe0c820eb";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1079,7 +1079,7 @@ function _templateObject() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
@@ -1123,7 +1123,7 @@ function (_Component) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(rootRoute, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_10___default()('http://localhost:5000/');
+      var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_10___default()(process.env.userManagementHost);
       socket.on('connect', function () {
         socket.on('client', function (res) {
           console.log(res);
@@ -1164,6 +1164,7 @@ var loadData = function loadData(_ref) {
   component: Object(react_redux__WEBPACK_IMPORTED_MODULE_8__["connect"])(null, mapDispatchToProps)(rootRoute),
   loadData: loadData
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/node-libs-browser/node_modules/process/browser.js */ "./node_modules/node-libs-browser/node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -1202,11 +1203,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ([_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _RootPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
   path: '/',
-  routes: [// {
-  //     component:Home,
-  //     path:'/index.html',
-  // },
-  _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  routes: [_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/users'
   }, _containers_usersList__WEBPACK_IMPORTED_MODULE_3__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/admins'
@@ -1700,6 +1697,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _Store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store/actions */ "./client/Store/actions/index.js");
 /* harmony import */ var _hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hoc/requireAuth */ "./client/hoc/requireAuth.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -1715,16 +1715,23 @@ var AdminsListPage =
 function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(AdminsListPage, _Component);
 
-  function AdminsListPage() {
+  function AdminsListPage(props) {
+    var _this;
+
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, AdminsListPage);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(AdminsListPage).apply(this, arguments));
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(AdminsListPage).call(this, props));
+    _this.headTitle = react__WEBPACK_IMPORTED_MODULE_5___default.a.createRef();
+    return _this;
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(AdminsListPage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.FetchAdmins();
+      jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.headTitle).on('click', function () {
+        console.log('head clicked');
+      });
     }
   }, {
     key: "renderAdmins",
@@ -1740,7 +1747,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", null, "Protected list of admins"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("ul", null, this.renderAdmins()));
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", {
+        ref: this.headTitle
+      }, "Protected list of admins"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("ul", null, this.renderAdmins()));
     }
   }]);
 
@@ -1865,15 +1874,15 @@ var NotFound = function NotFound(_ref) {
 
 /***/ }),
 
-/***/ "./client/containers/userList.css":
-/*!****************************************!*\
-  !*** ./client/containers/userList.css ***!
-  \****************************************/
+/***/ "./client/containers/userList.scss":
+/*!*****************************************!*\
+  !*** ./client/containers/userList.scss ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"paginationList":"userList__paginationList--3hErR","pageList":"userList__pageList--2M9Ub","activePage":"userList__activePage--1V0K4","lastPage":"userList__lastPage--13i9C","nextPage":"userList__nextPage--2nBH3","previousPage":"userList__previousPage--109Wj","paginationContainer":"userList__paginationContainer--3I__r"};
+module.exports = {"paginationList":"userList__paginationList--2LcPw","activePage":"userList__activePage--2n3Ng","list_group":"userList__list_group--4Fu-P","list_group_item":"userList__list_group_item--29cPB","paginationContainer":"userList__paginationContainer--2E1Cl","intrinsic":"userList__intrinsic--2qYJu","intrinsic__square":"userList__intrinsic__square--2vZs2","intrinsic_item":"userList__intrinsic_item--_Aalg"};
 
 /***/ }),
 
@@ -2605,8 +2614,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_actions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../store/actions */ "./client/store/actions/index.js");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-helmet */ "./node_modules/react-helmet/lib/Helmet.js");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_helmet__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _userList_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./userList.css */ "./client/containers/userList.css");
-/* harmony import */ var _userList_css__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_userList_css__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _userList_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./userList.scss */ "./client/containers/userList.scss");
+/* harmony import */ var _userList_scss__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_userList_scss__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var _components_pagination__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/pagination */ "./client/components/pagination.js");
 
 
@@ -2669,7 +2678,7 @@ function (_Component) {
       *   baseAddress :for forwarding user to that page on server
       */
       return Object(_components_pagination__WEBPACK_IMPORTED_MODULE_13__["default"])(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _this.props, {
-        classes: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a,
+        classes: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a,
         baseAddress: '/users/page/'
       }));
     });
@@ -2700,7 +2709,7 @@ function (_Component) {
       if (this.props.users !== null) {
         return this.props.users.map(function (user) {
           return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("li", {
-            className: "list-group-item",
+            className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.list_group_item,
             key: user._id
           }, user.name);
         });
@@ -2709,12 +2718,21 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h2", null, "UsersList:"), this.head(), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
-        className: "list-group"
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("picture", {
+        class: [_userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic, _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic__square].join(' ')
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("source", {
+        media: "(min-width: 500px)",
+        srcset: "https://im.rediff.com/getahead/2017/mar/31kerala8.jpg"
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("img", {
+        class: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic_item,
+        srcset: "https://media.wpri.com/nxs-wpritv-media-us-east-1/photo/2018/11/21/pic%20of%20the%20day%20nov%2021_1542802532936.jpg_62805245_ver1.0_640_360.jpg",
+        alt: ""
+      })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h2", null, "UsersList:"), this.head(), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.list_group
       }, this.renderUsersList()), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a.paginationContainer
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.paginationContainer
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
-        className: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a.paginationList
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.paginationList
       }, this.pagination())));
     }
   }]);
@@ -2836,7 +2854,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
@@ -2856,6 +2874,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_boost__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! apollo-boost */ "./node_modules/apollo-boost/lib/bundle.esm.js");
 /* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! apollo-link-http */ "./node_modules/apollo-link-http/lib/bundle.esm.js");
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.esm.js");
+/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! https */ "./node_modules/https-browserify/index.js");
+/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(https__WEBPACK_IMPORTED_MODULE_15__);
 
 
  //-----------Redux
@@ -2875,12 +2895,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var client = new apollo_boost__WEBPACK_IMPORTED_MODULE_12__["ApolloClient"]({
   ssrForceFetchDelay: 100,
   connectToDevTools: true,
   link: Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_13__["createHttpLink"])({
-    uri: 'http://localhost:3000/api/graphql',
-    credentials: 'same-origin'
+    uri: "".concat(process.env.hostAddress, "/api/graphql"),
+    credentials: 'same-origin',
+    fetchOptions: {
+      agent: new https__WEBPACK_IMPORTED_MODULE_15___default.a.Agent({
+        rejectUnauthorized: false
+      })
+    }
   }),
   cache: new apollo_boost__WEBPACK_IMPORTED_MODULE_12__["InMemoryCache"]({
     dataIdFromObject: function dataIdFromObject(o) {
@@ -2905,12 +2931,8 @@ function Render(Route) {
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["BrowserRouter"], null, Object(react_router_config__WEBPACK_IMPORTED_MODULE_10__["renderRoutes"])(Route)))), document.querySelector('#root'));
 }
 
-Render(_Routes__WEBPACK_IMPORTED_MODULE_9__["default"]); // if(module.hot){
-//     module.hot.accept('./Routes',()=>{
-//         const NewCounter = require('./Routes').default;
-//         Render(NewCounter)
-//     })
-// }
+Render(_Routes__WEBPACK_IMPORTED_MODULE_9__["default"]);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/node-libs-browser/node_modules/process/browser.js */ "./node_modules/node-libs-browser/node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -3238,6 +3260,28 @@ module.exports = __webpack_require__(/*! ./client/index.js */"./client/index.js"
 /*!********************!*\
   !*** ws (ignored) ***!
   \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 

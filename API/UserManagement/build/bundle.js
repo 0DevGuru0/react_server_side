@@ -965,20 +965,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
 /* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! express-graphql */ "express-graphql");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! socket.io-redis */ "socket.io-redis");
-/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(socket_io_redis__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! morgan */ "morgan");
-/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
-/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_20__);
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ioredis */ "ioredis");
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_21__);
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! socket.io-redis */ "socket.io-redis");
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(socket_io_redis__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! morgan */ "morgan");
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ioredis */ "ioredis");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! express-graphql */ "express-graphql");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
 
 
 
@@ -1027,11 +1027,11 @@ app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.noSniff());
 app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.ieNoOpen());
 var logDirectory = path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve('./logs');
 fs__WEBPACK_IMPORTED_MODULE_5___default.a.existsSync(logDirectory) || fs__WEBPACK_IMPORTED_MODULE_5___default.a.mkdirSync(logDirectory);
-var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_20___default()('access.log', {
+var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default()('access.log', {
   interval: '1d',
   path: logDirectory
 });
-app.use(morgan__WEBPACK_IMPORTED_MODULE_19___default()('combined', {
+app.use(morgan__WEBPACK_IMPORTED_MODULE_17___default()('combined', {
   stream: accessLogStream
 })); /////////////////START APP MIDDLEWARE///////////////////////////
 
@@ -1056,7 +1056,7 @@ app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////
 
 var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_6___default.a);
 
-var server = http__WEBPACK_IMPORTED_MODULE_17___default.a.createServer(app);
+var server = http__WEBPACK_IMPORTED_MODULE_15___default.a.createServer(app);
 
 var io = __webpack_require__(/*! ../webSocket/socket */ "./webSocket/socket.js").init(server);
 
@@ -1079,13 +1079,13 @@ app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session());
 io.use(function (socket, next) {
   expressSession(socket.request, {}, next);
 });
-io.adapter(socket_io_redis__WEBPACK_IMPORTED_MODULE_18___default()({
+io.adapter(socket_io_redis__WEBPACK_IMPORTED_MODULE_16___default()({
   host: 'localhost',
   port: 6379
 })); ////////////////START GRAPHQL CONFIG///////////////////////////
 
-app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_15___default()({
-  schema: _schema__WEBPACK_IMPORTED_MODULE_16__["default"],
+app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_21___default()({
+  schema: _schema__WEBPACK_IMPORTED_MODULE_22__["default"],
   graphiql: true
 })); ////////////////START ROUTER CONFIG///////////////////////////
 

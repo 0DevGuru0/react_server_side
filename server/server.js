@@ -21,25 +21,28 @@ app.use('/api',proxy(process.env.userManagementHost, {
     return opts;
   }
 }));
-app.use('/',expressStaticGzip('./public',{
-  enableBrotli:true,
-  orderPreference: ['br']
-}));
 
 
-
-
-const compiler = webpack([webpackClientConfig, webpackServerConfig])
+const compiler = webpack([webpackClientConfig, webpackServerConfig]);
 const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
   serverSideRender: true
 })
 const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
+
 app.use(webpackDevMiddleware)
+
 app.use(webpackHotMiddleware)
+
 app.use(webpackHotServerMiddleware(compiler));
 
 const render = require('../build/server-bundle.js').default;
+
+app.use('/',expressStaticGzip('./public',{
+  enableBrotli:true,
+  orderPreference: ['br']
+}));
+
 
 app.use(render())
 

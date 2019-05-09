@@ -352,7 +352,7 @@ function (_Component) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(rootRoute, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_10___default()('http://localhost:5000/');
+      var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_10___default()(process.env.userManagementHost);
       socket.on('connect', function () {
         socket.on('client', function (res) {
           console.log(res);
@@ -431,11 +431,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ([_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _RootPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
   path: '/',
-  routes: [// {
-  //     component:Home,
-  //     path:'/index.html',
-  // },
-  _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  routes: [_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/users'
   }, _containers_usersList__WEBPACK_IMPORTED_MODULE_3__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/admins'
@@ -934,6 +930,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store/actions */ "./client/Store/actions/index.js");
 /* harmony import */ var _hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hoc/requireAuth */ "./client/hoc/requireAuth.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -949,16 +948,23 @@ var AdminsListPage =
 function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(AdminsListPage, _Component);
 
-  function AdminsListPage() {
+  function AdminsListPage(props) {
+    var _this;
+
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, AdminsListPage);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(AdminsListPage).apply(this, arguments));
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(AdminsListPage).call(this, props));
+    _this.headTitle = react__WEBPACK_IMPORTED_MODULE_5___default.a.createRef();
+    return _this;
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(AdminsListPage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.FetchAdmins();
+      jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.headTitle).on('click', function () {
+        console.log('head clicked');
+      });
     }
   }, {
     key: "renderAdmins",
@@ -974,7 +980,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", null, "Protected list of admins"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("ul", null, this.renderAdmins()));
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", {
+        ref: this.headTitle
+      }, "Protected list of admins"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("ul", null, this.renderAdmins()));
     }
   }]);
 
@@ -1099,15 +1107,15 @@ var NotFound = function NotFound(_ref) {
 
 /***/ }),
 
-/***/ "./client/containers/userList.css":
-/*!****************************************!*\
-  !*** ./client/containers/userList.css ***!
-  \****************************************/
+/***/ "./client/containers/userList.scss":
+/*!*****************************************!*\
+  !*** ./client/containers/userList.scss ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"paginationList":"userList__paginationList--3hErR","pageList":"userList__pageList--2M9Ub","activePage":"userList__activePage--1V0K4","lastPage":"userList__lastPage--13i9C","nextPage":"userList__nextPage--2nBH3","previousPage":"userList__previousPage--109Wj","paginationContainer":"userList__paginationContainer--3I__r"};
+module.exports = {"paginationList":"userList__paginationList--2LcPw","activePage":"userList__activePage--2n3Ng","lastPage":"userList__lastPage--2Bxbu","list_group":"userList__list_group--4Fu-P","list_group_item":"userList__list_group_item--29cPB","paginationContainer":"userList__paginationContainer--2E1Cl"};
 
 /***/ }),
 
@@ -1844,8 +1852,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_actions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../store/actions */ "./client/store/actions/index.js");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-helmet */ "react-helmet");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_helmet__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _userList_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./userList.css */ "./client/containers/userList.css");
-/* harmony import */ var _userList_css__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_userList_css__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _userList_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./userList.scss */ "./client/containers/userList.scss");
+/* harmony import */ var _userList_scss__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_userList_scss__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var _components_pagination__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/pagination */ "./client/components/pagination.js");
 
 
@@ -1908,7 +1916,7 @@ function (_Component) {
       *   baseAddress :for forwarding user to that page on server
       */
       return Object(_components_pagination__WEBPACK_IMPORTED_MODULE_13__["default"])(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _this.props, {
-        classes: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a,
+        classes: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a,
         baseAddress: '/users/page/'
       }));
     });
@@ -1939,7 +1947,7 @@ function (_Component) {
       if (this.props.users !== null) {
         return this.props.users.map(function (user) {
           return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("li", {
-            className: "list-group-item",
+            className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.list_group_item,
             key: user._id
           }, user.name);
         });
@@ -1949,11 +1957,11 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h2", null, "UsersList:"), this.head(), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
-        className: "list-group"
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.list_group
       }, this.renderUsersList()), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a.paginationContainer
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.paginationContainer
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
-        className: _userList_css__WEBPACK_IMPORTED_MODULE_12___default.a.paginationList
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.paginationList
       }, this.pagination())));
     }
   }]);
@@ -2432,7 +2440,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (function (req) {
   var axiosInstance = axios__WEBPACK_IMPORTED_MODULE_3___default.a.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: process.env.userManagementHost,
     headers: {
       cookie: req.get('cookie') || ''
     }
@@ -2540,9 +2548,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! apollo-link-http */ "apollo-link-http");
 /* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(apollo_link_http__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _links__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./links */ "./server/helpers/links.js");
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! node-fetch */ "node-fetch");
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! https */ "https");
+/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(https__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _links__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./links */ "./server/helpers/links.js");
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! node-fetch */ "node-fetch");
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_15__);
+
 
 
 
@@ -2570,9 +2581,14 @@ __webpack_require__.r(__webpack_exports__);
             client = new apollo_boost__WEBPACK_IMPORTED_MODULE_10__["ApolloClient"]({
               ssrMode: true,
               link: Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_12__["createHttpLink"])({
-                fetch: node_fetch__WEBPACK_IMPORTED_MODULE_14___default.a,
-                uri: 'http://localhost:3000/api/graphql',
-                credentials: 'same-origin'
+                fetch: node_fetch__WEBPACK_IMPORTED_MODULE_15___default.a,
+                uri: "".concat(process.env.hostAddress, "/api/graphql"),
+                credentials: 'same-origin',
+                fetchOptions: {
+                  agent: new https__WEBPACK_IMPORTED_MODULE_13___default.a.Agent({
+                    rejectUnauthorized: false
+                  })
+                }
               }),
               cache: new apollo_boost__WEBPACK_IMPORTED_MODULE_10__["InMemoryCache"]()
             });
@@ -2588,7 +2604,7 @@ __webpack_require__.r(__webpack_exports__);
               var serializedStore = serialize_javascript__WEBPACK_IMPORTED_MODULE_9___default()(store.getState());
               var hashedUsersList = crypto_js__WEBPACK_IMPORTED_MODULE_7__["AES"].encrypt(serializedStore, 'secret key 123');
               var helmet = react_helmet__WEBPACK_IMPORTED_MODULE_8__["Helmet"].renderStatic();
-              return "\n            <html>\n                <head>\n                    ".concat(helmet.title.toString(), "\n                    ").concat(helmet.meta.toString(), "\n                    ").concat(helmet.link.toString(), "\n                    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css\">\n                    <link href=\"http://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n                    <link href=\"/stylesheets/main.css\" rel=\"stylesheet\">\n                    <script>window.INITIAL_STATE = ").concat(JSON.stringify(hashedUsersList, Object(_links__WEBPACK_IMPORTED_MODULE_13__["getCircularReplacer"])()), "</script>\n                </head>\n                <body>\n                    <div id=\"root\">").concat(content, "</div>\n                    <script src=\"/public-bundle.js\"></script>\n                    <script src=\"/public-bundle.chunk.js\"></script>\n                    <script>window.__APOLLO_STATE__=").concat(JSON.stringify(client.extract(), Object(_links__WEBPACK_IMPORTED_MODULE_13__["getCircularReplacer"])()), "</script>\n                </body>\n            </html>");
+              return "\n            <html>\n                <head>\n                    ".concat(helmet.title.toString(), "\n                    ").concat(helmet.meta.toString(), "\n                    ").concat(helmet.link.toString(), "\n                    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css\">\n                    <link href=\"http://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n                    <link href=\"/stylesheets/main.css\" rel=\"stylesheet\">\n                    <link href=\"/stylesheets/main_sass.css\" rel=\"stylesheet\">\n                    <script>window.INITIAL_STATE = ").concat(JSON.stringify(hashedUsersList, Object(_links__WEBPACK_IMPORTED_MODULE_14__["getCircularReplacer"])()), "</script>\n                </head>\n                <body>\n                    <div id=\"root\">").concat(content, "</div>\n                    <script src=\"/public-bundle.js\"></script>\n                    <script src=\"/public-bundle.chunk.js\"></script>\n                    <script>window.__APOLLO_STATE__=").concat(JSON.stringify(client.extract(), Object(_links__WEBPACK_IMPORTED_MODULE_14__["getCircularReplacer"])()), "</script>\n                </body>\n            </html>");
             }));
 
           case 3:
@@ -2872,6 +2888,28 @@ module.exports = require("crypto-js");
 /***/ (function(module, exports) {
 
 module.exports = require("graphql-tag");
+
+/***/ }),
+
+/***/ "https":
+/*!************************!*\
+  !*** external "https" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("https");
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jquery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("jquery");
 
 /***/ }),
 
