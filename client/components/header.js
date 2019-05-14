@@ -38,7 +38,7 @@ class Header extends Component{
             <Link to="/Signup">SignUp</Link>
           </li>
           <li>
-            <a href="/api/auth/google">Login via google</a>
+            <a href="https://localhost:3000/api/auth/google">Login via google</a>
           </li>
         </div>
       );
@@ -58,6 +58,7 @@ class Header extends Component{
   emailVerify = ()=>{
     if(this.props.data.user && this.props.user){
       if(!this.props.user.isVerified || !this.props.data.user.isVerified){
+        console.log(this.props)
         return <div className={classes.emailVerify}>
           <p>please confirm your email verify<a href="#" onClick={this.sendEmail}>Send Request To My Email</a></p>
         </div>

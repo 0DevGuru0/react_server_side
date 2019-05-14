@@ -34,9 +34,8 @@ mongoose.Promise = global.Promise;
 
 /////////////////END DATABASE CONFIG///////////////////////////
 const app = express();
-app.use(helmet())
-app.use(helmet.noSniff())
-app.use(helmet.ieNoOpen())
+// app.use(helmet())
+// app.use(helmet.ieNoOpen())
 var logDirectory = path.resolve('./logs')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 let accessLogStream = rfs('access.log',{

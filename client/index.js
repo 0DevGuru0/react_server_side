@@ -21,12 +21,11 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import https from 'https'
 
-
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,
     link: createHttpLink({
-        uri: `${process.env.hostAddress}/api/graphql`,
+        uri: `https://localhost:3000/api/graphql`,
         credentials:'same-origin',
         fetchOptions:{
             agent: new https.Agent({ rejectUnauthorized: false }),

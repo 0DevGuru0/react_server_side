@@ -88,7 +88,7 @@
 
 /***/ "../../node_modules/@babel/runtime/helpers/asyncToGenerator.js":
 /*!*********************************************************************************************************************************************************!*\
-  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
+  !*** D:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*********************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -135,7 +135,7 @@ module.exports = _asyncToGenerator;
 
 /***/ "../../node_modules/@babel/runtime/regenerator/index.js":
 /*!**************************************************************************************************************************************************!*\
-  !*** G:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/regenerator/index.js ***!
+  !*** D:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/regenerator/index.js ***!
   \**************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -750,6 +750,7 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
         resolve: function resolve(parentValue, _ref, req) {
           var password = _ref.password,
               email = _ref.email;
+          console.log(password, email);
           return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].SignIn({
             email: email,
             password: password,
@@ -1021,10 +1022,9 @@ mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.connection.on('disconnected', fu
 mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.set('useCreateIndex', true);
 mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Promise = global.Promise; /////////////////END DATABASE CONFIG///////////////////////////
 
-var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
-app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default()());
-app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.noSniff());
-app.use(helmet__WEBPACK_IMPORTED_MODULE_12___default.a.ieNoOpen());
+var app = express__WEBPACK_IMPORTED_MODULE_0___default()(); // app.use(helmet())
+// app.use(helmet.ieNoOpen())
+
 var logDirectory = path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve('./logs');
 fs__WEBPACK_IMPORTED_MODULE_5___default.a.existsSync(logDirectory) || fs__WEBPACK_IMPORTED_MODULE_5___default.a.mkdirSync(logDirectory);
 var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default()('access.log', {

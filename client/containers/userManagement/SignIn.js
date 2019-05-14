@@ -21,8 +21,10 @@ class SignIn extends Component{
             refetchQueries:[{query}]
         })
         .then(()=>{
+            console.log('ok')
             this.props.history.replace('/')
         }).catch((e)=>{
+            console.log(e.message)
             let errors = e.graphQLErrors.map(err=>err.message);
             errors = errors[0].split(',')
             this.setState({errors});

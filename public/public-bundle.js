@@ -112,7 +112,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "cde6231a51ebe0c820eb";
+/******/ 	var hotCurrentHash = "038b8a66803a09820d00";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1697,8 +1697,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _Store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store/actions */ "./client/Store/actions/index.js");
 /* harmony import */ var _hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hoc/requireAuth */ "./client/hoc/requireAuth.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-helmet */ "./node_modules/react-helmet/lib/Helmet.js");
+/* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_helmet__WEBPACK_IMPORTED_MODULE_9__);
 
 
 
@@ -1708,7 +1708,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+ // import $ from 'jquery'
 
 var AdminsListPage =
 /*#__PURE__*/
@@ -1728,10 +1728,9 @@ function (_Component) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(AdminsListPage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.FetchAdmins();
-      jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.headTitle).on('click', function () {
-        console.log('head clicked');
-      });
+      this.props.FetchAdmins(); // $(this.headTitle).on('click',()=>{
+      //     console.log('head clicked')
+      // })
     }
   }, {
     key: "renderAdmins",
@@ -1747,7 +1746,10 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", {
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(react_helmet__WEBPACK_IMPORTED_MODULE_9___default.a, null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("meta", {
+        content: "text/html; charset=UTF-8; X-Content-Type-Options=nosniff",
+        "http-equiv": "Content-Type"
+      })), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("h3", {
         ref: this.headTitle
       }, "Protected list of admins"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("ul", null, this.renderAdmins()));
     }
@@ -2719,13 +2721,13 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("picture", {
-        class: [_userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic, _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic__square].join(' ')
+        className: [_userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic, _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic__square].join(' ')
       }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("source", {
         media: "(min-width: 500px)",
-        srcset: "https://im.rediff.com/getahead/2017/mar/31kerala8.jpg"
+        srcSet: "https://im.rediff.com/getahead/2017/mar/31kerala8.jpg"
       }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("img", {
-        class: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic_item,
-        srcset: "https://media.wpri.com/nxs-wpritv-media-us-east-1/photo/2018/11/21/pic%20of%20the%20day%20nov%2021_1542802532936.jpg_62805245_ver1.0_640_360.jpg",
+        className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.intrinsic_item,
+        srcSet: "https://media.wpri.com/nxs-wpritv-media-us-east-1/photo/2018/11/21/pic%20of%20the%20day%20nov%2021_1542802532936.jpg_62805245_ver1.0_640_360.jpg",
         alt: ""
       })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h2", null, "UsersList:"), this.head(), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("ul", {
         className: _userList_scss__WEBPACK_IMPORTED_MODULE_12___default.a.list_group

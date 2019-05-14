@@ -2,7 +2,8 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import * as actionCreator from '../Store/actions';
 import requireAuth from '../hoc/requireAuth';
-import $ from 'jquery'
+import Helmet from 'react-helmet'
+// import $ from 'jquery'
 class AdminsListPage extends Component {
     constructor(props){
         super(props)
@@ -10,9 +11,9 @@ class AdminsListPage extends Component {
     }
     componentDidMount(){
         this.props.FetchAdmins()
-        $(this.headTitle).on('click',()=>{
-            console.log('head clicked')
-        })
+        // $(this.headTitle).on('click',()=>{
+        //     console.log('head clicked')
+        // })
     }
     renderAdmins(){
         if(this.props.admins.length > 0){
@@ -22,6 +23,9 @@ class AdminsListPage extends Component {
     render(){
         return(
             <div>
+                <Helmet>
+                <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+                </Helmet>
                 <h3 ref={this.headTitle}>Protected list of admins</h3>
                 <ul>
                     {this.renderAdmins()}
