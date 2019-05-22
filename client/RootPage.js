@@ -3,25 +3,20 @@ import { renderRoutes } from 'react-router-config';
 import Header from './components/header'
 import {connect} from 'react-redux';
 import * as actionCreators from './store/actions'
-import openSocket from 'socket.io-client'
 
 class rootRoute extends Component {
-    componentDidMount(){
-        let socket = openSocket(process.env.userManagementHost)
-        socket.on('connect',()=>{
-            socket.on('client',(res)=>{
-                console.log(res)
-            })
-            socket.emit('name','sajjad')
-            socket.on('event',(data)=>{
-                console.log('event:'+data)
-            })
-            socket.on('hi',data=>{
-                console.log(data)
-            })
-        })
+
+    componentDidUpdate(prevProps){
+        console.log(this.props)
+        console.log('previousProp',prevProps)
+        // redis Setup
+            let key = 'pageViews';
+            let field = this.props.location.pathname
+        // send to backend for save via Redux
+            this.props.pageViews(key,field)
     }
     render(){
+
         return (
             <div>
                 <Header/>
@@ -32,7 +27,8 @@ class rootRoute extends Component {
 }
 
 const mapDispatchToProps = dispatch=>({
-    fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser())
+    fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser()),
+    pageViews : (key,field)=>dispatch(actionCreators.pageViews(key,field))
 })
 const loadData = ({dispatch})=>(
 dispatch(actionCreators.fetchCurrentUser())

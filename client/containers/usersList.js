@@ -9,8 +9,6 @@ class UserList extends Component {
         const array = this.props.location.pathname.split('/')
         let pageNumber = array[3] || 1 ;
         this.props.fetchUsers(pageNumber)
-        // let io = require('socket.io-emitter')({host:'localhost',port:6379})
-        // io.emit('result','process as client')
     }
     componentDidUpdate(prevProps, prevState){
         if(prevProps.location.pathname !== this.props.location.pathname){

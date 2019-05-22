@@ -1,8 +1,25 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
-export default ({currentPage,lastPage,hasNextPage,hasPreviousPage,classes,baseAddress})=>{
+import {Link} from 'react-router-dom';
+
+export default ({
+  currentPage,
+  lastPage,
+  hasNextPage,
+  hasPreviousPage,
+  classes,
+  baseAddress
+}) => {
   let list=[]
-  let pageNum = pagesContainer(currentPage,lastPage,5)
+
+  let pageNum;
+  let neighbor = 5;
+  let totalPage = lastPage
+  if(totalPage>=(neighbor*2)){
+    pageNum = pagesContainer(currentPage,totalPage,neighbor)
+  }else{
+    pageNum = range(1,totalPage)
+  }
+
   pageNum.map(pg=>{
     let classArray = classes.pageList;
     if(pg == currentPage){
@@ -49,10 +66,11 @@ function range(from, to, step = 1){
   }
   return range;
 }
-function pagesContainer(currentPage= 1,totalPage=1,neighbor = 2){
+
+function pagesContainer(currentPage= 1,totalPage=1,neighbor = 5){
     currentPage = (typeof(currentPage) === 'number' && currentPage > 0 ) ? currentPage : 1;
     totalPage   = (typeof(totalPage) === 'number' && totalPage > 0 ) ? totalPage : 1;
-    neighbor    = (typeof(neighbor) === 'number' && neighbor > 0 ) ? neighbor : 2;
+    neighbor    = (typeof(neighbor) === 'number' && neighbor > 0 ) ? neighbor : 5;
     let startPoint;
     let endPoint;
     /* test :totalPage=100  , neighbor=5 */

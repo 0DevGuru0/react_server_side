@@ -17,7 +17,6 @@ import http         from 'http';
 import redisAdapter from 'socket.io-redis';
 import morgan       from 'morgan';
 import rfs          from 'rotating-file-stream';
-import Redis        from 'ioredis'
 import User         from '../models/user'
 import expressGraphql from 'express-graphql';
 import schema         from '../schema';
@@ -65,8 +64,8 @@ app.use(cors(corsOptionsDelegate))
 
 /////////////// CACHE IMPLEMENTING ///////////////////////////
 let RedisStore = require('connect-redis')(session);
+app.set('trust proxy', 1)
 let server = http.createServer(app)
-const io = require('../webSocket/socket').init(server);
 const expressSession = session({
     secret:"3f9faa8bc0e722172cc0bdafede9f3f217474e47",
     resave:false,
@@ -75,17 +74,13 @@ const expressSession = session({
         prefix:"session:auth:"
     }),
     cookie:{
-        maxAge:30 * 24 * 60 * 60 * 1000,
-        httpOnly:true,
+        maxAge:30 * 24 * 60 * 60 * 1000
     }
 })
 app.use(expressSession)
-
 app.use(xssFilter())
 app.use(passport.initialize())
 app.use(passport.session());
-io.use((socket,next)=>{expressSession(socket.request,{},next)});
-io.adapter(redisAdapter({ host: 'localhost', port: 6379 }));
 ////////////////START GRAPHQL CONFIG///////////////////////////
 app.use('/graphql',expressGraphql({
     schema,

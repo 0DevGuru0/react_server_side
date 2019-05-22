@@ -5,7 +5,6 @@ import {graphql}   from 'react-apollo';
 import query       from '../Graphql/query/user'
 import emailVerify from '../Graphql/mutation/emailVerify';
 import classes     from './header.css';
-
 class Header extends Component{
   constructor(props){
     super(props)

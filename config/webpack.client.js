@@ -4,11 +4,11 @@ const path = require('path'),
     CompressionPlugin = require('compression-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-    UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+    UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
+    nodeExternals = require('webpack-node-externals');
 module.exports = {
     name: "client",
-    target: 'web',
-    mode: "development",
+    mode: "production",
     entry: [
         "@babel/runtime/regenerator",
         // "react-hot-loader/patch",

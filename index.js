@@ -14,9 +14,8 @@ https.createServer({
     key: privateKey,
     cert: certificate
 }, server).listen(process.env.PORT, () => {
-        console.log(server.enabled('trust proxy'))
-        // console.log(`server is running on port ${process.env.PORT}`)
-        console.log('Listening on port %d', server.address().port);
+        console.log(`server is running on port ${process.env.PORT}`)
+        // console.log('Listening on port %d', server.address().port);
     });
     
 

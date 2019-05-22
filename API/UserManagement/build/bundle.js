@@ -497,34 +497,6 @@ _server__WEBPACK_IMPORTED_MODULE_0__["default"].listen(process.env.PORT, functio
   console.log("[UserManagement]_server is running on port ".concat(process.env.PORT));
 });
 
-var io = __webpack_require__(/*! ./webSocket/socket */ "./webSocket/socket.js").getIO();
-
-io.on('connection', function (socket) {
-  console.log("Client connected // id:[".concat(JSON.stringify(socket.handshake.time), "]"));
-  io.emit('client', '[UserManagement]server is connected successfully');
-  socket.emit('users', 'UsersList');
-
-  if (socket.request.session.name !== undefined) {
-    socket.emit('name', socket.request.session.name);
-    io.emit('event', socket.request.session.name + 'has joined!');
-  }
-
-  socket.on('name', function (name) {
-    socket.request.session.name = name;
-    socket.request.session.save();
-    socket.broadcast.emit('event', name + 'say hello!');
-  });
-  socket.on('result', function (data) {
-    console.log(data);
-  });
-});
-
-var usersSocket = __webpack_require__(/*! ./webSocket/socket */ "./webSocket/socket.js").nameSpace('/users');
-
-usersSocket.on('connection', function (socket) {
-  socket.emit('users', 'user is connected to list');
-});
-
 /***/ }),
 
 /***/ "./middlewares/requireLogin.js":
@@ -974,13 +946,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_17__);
 /* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
 /* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ioredis */ "ioredis");
-/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! express-graphql */ "express-graphql");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_21__);
-/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
-
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! express-graphql */ "express-graphql");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
 
 
 
@@ -1056,10 +1025,8 @@ app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////
 
 var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_6___default.a);
 
+app.set('trust proxy', 1);
 var server = http__WEBPACK_IMPORTED_MODULE_15___default.a.createServer(app);
-
-var io = __webpack_require__(/*! ../webSocket/socket */ "./webSocket/socket.js").init(server);
-
 var expressSession = express_session__WEBPACK_IMPORTED_MODULE_6___default()({
   secret: "3f9faa8bc0e722172cc0bdafede9f3f217474e47",
   resave: false,
@@ -1068,24 +1035,16 @@ var expressSession = express_session__WEBPACK_IMPORTED_MODULE_6___default()({
     prefix: "session:auth:"
   }),
   cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true
+    maxAge: 30 * 24 * 60 * 60 * 1000
   }
 });
 app.use(expressSession);
 app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_10___default()());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.initialize());
-app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session());
-io.use(function (socket, next) {
-  expressSession(socket.request, {}, next);
-});
-io.adapter(socket_io_redis__WEBPACK_IMPORTED_MODULE_16___default()({
-  host: 'localhost',
-  port: 6379
-})); ////////////////START GRAPHQL CONFIG///////////////////////////
+app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session()); ////////////////START GRAPHQL CONFIG///////////////////////////
 
-app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_21___default()({
-  schema: _schema__WEBPACK_IMPORTED_MODULE_22__["default"],
+app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_20___default()({
+  schema: _schema__WEBPACK_IMPORTED_MODULE_21__["default"],
   graphiql: true
 })); ////////////////START ROUTER CONFIG///////////////////////////
 
@@ -1534,35 +1493,6 @@ passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(GoogleAuth);
 
 /***/ }),
 
-/***/ "./webSocket/socket.js":
-/*!*****************************!*\
-  !*** ./webSocket/socket.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var io;
-
-exports.init = function (server) {
-  io = __webpack_require__(/*! socket.io */ "socket.io")(server);
-  return io;
-};
-
-exports.nameSpace = function (name) {
-  io.of(name);
-  return io;
-};
-
-exports.getIO = function () {
-  if (!io) {
-    throw new Error('Socket.io not initialized!');
-  }
-
-  return io;
-};
-
-/***/ }),
-
 /***/ "@sendgrid/mail":
 /*!*********************************!*\
   !*** external "@sendgrid/mail" ***!
@@ -1739,17 +1669,6 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ "ioredis":
-/*!**************************!*\
-  !*** external "ioredis" ***!
-  \**************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("ioredis");
-
-/***/ }),
-
 /***/ "jsonwebtoken":
 /*!*******************************!*\
   !*** external "jsonwebtoken" ***!
@@ -1857,17 +1776,6 @@ module.exports = require("regenerator-runtime");
 /***/ (function(module, exports) {
 
 module.exports = require("rotating-file-stream");
-
-/***/ }),
-
-/***/ "socket.io":
-/*!****************************!*\
-  !*** external "socket.io" ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("socket.io");
 
 /***/ }),
 

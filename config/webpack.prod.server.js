@@ -7,9 +7,9 @@ const path = require('path'),
 module.exports = {
     name:"server",
     target: "node",
-    mode: "development",
+    mode: "production",
     entry: ["./server/routes/root.js"],
-    externals: [nodeExternals()],
+    externals: [nodeExternals('node_modules')],
     stats:{warnings: false},
     devtool: "cheap-module-source-map",
     output: {
