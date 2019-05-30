@@ -4,19 +4,20 @@ import Header from './components/header'
 import {connect} from 'react-redux';
 import * as actionCreators from './store/actions'
 
+import {graphql} from 'react-apollo';
+import pageviews from './Graphql/mutation/pageViews'
 class rootRoute extends Component {
 
     componentDidUpdate(prevProps){
-        console.log(this.props)
-        console.log('previousProp',prevProps)
-        // redis Setup
-            let key = 'pageViews';
-            let field = this.props.location.pathname
-        // send to backend for save via Redux
-            this.props.pageViews(key,field)
+        if(this.props.location.pathname !== prevProps.location.pathname ){
+            // redis Setup
+                let key = 'pageViews';
+                let field = this.props.location.pathname
+            // send to backend for save via Graphql
+                this.props.mutate({variables:{key,field}})
+        }
     }
     render(){
-
         return (
             <div>
                 <Header/>
@@ -28,12 +29,11 @@ class rootRoute extends Component {
 
 const mapDispatchToProps = dispatch=>({
     fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser()),
-    pageViews : (key,field)=>dispatch(actionCreators.pageViews(key,field))
 })
 const loadData = ({dispatch})=>(
 dispatch(actionCreators.fetchCurrentUser())
 )
 export default {
-    component:connect(null,mapDispatchToProps)(rootRoute),
+    component:graphql(pageviews)(connect(null,mapDispatchToProps)(rootRoute)),
     loadData
 }

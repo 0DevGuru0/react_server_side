@@ -4,9 +4,10 @@ import {
     GraphQLNonNull
     } from 'graphql';
 
-import UserType from './types/userType'
+import UserType from './types/userType';
+import pageViews from './types/statistic/pageviews'
 import Auth     from '../services/helpers';
-
+import stat_pageviews from '../services/statistic/pageviews'
 const mutation = new GraphQLObjectType({
     name:"MutationObserver",
     fields:()=>({
@@ -67,7 +68,18 @@ const mutation = new GraphQLObjectType({
             resolve(parentValue,{email,password},req){
                 return Auth.updateUserPassword({email,password,req})
             }
+        },
+        pageViews:{
+            type:pageViews,
+            args:{
+                field:{type:new GraphQLNonNull(GraphQLString)},
+                key:{type:new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue,{key,field}){
+                return stat_pageviews({key,field})
+            }
         }
+
     })
 });
 

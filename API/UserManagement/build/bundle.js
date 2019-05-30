@@ -133,6 +133,64 @@ module.exports = _asyncToGenerator;
 
 /***/ }),
 
+/***/ "../../node_modules/@babel/runtime/helpers/defineProperty.js":
+/*!*******************************************************************************************************************************************************!*\
+  !*** D:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \*******************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+
+/***/ }),
+
+/***/ "../../node_modules/@babel/runtime/helpers/objectSpread.js":
+/*!*****************************************************************************************************************************************************!*\
+  !*** D:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/helpers/objectSpread.js ***!
+  \*****************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var defineProperty = __webpack_require__(/*! ./defineProperty */ "../../node_modules/@babel/runtime/helpers/defineProperty.js");
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+module.exports = _objectSpread;
+
+/***/ }),
+
 /***/ "../../node_modules/@babel/runtime/regenerator/index.js":
 /*!**************************************************************************************************************************************************!*\
   !*** D:/WebSite_Learn/ReactJs/00--Studied--/Server Side Rendering with React and Redux/Project/node_modules/@babel/runtime/regenerator/index.js ***!
@@ -142,6 +200,194 @@ module.exports = _asyncToGenerator;
 
 module.exports = __webpack_require__(/*! regenerator-runtime */ "regenerator-runtime");
 
+
+/***/ }),
+
+/***/ "./controllers/ipInfo.js":
+/*!*******************************!*\
+  !*** ./controllers/ipInfo.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "../../node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread */ "../../node_modules/@babel/runtime/helpers/objectSpread.js");
+/* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../../node_modules/@babel/runtime/helpers/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! redis */ "redis");
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(redis__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var chalk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! chalk */ "chalk");
+/* harmony import */ var chalk__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(chalk__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _models_visitors_ips__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models/visitors/ips */ "./models/visitors/ips.js");
+/* harmony import */ var _models_visitors_ips__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_models_visitors_ips__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../models/visitors/ipInfo */ "./models/visitors/ipInfo.js");
+/* harmony import */ var _models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+var redisClient = redis__WEBPACK_IMPORTED_MODULE_4___default.a.createClient({
+  retry_strategy: function retry_strategy() {
+    return 1000;
+  }
+});
+
+var GeolocationParams = __webpack_require__(/*! ip-geolocation-api-javascript-sdk/GeolocationParams.js */ "ip-geolocation-api-javascript-sdk/GeolocationParams.js");
+
+var IPGeolocationAPI = __webpack_require__(/*! ip-geolocation-api-javascript-sdk/IPGeolocationAPI */ "ip-geolocation-api-javascript-sdk/IPGeolocationAPI");
+
+var ipgeolocationApi = new IPGeolocationAPI(process.env.GEOLOCATION_IP_ADDRESS);
+var ipInfo = {};
+var Day = moment__WEBPACK_IMPORTED_MODULE_5___default()().format("YYYY/M/D");
+
+ipInfo.storeSystem =
+/*#__PURE__*/
+function () {
+  var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(cb) {
+    var successMsg, IPContainer, _ref2, data, now, storeTime;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            successMsg = [];
+            _context.prev = 1;
+            _context.next = 4;
+            return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('https://api.ipgeolocation.io/getip');
+
+          case 4:
+            _ref2 = _context.sent;
+            data = _ref2.data;
+            IPContainer = data.ip;
+            _context.next = 20;
+            break;
+
+          case 9:
+            _context.prev = 9;
+            _context.t0 = _context["catch"](1);
+
+            if (!_context.t0.response) {
+              _context.next = 15;
+              break;
+            }
+
+            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "The request was made and the server responded with error \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.response.data))) + '\n', null));
+
+          case 15:
+            if (!_context.t0.request) {
+              _context.next = 19;
+              break;
+            }
+
+            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "The request was made but no response was received \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.request))) + '\n', null));
+
+          case 19:
+            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something happened in setting up the request that triggered an Error\n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.message))) + '\n', null));
+
+          case 20:
+            //2| calculate remaining time to store IPs from redis memory to mongodb
+            now = new Date();
+            storeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0, 0) - now;
+
+            if (storeTime < 0) {
+              storeTime += 86400000;
+            }
+
+            setInterval(function () {
+              var lastDay = moment__WEBPACK_IMPORTED_MODULE_5___default()().subtract(1, 'day').format('YYYY/M/D');
+              redisClient.hgetall(lastDay, function (error, result) {
+                if (error) {
+                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something went wrong on redis \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(error))) + '\n', null);
+                }
+
+                if (result == null) {
+                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "receiving null as result for redis query  \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify({
+                    queryResult: null
+                  }))) + '\n', null);
+                } //3|Store Fetched Data on Mongodb
+
+
+                var errors = [];
+
+                for (var key in result) {
+                  var visitorIP_info = new _models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8___default.a(JSON.parse(result[key]));
+                  var visitorIP = new _models_visitors_ips__WEBPACK_IMPORTED_MODULE_7___default.a({
+                    IP: key,
+                    visitedDay: lastDay
+                  });
+                  visitorIP.IPsInfo = visitorIP_info;
+                  Promise.all([visitorIP.save(), visitorIP_info.save()]).catch(function (err) {
+                    if (err) {
+                      errors.push(err);
+                    }
+                  });
+                }
+
+                if (errors.length == 0) {
+                  redisClient.del(lastDay);
+                } else {
+                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "something went wrong on storing fetched data from redis on mongoDB \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_StoreFetchedDataOnDB(line:57)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(errors))) + '\n', null);
+                }
+              });
+            }, storeTime + 20000); //  4|Fetch information and store in Redis
+
+            redisClient.hget(Day, IPContainer, function (error, result) {
+              if (error) {
+                return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something went wrong on redis \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(error))) + '\n', null);
+              }
+
+              if (result !== null) {
+                return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "receiving unexpected Data as result for redis query  \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify({
+                  queryResult: result
+                }))) + '\n', null);
+              }
+
+              var geolocationParams = new GeolocationParams();
+              var targetData = ["continent_name", "country_name", "state_prov", "district", "latitude", "longitude", "calling_code", "languages", "organization", "currency"];
+              geolocationParams.setFields(targetData.join(','));
+              ipgeolocationApi.getGeolocation(function (ipData) {
+                if (ipData.message) {
+                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "something went wrong on fetching IP information from protocol \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_fetchInfoFromProtocol(line:86)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(ipData.message))) + '\n', null);
+                }
+
+                delete ipData.ip;
+                ipData = _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, ipData, {
+                  currency: ipData.currency['code']
+                });
+                ipData = JSON.stringify(ipData);
+                redisClient.hset(Day, IPContainer, ipData);
+              }, geolocationParams);
+            });
+
+          case 25:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[1, 9]]);
+  }));
+
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (ipInfo);
 
 /***/ }),
 
@@ -601,6 +847,78 @@ var userModel = Object(mongoose__WEBPACK_IMPORTED_MODULE_0__["model"])('user', u
 
 /***/ }),
 
+/***/ "./models/visitors/ipInfo.js":
+/*!***********************************!*\
+  !*** ./models/visitors/ipInfo.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+var Schema = mongoose.Schema;
+var ipInfo = new Schema({
+  continent_name: {
+    type: String
+  },
+  country_name: {
+    type: String
+  },
+  state_prov: {
+    type: String
+  },
+  district: {
+    type: String
+  },
+  latitude: {
+    type: Number
+  },
+  longitude: {
+    type: Number
+  },
+  calling_code: {
+    type: String
+  },
+  languages: {
+    type: String
+  },
+  organization: {
+    type: String
+  },
+  currency: {
+    type: String
+  }
+});
+module.exports = mongoose.model('visitorsInfo', ipInfo);
+
+/***/ }),
+
+/***/ "./models/visitors/ips.js":
+/*!********************************!*\
+  !*** ./models/visitors/ips.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+var Schema = mongoose.Schema;
+var IPs = new Schema({
+  IP: {
+    type: String
+  },
+  visitedDay: {
+    type: String
+  },
+  IPsInfo: {
+    type: Schema.Types.ObjectId,
+    ref: 'visitorsInfo'
+  }
+});
+module.exports = mongoose.model('visitorsIP', IPs);
+
+/***/ }),
+
 /***/ "./routes/rootRouter.js":
 /*!******************************!*\
   !*** ./routes/rootRouter.js ***!
@@ -641,6 +959,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var passport__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(passport__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../middlewares/requireLogin */ "./middlewares/requireLogin.js");
 /* harmony import */ var _controllers_root__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/root */ "./controllers/root.js");
+/* harmony import */ var _controllers_ipInfo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/ipInfo */ "./controllers/ipInfo.js");
+
 
 
 
@@ -661,6 +981,12 @@ router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2
 router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].emailVerification, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
 router.get('/resetPassword', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].resetPassword);
 router.get('/usersListPdf', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].printUsers);
+router.get('/userInfo', function (req, res) {
+  _controllers_ipInfo__WEBPACK_IMPORTED_MODULE_4__["default"].storeSystem(function (errMsg, successMsg) {
+    console.log(errMsg);
+  });
+  res.end();
+});
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
@@ -701,7 +1027,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
 /* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _types_userType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./types/userType */ "./schema/types/userType.js");
-/* harmony import */ var _services_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/helpers */ "./services/helpers.js");
+/* harmony import */ var _types_statistic_pageviews__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./types/statistic/pageviews */ "./schema/types/statistic/pageviews.js");
+/* harmony import */ var _services_helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/helpers */ "./services/helpers.js");
+/* harmony import */ var _services_statistic_pageviews__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/statistic/pageviews */ "./services/statistic/pageviews.js");
+
+
 
 
 
@@ -723,7 +1053,7 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
           var password = _ref.password,
               email = _ref.email;
           console.log(password, email);
-          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].SignIn({
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_3__["default"].SignIn({
             email: email,
             password: password,
             req: req
@@ -747,7 +1077,7 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
           var email = _ref2.email,
               password = _ref2.password,
               name = _ref2.name;
-          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].SignUp({
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_3__["default"].SignUp({
             email: email,
             password: password,
             name: name,
@@ -772,7 +1102,7 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
         },
         resolve: function resolve(parentValue, _ref3, req) {
           var email = _ref3.email;
-          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].sendEmailVerify({
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_3__["default"].sendEmailVerify({
             email: email,
             req: req
           });
@@ -787,7 +1117,7 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
         },
         resolve: function resolve(parentValue, _ref4, req) {
           var email = _ref4.email;
-          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].sendResetPassEmail({
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_3__["default"].sendResetPassEmail({
             email: email,
             req: req
           });
@@ -806,10 +1136,29 @@ var mutation = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
         resolve: function resolve(parentValue, _ref5, req) {
           var email = _ref5.email,
               password = _ref5.password;
-          return _services_helpers__WEBPACK_IMPORTED_MODULE_2__["default"].updateUserPassword({
+          return _services_helpers__WEBPACK_IMPORTED_MODULE_3__["default"].updateUserPassword({
             email: email,
             password: password,
             req: req
+          });
+        }
+      },
+      pageViews: {
+        type: _types_statistic_pageviews__WEBPACK_IMPORTED_MODULE_2__["default"],
+        args: {
+          field: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          },
+          key: {
+            type: new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLNonNull"](graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"])
+          }
+        },
+        resolve: function resolve(parentValue, _ref6) {
+          var key = _ref6.key,
+              field = _ref6.field;
+          return Object(_services_statistic_pageviews__WEBPACK_IMPORTED_MODULE_4__["default"])({
+            key: key,
+            field: field
           });
         }
       }
@@ -860,11 +1209,43 @@ var RootQueryType = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"
             req: req
           });
         }
-      }
+      } // visitorsData: {
+      //     type: visitorShipType,
+      //     resolve(parentValue, args, req) {
+      //     }
+      // }
+
     };
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (RootQueryType);
+
+/***/ }),
+
+/***/ "./schema/types/statistic/pageviews.js":
+/*!*********************************************!*\
+  !*** ./schema/types/statistic/pageviews.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql */ "graphql");
+/* harmony import */ var graphql__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql__WEBPACK_IMPORTED_MODULE_0__);
+
+var pageView = new graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLObjectType"]({
+  name: "PageView",
+  fields: {
+    field: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLString"]
+    },
+    counted: {
+      type: graphql__WEBPACK_IMPORTED_MODULE_0__["GraphQLInt"]
+    }
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (pageView);
 
 /***/ }),
 
@@ -1493,6 +1874,33 @@ passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(GoogleAuth);
 
 /***/ }),
 
+/***/ "./services/statistic/pageviews.js":
+/*!*****************************************!*\
+  !*** ./services/statistic/pageviews.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ioredis */ "ioredis");
+/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_0__);
+
+var redis = new ioredis__WEBPACK_IMPORTED_MODULE_0___default.a();
+/* harmony default export */ __webpack_exports__["default"] = (function (_ref) {
+  var key = _ref.key,
+      field = _ref.field;
+  redis.hsetnx(key, field, 0);
+  return redis.hincrby(key, field, 1).then(function (result) {
+    return {
+      field: key,
+      counted: result
+    };
+  });
+});
+
+/***/ }),
+
 /***/ "@sendgrid/mail":
 /*!*********************************!*\
   !*** external "@sendgrid/mail" ***!
@@ -1501,6 +1909,17 @@ passport__WEBPACK_IMPORTED_MODULE_2___default.a.use(GoogleAuth);
 /***/ (function(module, exports) {
 
 module.exports = require("@sendgrid/mail");
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
 
 /***/ }),
 
@@ -1523,6 +1942,17 @@ module.exports = require("bcrypt");
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
+
+/***/ }),
+
+/***/ "chalk":
+/*!************************!*\
+  !*** external "chalk" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("chalk");
 
 /***/ }),
 
@@ -1669,6 +2099,39 @@ module.exports = require("http");
 
 /***/ }),
 
+/***/ "ioredis":
+/*!**************************!*\
+  !*** external "ioredis" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("ioredis");
+
+/***/ }),
+
+/***/ "ip-geolocation-api-javascript-sdk/GeolocationParams.js":
+/*!*************************************************************************!*\
+  !*** external "ip-geolocation-api-javascript-sdk/GeolocationParams.js" ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("ip-geolocation-api-javascript-sdk/GeolocationParams.js");
+
+/***/ }),
+
+/***/ "ip-geolocation-api-javascript-sdk/IPGeolocationAPI":
+/*!*********************************************************************!*\
+  !*** external "ip-geolocation-api-javascript-sdk/IPGeolocationAPI" ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("ip-geolocation-api-javascript-sdk/IPGeolocationAPI");
+
+/***/ }),
+
 /***/ "jsonwebtoken":
 /*!*******************************!*\
   !*** external "jsonwebtoken" ***!
@@ -1677,6 +2140,17 @@ module.exports = require("http");
 /***/ (function(module, exports) {
 
 module.exports = require("jsonwebtoken");
+
+/***/ }),
+
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("moment");
 
 /***/ }),
 
@@ -1754,6 +2228,17 @@ module.exports = require("path");
 /***/ (function(module, exports) {
 
 module.exports = require("pdfkit");
+
+/***/ }),
+
+/***/ "redis":
+/*!************************!*\
+  !*** external "redis" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("redis");
 
 /***/ }),
 

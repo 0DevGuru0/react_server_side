@@ -1,16 +1,14 @@
 import express from 'express';
 import passport from 'passport'
 import requireLogin from '../middlewares/requireLogin'
-import rootCtr from '../controllers/root'
-
+import rootCtr from '../controllers/root';
+import ipInfo from '../controllers/ipInfo';
 const router = express.Router();
 
 const googleAuth = passport.authenticate('google', {
    scope: ['profile', 'email']
 })
 const googleAuthCB = passport.authenticate('google')
-
-
 router.get(
    '/auth/google',
    googleAuth
@@ -49,5 +47,17 @@ router.get(
    '/resetPassword',
    rootCtr.resetPassword
 )
-router.get('/usersListPdf',rootCtr.printUsers)
+router.get(
+   '/usersListPdf',
+   rootCtr.printUsers
+)
+router.get(
+   '/userInfo',
+   (req,res)=>{
+      ipInfo.storeSystem((errMsg,successMsg)=>{
+         console.log(errMsg)
+      })
+      res.end()
+   }
+)
 export default router;
