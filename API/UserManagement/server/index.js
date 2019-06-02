@@ -34,12 +34,17 @@ mongoose.Promise = global.Promise;
 const app = express();
 // app.use(helmet())
 // app.use(helmet.ieNoOpen())
+
+
+
 var logDirectory = path.resolve('./logs')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 let accessLogStream = rfs('access.log',{
     interval:'1d',
     path:logDirectory
 })
+
+
 app.use(morgan('combined', { stream: accessLogStream }))
 /////////////////START APP MIDDLEWARE///////////////////////////
 require('dotenv').config({

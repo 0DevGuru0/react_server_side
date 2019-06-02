@@ -822,6 +822,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(validator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bcrypt */ "bcrypt");
 /* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bcrypt__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -856,6 +859,12 @@ var userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__["Schema"]({
   },
   isVerified: {
     type: Boolean
+  },
+  createdAt: {
+    type: String
+  },
+  updatedAt: {
+    type: String
   }
 });
 userSchema.method('comparePassword', function (candidatePass, callback) {
@@ -1512,6 +1521,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _emails_resetPassword__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../emails/resetPassword */ "./emails/resetPassword.js");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! redis */ "redis");
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(redis__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -1519,6 +1532,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+var redisClient = redis__WEBPACK_IMPORTED_MODULE_8___default.a.createClient();
 /*
  * Auth Object contain all logic for authentication
 */
@@ -1562,6 +1578,8 @@ Auth.SignUp = function (_ref) {
       email: email,
       password: password,
       name: name,
+      createdAt: moment__WEBPACK_IMPORTED_MODULE_7___default()().format(),
+      updatedAt: null,
       isVerified: false
     }).save();
   }).then(function (user) {
@@ -1571,6 +1589,7 @@ Auth.SignUp = function (_ref) {
           rej(err);
         }
 
+        redisClient.hset('lastLogIn', user.id, moment__WEBPACK_IMPORTED_MODULE_7___default()().format());
         return res(user);
       });
     });
@@ -1806,6 +1825,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var passport_local__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! passport-local */ "passport-local");
 /* harmony import */ var passport_local__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(passport_local__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! redis */ "redis");
+/* harmony import */ var redis__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(redis__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -1813,6 +1836,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+var redisClient = redis__WEBPACK_IMPORTED_MODULE_8___default.a.createClient();
 
 __webpack_require__(/*! dotenv */ "dotenv").config({
   path: path__WEBPACK_IMPORTED_MODULE_5___default.a.resolve(process.cwd(), 'config/keys/.env')
@@ -1853,18 +1879,21 @@ function () {
             existingUser = _context.sent;
 
             if (!existingUser) {
-              _context.next = 5;
+              _context.next = 6;
               break;
             }
 
+            redisClient.hset('lastLogIn', existingUser.id, moment__WEBPACK_IMPORTED_MODULE_7___default()().format());
             return _context.abrupt("return", done(null, existingUser));
 
-          case 5:
+          case 6:
             newUser = new _models_user__WEBPACK_IMPORTED_MODULE_4__["default"]({
               name: profile.displayName,
               email: profile.emails[0].value,
               password: profile.id,
               googleId: profile.id,
+              createdAt: moment__WEBPACK_IMPORTED_MODULE_7___default()().format(),
+              updatedAt: null,
               isVerified: true
             });
             newUser.save(function (err, user, row) {
@@ -1875,7 +1904,7 @@ function () {
               done(null, user);
             });
 
-          case 7:
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -1909,6 +1938,7 @@ var LocalAuth = new passport_local__WEBPACK_IMPORTED_MODULE_6___default.a(LocalO
       }
 
       if (isMatch) {
+        redisClient.hset('lastLogIn', user.id, moment__WEBPACK_IMPORTED_MODULE_7___default()().format());
         return done(null, user);
       }
 

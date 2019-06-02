@@ -5,7 +5,9 @@ import sgMail                from '@sendgrid/mail';
 import Verify_Email_Config   from '../emails/emailVerify';
 import Reset_Password_Config from '../emails/resetPassword';
 import jwt                   from 'jsonwebtoken';
-
+import moment from 'moment';
+import redis from 'redis';
+const redisClient = redis.createClient()
 /*
  * Auth Object contain all logic for authentication
 */
@@ -39,6 +41,8 @@ Auth.SignUp = ({email,password,name,req})=>{
                 email,
                 password,
                 name,
+                createdAt:moment().format(),
+                updatedAt:null,
                 isVerified: false
             }).save()
         })
@@ -46,6 +50,7 @@ Auth.SignUp = ({email,password,name,req})=>{
             return new Promise((res,rej)=>{
                 req.login(user,err=>{
                     if(err){ rej(err)}
+                    redisClient.hset('lastLogIn',user.id,moment().format())
                     return res(user)
                 });
             })

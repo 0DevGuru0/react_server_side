@@ -3,6 +3,10 @@ import {Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import User from '../models/user';
 import path from 'path'
 import LocalStrategy from 'passport-local';
+import moment from 'moment';
+import redis from 'redis';
+const redisClient = redis.createClient()
+
 require('dotenv').config({
     path:path.resolve(process.cwd(),'config/keys/.env')
 })
@@ -24,12 +28,16 @@ const googleOption = {
 };
 const GoogleAuth = new GoogleStrategy(googleOption,async (accessToken,refreshToken,profile,done)=>{
     const existingUser = await User.findOne({googleId:profile.id});
-    if(existingUser){ return done(null,existingUser) }
+    if(existingUser){ 
+        redisClient.hset('lastLogIn',existingUser.id,moment().format())
+        return done(null,existingUser) }
         const newUser = new User({
             name:profile.displayName,
             email:profile.emails[0].value,
             password:profile.id,
             googleId:profile.id,
+            createdAt:moment().format(),
+            updatedAt:null,
             isVerified:true
         })
         newUser.save((err,user,row)=>{
@@ -45,7 +53,10 @@ const LocalAuth = new LocalStrategy(LocalOption,(email,password,done)=>{
         if(!user){return done(null,false)}
         user.comparePassword(password,(err,isMatch)=>{
             if(err){return done(err)}
-            if(isMatch){return done(null,user)}
+            if(isMatch){
+                redisClient.hset('lastLogIn',user.id,moment().format())
+                return done(null,user)
+            }
             return done(null,false,'Invalid_Credential')
         })
     })
