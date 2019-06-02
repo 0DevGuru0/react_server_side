@@ -230,6 +230,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_visitors_ips__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_models_visitors_ips__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../models/visitors/ipInfo */ "./models/visitors/ipInfo.js");
 /* harmony import */ var _models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_models_visitors_ipInfo__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_9__);
 
 
 
@@ -238,11 +240,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+__webpack_require__(/*! dotenv */ "dotenv").config({
+  path: path__WEBPACK_IMPORTED_MODULE_9___default.a.resolve(process.cwd(), 'config/keys/.env')
+});
 
 var redisClient = redis__WEBPACK_IMPORTED_MODULE_4___default.a.createClient({
   retry_strategy: function retry_strategy() {
     return 1000;
   }
+});
+redisClient.on('error', function (err) {
+  console.log(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.bgRedBright.bold('ERROR:') + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.bold('connecting to redis encountered with issue.\n'));
 });
 
 var GeolocationParams = __webpack_require__(/*! ip-geolocation-api-javascript-sdk/GeolocationParams.js */ "ip-geolocation-api-javascript-sdk/GeolocationParams.js");
@@ -259,47 +270,58 @@ function () {
   var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(cb) {
-    var successMsg, IPContainer, _ref2, data, now, storeTime;
+    var IPContainer, _ref2, data, now, storeTime;
 
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            successMsg = [];
-            _context.prev = 1;
-            _context.next = 4;
+            _context.prev = 0;
+            _context.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('https://api.ipgeolocation.io/getip');
 
-          case 4:
+          case 3:
             _ref2 = _context.sent;
             data = _ref2.data;
             IPContainer = data.ip;
-            _context.next = 20;
+            _context.next = 19;
             break;
 
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](1);
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context["catch"](0);
 
             if (!_context.t0.response) {
-              _context.next = 15;
+              _context.next = 14;
               break;
             }
 
-            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "The request was made and the server responded with error \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.response.data))) + '\n', null));
+            return _context.abrupt("return", cb(ErrorModel({
+              message: 'The request was made and the server responded with error',
+              sourceCode: 'getIPRequest',
+              errorDetail: _context.t0.response.data
+            })));
 
-          case 15:
+          case 14:
             if (!_context.t0.request) {
-              _context.next = 19;
+              _context.next = 18;
               break;
             }
 
-            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "The request was made but no response was received \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.request))) + '\n', null));
+            return _context.abrupt("return", cb(ErrorModel({
+              message: 'The request was made but no response was received',
+              sourceCode: 'getIPRequest',
+              errorDetail: _context.t0.request
+            })));
+
+          case 18:
+            return _context.abrupt("return", cb(ErrorModel({
+              message: 'Something happened in setting up the request that triggered an Error',
+              sourceCode: 'getIPRequest',
+              errorDetail: _context.t0.message
+            })));
 
           case 19:
-            return _context.abrupt("return", cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something happened in setting up the request that triggered an Error\n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_getIPRequest(line:24)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(_context.t0.message))) + '\n', null));
-
-          case 20:
             //2| calculate remaining time to store IPs from redis memory to mongodb
             now = new Date();
             storeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0, 0) - now;
@@ -312,13 +334,19 @@ function () {
               var lastDay = moment__WEBPACK_IMPORTED_MODULE_5___default()().subtract(1, 'day').format('YYYY/M/D');
               redisClient.hgetall(lastDay, function (error, result) {
                 if (error) {
-                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something went wrong on redis \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(error))) + '\n', null);
+                  return cb(ErrorModel({
+                    message: 'Something went wrong on redis',
+                    sourceCode: 'FetchVisitorDataFromRedis',
+                    errorDetail: error
+                  }));
                 }
 
                 if (result == null) {
-                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "receiving null as result for redis query  \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify({
-                    queryResult: null
-                  }))) + '\n', null);
+                  return cb(ErrorModel({
+                    message: 'receiving null as result for redis query ',
+                    sourceCode: 'FetchVisitorDataFromRedis',
+                    errorDetail: '{queryResult:null}'
+                  }));
                 } //3|Store Fetched Data on Mongodb
 
 
@@ -341,20 +369,26 @@ function () {
                 if (errors.length == 0) {
                   redisClient.del(lastDay);
                 } else {
-                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "something went wrong on storing fetched data from redis on mongoDB \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_StoreFetchedDataOnDB(line:57)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(errors))) + '\n', null);
+                  return cb(ErrorModel({
+                    message: 'something went wrong on storing fetched data from redis on mongoDB',
+                    sourceCode: 'StoreFetchedDataOnDB',
+                    errorDetail: errors
+                  }));
                 }
               });
             }, storeTime + 20000); //  4|Fetch information and store in Redis
 
             redisClient.hget(Day, IPContainer, function (error, result) {
               if (error) {
-                return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "Something went wrong on redis \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(error))) + '\n', null);
+                return cb(ErrorModel({
+                  message: 'Something went wrong on redis',
+                  sourceCode: 'FetchVisitorDataFromRedis',
+                  errorDetail: error
+                }));
               }
 
               if (result !== null) {
-                return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "receiving unexpected Data as result for redis query  \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify({
-                  queryResult: result
-                }))) + '\n', null);
+                return cb(null);
               }
 
               var geolocationParams = new GeolocationParams();
@@ -362,7 +396,11 @@ function () {
               geolocationParams.setFields(targetData.join(','));
               ipgeolocationApi.getGeolocation(function (ipData) {
                 if (ipData.message) {
-                  return cb(chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "something went wrong on fetching IP information from protocol \n" + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_fetchInfoFromProtocol(line:86)]\n") + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(ipData.message))) + '\n', null);
+                  return cb(ErrorModel({
+                    message: 'something went wrong on fetching IP information from protocol',
+                    sourceCode: 'fetchInfoFromProtocol',
+                    errorDetail: ipData.message
+                  }));
                 }
 
                 delete ipData.ip;
@@ -374,18 +412,25 @@ function () {
               }, geolocationParams);
             });
 
-          case 25:
+          case 24:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[1, 9]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function (_x) {
     return _ref.apply(this, arguments);
   };
 }();
+
+function ErrorModel(_ref3) {
+  var message = _ref3.message,
+      sourceCode = _ref3.sourceCode,
+      errorDetail = _ref3.errorDetail;
+  return chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "".concat(message, "\n") + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_".concat(sourceCode, ")]\n")) + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(errorDetail))) + '\n';
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (ipInfo);
 
@@ -982,8 +1027,10 @@ router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["defau
 router.get('/resetPassword', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].resetPassword);
 router.get('/usersListPdf', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].printUsers);
 router.get('/userInfo', function (req, res) {
-  _controllers_ipInfo__WEBPACK_IMPORTED_MODULE_4__["default"].storeSystem(function (errMsg, successMsg) {
-    console.log(errMsg);
+  _controllers_ipInfo__WEBPACK_IMPORTED_MODULE_4__["default"].storeSystem(function (errMsg) {
+    if (errMsg) {
+      console.log(errMsg);
+    }
   });
   res.end();
 });
@@ -1309,29 +1356,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! cors */ "cors");
 /* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! csurf */ "csurf");
-/* harmony import */ var csurf__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(csurf__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! x-xss-protection */ "x-xss-protection");
-/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(x_xss_protection__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! hpp */ "hpp");
-/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(hpp__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! helmet */ "helmet");
-/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
-/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! socket.io-redis */ "socket.io-redis");
-/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(socket_io_redis__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! morgan */ "morgan");
-/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
-/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! express-graphql */ "express-graphql");
-/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_20__);
-/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
-
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! x-xss-protection */ "x-xss-protection");
+/* harmony import */ var x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(x_xss_protection__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! hpp */ "hpp");
+/* harmony import */ var hpp__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(hpp__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! helmet */ "helmet");
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../routes/userRouter */ "./routes/userRouter.js");
+/* harmony import */ var _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../routes/rootRouter */ "./routes/rootRouter.js");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! socket.io-redis */ "socket.io-redis");
+/* harmony import */ var socket_io_redis__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(socket_io_redis__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! morgan */ "morgan");
+/* harmony import */ var morgan__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(morgan__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rotating-file-stream */ "rotating-file-stream");
+/* harmony import */ var rotating_file_stream__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(rotating_file_stream__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../models/user */ "./models/user.js");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! express-graphql */ "express-graphql");
+/* harmony import */ var express_graphql__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(express_graphql__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../schema */ "./schema/index.js");
 
 
 
@@ -1377,11 +1421,11 @@ var app = express__WEBPACK_IMPORTED_MODULE_0___default()(); // app.use(helmet())
 
 var logDirectory = path__WEBPACK_IMPORTED_MODULE_4___default.a.resolve('./logs');
 fs__WEBPACK_IMPORTED_MODULE_5___default.a.existsSync(logDirectory) || fs__WEBPACK_IMPORTED_MODULE_5___default.a.mkdirSync(logDirectory);
-var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_18___default()('access.log', {
+var accessLogStream = rotating_file_stream__WEBPACK_IMPORTED_MODULE_17___default()('access.log', {
   interval: '1d',
   path: logDirectory
 });
-app.use(morgan__WEBPACK_IMPORTED_MODULE_17___default()('combined', {
+app.use(morgan__WEBPACK_IMPORTED_MODULE_16___default()('combined', {
   stream: accessLogStream
 })); /////////////////START APP MIDDLEWARE///////////////////////////
 
@@ -1394,7 +1438,7 @@ app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({
   extended: true
 }));
-app.use(hpp__WEBPACK_IMPORTED_MODULE_11___default()());
+app.use(hpp__WEBPACK_IMPORTED_MODULE_10___default()());
 app.disable('x-powered-by');
 var whiteList = [process.env.CORS_APPROVED_ADDRESS, "http://localhost:".concat(process.env.PORT)];
 var corsOptionsDelegate = {
@@ -1407,7 +1451,9 @@ app.use(cors__WEBPACK_IMPORTED_MODULE_8___default()(corsOptionsDelegate)); /////
 var RedisStore = __webpack_require__(/*! connect-redis */ "connect-redis")(express_session__WEBPACK_IMPORTED_MODULE_6___default.a);
 
 app.set('trust proxy', 1);
-var server = http__WEBPACK_IMPORTED_MODULE_15___default.a.createServer(app);
+var server = http__WEBPACK_IMPORTED_MODULE_14___default.a.createServer(app);
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
 var expressSession = express_session__WEBPACK_IMPORTED_MODULE_6___default()({
   secret: "3f9faa8bc0e722172cc0bdafede9f3f217474e47",
   resave: false,
@@ -1416,21 +1462,22 @@ var expressSession = express_session__WEBPACK_IMPORTED_MODULE_6___default()({
     prefix: "session:auth:"
   }),
   cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    expires: expiryDate
   }
 });
 app.use(expressSession);
-app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_10___default()());
+app.use(x_xss_protection__WEBPACK_IMPORTED_MODULE_9___default()());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.initialize());
 app.use(passport__WEBPACK_IMPORTED_MODULE_3___default.a.session()); ////////////////START GRAPHQL CONFIG///////////////////////////
 
-app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_20___default()({
-  schema: _schema__WEBPACK_IMPORTED_MODULE_21__["default"],
+app.use('/graphql', express_graphql__WEBPACK_IMPORTED_MODULE_19___default()({
+  schema: _schema__WEBPACK_IMPORTED_MODULE_20__["default"],
   graphiql: true
 })); ////////////////START ROUTER CONFIG///////////////////////////
 
-app.use('/', csurf__WEBPACK_IMPORTED_MODULE_9___default()(), _routes_userRouter__WEBPACK_IMPORTED_MODULE_13__["default"]);
-app.use('/', csurf__WEBPACK_IMPORTED_MODULE_9___default()(), _routes_rootRouter__WEBPACK_IMPORTED_MODULE_14__["default"]); /////////////////START ERROR HANDLING///////////////////////////
+app.use('/', _routes_userRouter__WEBPACK_IMPORTED_MODULE_12__["default"]);
+app.use('/', _routes_rootRouter__WEBPACK_IMPORTED_MODULE_13__["default"]); /////////////////START ERROR HANDLING///////////////////////////
 
 app.use(function (req, res, next) {
   res.status(404).send('404');
@@ -1986,17 +2033,6 @@ module.exports = require("cookie-parser");
 /***/ (function(module, exports) {
 
 module.exports = require("cors");
-
-/***/ }),
-
-/***/ "csurf":
-/*!************************!*\
-  !*** external "csurf" ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("csurf");
 
 /***/ }),
 

@@ -7,7 +7,6 @@ import fs           from 'fs';
 import session      from 'express-session';
 import cookieParser from 'cookie-parser'
 import cors         from 'cors';
-import csrf         from 'csurf';
 import xssFilter    from 'x-xss-protection';
 import hpp          from 'hpp';
 import helmet       from 'helmet';
@@ -61,11 +60,11 @@ const corsOptionsDelegate = {
     }
 }
 app.use(cors(corsOptionsDelegate))
-
 /////////////// CACHE IMPLEMENTING ///////////////////////////
 let RedisStore = require('connect-redis')(session);
 app.set('trust proxy', 1)
 let server = http.createServer(app)
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 const expressSession = session({
     secret:"3f9faa8bc0e722172cc0bdafede9f3f217474e47",
     resave:false,
@@ -74,7 +73,8 @@ const expressSession = session({
         prefix:"session:auth:"
     }),
     cookie:{
-        maxAge:30 * 24 * 60 * 60 * 1000
+        maxAge:30 * 24 * 60 * 60 * 1000,
+        expires:expiryDate
     }
 })
 app.use(expressSession)
@@ -87,8 +87,8 @@ app.use('/graphql',expressGraphql({
     graphiql:true,
 }))
 ////////////////START ROUTER CONFIG///////////////////////////
-app.use('/',csrf(),userRouter)
-app.use('/',csrf(),rootRouter)
+app.use('/',userRouter)
+app.use('/',rootRouter)
 /////////////////START ERROR HANDLING///////////////////////////
 app.use((req, res, next)=>{
     res.status(404).send('404');

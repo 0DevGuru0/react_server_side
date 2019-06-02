@@ -17,6 +17,10 @@ app.use('/api', proxy(process.env.userManagementHost, {
   proxyReqOptDecorator(opts) {
     opts.headers['x-forwarded-host'] = process.env.hostAddress;
     return opts;
+  },
+  proxyErrorHandler: (err, res, next)=>{
+    console.log(err)
+    next(err);
   }
 }));
 

@@ -4,10 +4,15 @@ import moment from 'moment';
 import chalk from 'chalk';
 import IP_DB from '../models/visitors/ips';
 import IPINFO_DB from '../models/visitors/ipInfo';
+import path from 'path'
+require('dotenv').config({path:path.resolve(process.cwd(),'config/keys/.env')})
 
 
+const redisClient = redis.createClient({ retry_strategy: () => 1000 })
+redisClient.on('error',err=>{
+   console.log( chalk.bgRedBright.bold('ERROR:')+ chalk.bold('connecting to redis encountered with issue.\n') )
+})
 
-const redisClient = redis.createClient({retry_strategy: () => 1000})
 
 const GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams.js');
 const IPGeolocationAPI  = require('ip-geolocation-api-javascript-sdk/IPGeolocationAPI');
@@ -18,7 +23,6 @@ const ipInfo = {}
 let Day = moment().format("YYYY/M/D")
 
 ipInfo.storeSystem = async (cb) => {
-   const successMsg = [];
    let IPContainer ;
 
    //1| get visitor IP via axios
@@ -27,11 +31,23 @@ ipInfo.storeSystem = async (cb) => {
       IPContainer = data.ip;
    }catch(error){
       if (error.response) {
-        return cb( chalk.white.bgRed.bold('\nERROR||')+ `The request was made and the server responded with error \n`+ `sourceCode:`+chalk.redBright.bold(`[ipInfoSystem_getIPRequest(line:24)]\n`)+ `[detail]:`+chalk.redBright.bold(`${JSON.stringify(error.response.data)}`)+'\n' ,null);
+         return cb(ErrorModel({
+            message:'The request was made and the server responded with error',
+            sourceCode:'getIPRequest',
+            errorDetail:error.response.data
+         }))
        } else if (error.request) {
-         return cb( chalk.white.bgRed.bold('\nERROR||')+ `The request was made but no response was received \n`+ `sourceCode:`+chalk.redBright.bold(`[ipInfoSystem_getIPRequest(line:24)]\n`)+ `[detail]:`+chalk.redBright.bold(`${JSON.stringify(error.request)}`)+'\n' ,null);
+         return cb(ErrorModel({
+            message:'The request was made but no response was received',
+            sourceCode:'getIPRequest',
+            errorDetail:error.request
+         }))
        } else {
-         return cb( chalk.white.bgRed.bold('\nERROR||')+ `Something happened in setting up the request that triggered an Error\n`+ `sourceCode:`+chalk.redBright.bold(`[ipInfoSystem_getIPRequest(line:24)]\n`)+ `[detail]:`+chalk.redBright.bold(`${JSON.stringify(error.message)}`)+'\n' ,null);
+         return cb(ErrorModel({
+            message:'Something happened in setting up the request that triggered an Error',
+            sourceCode:'getIPRequest',
+            errorDetail:error.message
+         })) 
       }
    }
 
@@ -43,11 +59,20 @@ ipInfo.storeSystem = async (cb) => {
       let lastDay = moment().subtract(1, 'day').format('YYYY/M/D')
       redisClient.hgetall(lastDay, (error, result) => {
          if(error){
-            return cb( chalk.white.bgRed.bold('\nERROR||') + `Something went wrong on redis \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify(error)}`) + '\n', null);
+            return cb(ErrorModel({
+               message:'Something went wrong on redis',
+               sourceCode:'FetchVisitorDataFromRedis',
+               errorDetail:error
+            })) 
          }
          if(result == null){
-            return cb( chalk.white.bgRed.bold('\nERROR||') + `receiving null as result for redis query  \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_FetchVisitorDataFromRedis(line:41)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify({queryResult:null})}`) + '\n', null);
+            return cb(ErrorModel({
+               message:'receiving null as result for redis query ',
+               sourceCode:'FetchVisitorDataFromRedis',
+               errorDetail:'{queryResult:null}'
+            })) 
          }
+
          //3|Store Fetched Data on Mongodb
          let errors = []
          for (let key in result) {
@@ -67,7 +92,11 @@ ipInfo.storeSystem = async (cb) => {
          if(errors.length == 0){
             redisClient.del(lastDay)
          } else {
-            return cb( chalk.white.bgRed.bold('\nERROR||') + `something went wrong on storing fetched data from redis on mongoDB \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_StoreFetchedDataOnDB(line:57)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify(errors)}`) + '\n', null);
+            return cb(ErrorModel({
+               message:'something went wrong on storing fetched data from redis on mongoDB',
+               sourceCode:'StoreFetchedDataOnDB',
+               errorDetail:errors
+            })) 
          }
       })
    }, storeTime + 20000);
@@ -75,17 +104,25 @@ ipInfo.storeSystem = async (cb) => {
    //  4|Fetch information and store in Redis
    redisClient.hget(Day,IPContainer, (error, result) => {
       if(error){
-         return cb( chalk.white.bgRed.bold('\nERROR||') + `Something went wrong on redis \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify(error)}`) + '\n', null);
+         return cb(ErrorModel({
+            message:'Something went wrong on redis',
+            sourceCode:'FetchVisitorDataFromRedis',
+            errorDetail:error
+         })) 
       }
       if(result !== null){
-         return cb( chalk.white.bgRed.bold('\nERROR||') + `receiving unexpected Data as result for redis query  \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_FetchVisitorDataFromRedis(line:73)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify({queryResult:result})}`) + '\n', null); 
+         return cb(null)
       }
       let geolocationParams = new GeolocationParams();
       let targetData = [ "continent_name", "country_name", "state_prov", "district", "latitude", "longitude", "calling_code", "languages", "organization", "currency" ];
       geolocationParams.setFields(targetData.join(','));
       ipgeolocationApi.getGeolocation((ipData) => {
          if(ipData.message){
-            return cb( chalk.white.bgRed.bold('\nERROR||') + `something went wrong on fetching IP information from protocol \n` + `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_fetchInfoFromProtocol(line:86)]\n`) + `[detail]:` + chalk.redBright.bold(`${JSON.stringify(ipData.message)}`) + '\n', null);
+            return cb(ErrorModel({
+               message:'something went wrong on fetching IP information from protocol',
+               sourceCode:'fetchInfoFromProtocol',
+               errorDetail:ipData.message
+            })) 
          }
          delete ipData.ip;
          ipData={
@@ -97,4 +134,11 @@ ipInfo.storeSystem = async (cb) => {
       }, geolocationParams);
    })
 }
+
+function ErrorModel({message,sourceCode,errorDetail}){
+   return chalk.white.bgRed.bold('\nERROR||') +`${message}\n` +
+    `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_${sourceCode})]\n`) + 
+    `[detail]:` + chalk.redBright.bold(`${JSON.stringify(errorDetail)}`) + '\n'
+}
+
 export default ipInfo;
