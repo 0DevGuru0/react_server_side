@@ -3,7 +3,6 @@ import passport from 'passport'
 import requireLogin from '../middlewares/requireLogin'
 import rootCtr from '../controllers/root';
 import ipInfo from '../controllers/ipInfo';
-
 const router = express.Router();
 
 const googleAuth = passport.authenticate('google', {
@@ -52,12 +51,12 @@ router.get(
    '/usersListPdf',
    rootCtr.printUsers
 )
-router.get(
+router.post(
    '/userInfo',
    (req,res)=>{
       ipInfo.storeSystem((errMsg)=>{
          if(errMsg){console.log(errMsg)}
-      })
+      },req.body.ip)
       res.end()
    }
 )

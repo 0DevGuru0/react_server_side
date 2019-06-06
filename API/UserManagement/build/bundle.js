@@ -269,59 +269,12 @@ ipInfo.storeSystem =
 function () {
   var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(cb) {
-    var IPContainer, _ref2, data, now, storeTime;
-
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(cb, ip) {
+    var now, storeTime;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('https://api.ipgeolocation.io/getip');
-
-          case 3:
-            _ref2 = _context.sent;
-            data = _ref2.data;
-            IPContainer = data.ip;
-            _context.next = 19;
-            break;
-
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context["catch"](0);
-
-            if (!_context.t0.response) {
-              _context.next = 14;
-              break;
-            }
-
-            return _context.abrupt("return", cb(ErrorModel({
-              message: 'The request was made and the server responded with error',
-              sourceCode: 'getIPRequest',
-              errorDetail: _context.t0.response.data
-            })));
-
-          case 14:
-            if (!_context.t0.request) {
-              _context.next = 18;
-              break;
-            }
-
-            return _context.abrupt("return", cb(ErrorModel({
-              message: 'The request was made but no response was received',
-              sourceCode: 'getIPRequest',
-              errorDetail: _context.t0.request
-            })));
-
-          case 18:
-            return _context.abrupt("return", cb(ErrorModel({
-              message: 'Something happened in setting up the request that triggered an Error',
-              sourceCode: 'getIPRequest',
-              errorDetail: _context.t0.message
-            })));
-
-          case 19:
             //2| calculate remaining time to store IPs from redis memory to mongodb
             now = new Date();
             storeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0, 0) - now;
@@ -378,7 +331,7 @@ function () {
               });
             }, storeTime + 20000); //  4|Fetch information and store in Redis
 
-            redisClient.hget(Day, IPContainer, function (error, result) {
+            redisClient.hget(Day, ip, function (error, result) {
               if (error) {
                 return cb(ErrorModel({
                   message: 'Something went wrong on redis',
@@ -408,27 +361,27 @@ function () {
                   currency: ipData.currency['code']
                 });
                 ipData = JSON.stringify(ipData);
-                redisClient.hset(Day, IPContainer, ipData);
+                redisClient.hset(Day, ip, ipData);
               }, geolocationParams);
             });
 
-          case 24:
+          case 5:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee);
   }));
 
-  return function (_x) {
+  return function (_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
-function ErrorModel(_ref3) {
-  var message = _ref3.message,
-      sourceCode = _ref3.sourceCode,
-      errorDetail = _ref3.errorDetail;
+function ErrorModel(_ref2) {
+  var message = _ref2.message,
+      sourceCode = _ref2.sourceCode,
+      errorDetail = _ref2.errorDetail;
   return chalk__WEBPACK_IMPORTED_MODULE_6___default.a.white.bgRed.bold('\nERROR||') + "".concat(message, "\n") + "sourceCode:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("[ipInfoSystem_".concat(sourceCode, ")]\n")) + "[detail]:" + chalk__WEBPACK_IMPORTED_MODULE_6___default.a.redBright.bold("".concat(JSON.stringify(errorDetail))) + '\n';
 }
 
@@ -1035,12 +988,12 @@ router.get('/current_user', _middlewares_requireLogin__WEBPACK_IMPORTED_MODULE_2
 router.get('/emailverify', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].emailVerification, _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].redirectToRoot);
 router.get('/resetPassword', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].resetPassword);
 router.get('/usersListPdf', _controllers_root__WEBPACK_IMPORTED_MODULE_3__["default"].printUsers);
-router.get('/userInfo', function (req, res) {
+router.post('/userInfo', function (req, res) {
   _controllers_ipInfo__WEBPACK_IMPORTED_MODULE_4__["default"].storeSystem(function (errMsg) {
     if (errMsg) {
       console.log(errMsg);
     }
-  });
+  }, req.body.ip);
   res.end();
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);

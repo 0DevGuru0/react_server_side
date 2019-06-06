@@ -5,13 +5,14 @@ import {connect} from 'react-redux';
 import * as actionCreators from './store/actions'
 
 import {graphql} from 'react-apollo';
-import pageviews from './Graphql/mutation/pageViews'
+import pageviews from './Graphql/mutation/pageViews';
+import moment from 'moment';
 class rootRoute extends Component {
 
     componentDidUpdate(prevProps){
         if(this.props.location.pathname !== prevProps.location.pathname ){
             // redis Setup
-                let key = 'pageViews';
+                let key = `pageViews:${moment().format("YYYY/M/D")}:`;
                 let field = this.props.location.pathname
             // send to backend for save via Graphql
                 this.props.mutate({variables:{key,field}})

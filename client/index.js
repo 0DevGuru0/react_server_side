@@ -1,6 +1,6 @@
 import React from 'react';
 import {hydrate}from 'react-dom';
-
+var socket = require('socket.io-client')();
 //-----------Redux
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware,compose} from 'redux';
@@ -47,6 +47,12 @@ const enhancer = composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosI
 let DecryptUsersList = AES.decrypt(window.INITIAL_STATE, 'secret key 123');
 let UsersList_State = JSON.parse(DecryptUsersList.toString(enc.Utf8))
 
+socket.on('connect', function(){
+    socket.emit('client','client connected')
+    socket.on('disconnect',()=>{
+        socket.emit('client_1','client disconnected')
+    })
+});
 const store = createStore(reducers, UsersList_State, enhancer)
 function Render(Route){
     hydrate(

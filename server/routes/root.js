@@ -24,8 +24,7 @@ export default () => (req,res)=>{
         Promise.all([pageRender]).then(async(value)=>{
             if(context.notFound){ res.status(404)  }
             redis.incr('totalVisit')
-            process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-            await axios.get('https://localhost:3000/api/userInfo')
+
             res.send(value[0])
         })
     })

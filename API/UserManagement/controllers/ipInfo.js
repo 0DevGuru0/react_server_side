@@ -22,35 +22,7 @@ const ipInfo = {}
 
 let Day = moment().format("YYYY/M/D")
 
-ipInfo.storeSystem = async (cb) => {
-   let IPContainer ;
-
-   //1| get visitor IP via axios
-   try{
-      let {data} = await axios.get('https://api.ipgeolocation.io/getip');
-      IPContainer = data.ip;
-   }catch(error){
-      if (error.response) {
-         return cb(ErrorModel({
-            message:'The request was made and the server responded with error',
-            sourceCode:'getIPRequest',
-            errorDetail:error.response.data
-         }))
-       } else if (error.request) {
-         return cb(ErrorModel({
-            message:'The request was made but no response was received',
-            sourceCode:'getIPRequest',
-            errorDetail:error.request
-         }))
-       } else {
-         return cb(ErrorModel({
-            message:'Something happened in setting up the request that triggered an Error',
-            sourceCode:'getIPRequest',
-            errorDetail:error.message
-         })) 
-      }
-   }
-
+ipInfo.storeSystem = async (cb,ip) => {
    //2| calculate remaining time to store IPs from redis memory to mongodb
    var now = new Date();
    var storeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0, 0) - now;
@@ -101,8 +73,8 @@ ipInfo.storeSystem = async (cb) => {
       })
    }, storeTime + 20000);
 
-   //  4|Fetch information and store in Redis
-   redisClient.hget(Day,IPContainer, (error, result) => {
+//  4|Fetch information and store in Redis
+   redisClient.hget(Day,ip, (error, result) => {
       if(error){
          return cb(ErrorModel({
             message:'Something went wrong on redis',
@@ -130,7 +102,7 @@ ipInfo.storeSystem = async (cb) => {
             currency:ipData.currency['code']
          }
          ipData = JSON.stringify(ipData)
-         redisClient.hset(Day, IPContainer, ipData)
+         redisClient.hset(Day, ip, ipData)
       }, geolocationParams);
    })
 }
