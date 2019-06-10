@@ -9,18 +9,16 @@ import cookieParser from 'cookie-parser'
 import cors         from 'cors';
 import xssFilter    from 'x-xss-protection';
 import hpp          from 'hpp';
-import helmet       from 'helmet';
 import userRouter   from '../routes/userRouter';
 import rootRouter   from '../routes/rootRouter';
 import http         from 'http';
-import redisAdapter from 'socket.io-redis';
+// import redisAdapter from 'socket.io-redis';
 import morgan       from 'morgan';
 import rfs          from 'rotating-file-stream';
-import User         from '../models/user'
 import expressGraphql from 'express-graphql';
 import schema         from '../schema';
+import '../models/user';
 require('../services/passport');
-
 /////////////////START DATABASE CONFIG///////////////////////////
 mongoose.connect(process.env.DB_ADDRESS,{ useNewUrlParser: true });
 mongoose.connection.on('connected'   ,()=>{console.log("connection established successfully")});

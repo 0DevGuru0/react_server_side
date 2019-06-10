@@ -100,7 +100,7 @@ RootController.emailVerification =  (req,res,next)=>{
     jwt.verify(token,'afsan|user|emailVerify|007', { subject: "emailVerification" },(err, decoded)=>{
         // Check to see can find email
         if(err){
-            if(err.name == 'TokenExpiredError'){
+            if(err.name === 'TokenExpiredError'){
                 return res.status(500).send('request expired please try again')
             }else{
                 return res.send({err})
@@ -128,7 +128,7 @@ RootController.resetPassword =  (req,res,next)=>{
     const {token} = req.query;
     jwt.verify(token,'afsan|user|resetPassword|007', { subject: "resetPassword" },(err, decoded)=>{
         if(err){
-            if(err.name == 'TokenExpiredError'){
+            if(err.name === 'TokenExpiredError'){
                 return res.status(500).send('request expired please try again')
             }else{
                 return res.send({err})
@@ -157,7 +157,7 @@ RootController.printUsers =  (req,res,next)=>{
         });
         pdfDoc.text('-----------------------');
         users = users.map(user=>{return{name:user.name,email:user.email}})
-        users.forEach(user => {
+        users.forEach((user,i) => {
              pdfDoc.text(i+')'+user.email+'---'+user.name)
         });
         pdfDoc.text('---');

@@ -1,8 +1,6 @@
 import {
     GraphQLString,
-    GraphQLID,
     GraphQLObjectType,
-    GraphQLBoolean,
     GraphQLInt
 } from 'graphql';
 

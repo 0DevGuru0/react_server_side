@@ -1,11 +1,8 @@
 const path             = require('path'),
-    // BrotliPlugin       = require('brotli-webpack-plugin'),
-    // CompressionPlugin  = require('compression-webpack-plugin'),
     UglifyJsPlugin     = require('uglifyjs-webpack-plugin'),
     nodeExternals      = require('webpack-node-externals');
-
 module.exports= {
-    mode:"development",
+    mode:"production",
     entry:"./index.js",
     output:{
         filename:"bundle.js",
@@ -26,6 +23,18 @@ module.exports= {
     module:{
         rules:[
             {
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
+                exclude: /node_modules/,
+                enforce: 'pre',
+                use: [{
+                    loader: require.resolve('eslint-loader'),
+                    options: {
+                        formatter: require.resolve('react-dev-utils/eslintFormatter'),
+                        eslintPath: require.resolve('eslint'),
+                    },
+                }]
+            },
+            {
                 test:/.js?$/,
                 exclude:/node_modules/,
                 use:[
@@ -34,14 +43,5 @@ module.exports= {
             }
         ]
     },
-    // plugins:[
-    //     new CompressionPlugin({algorithm:"gzip"}),
-    //     new BrotliPlugin({
-    //         asset:'[path].br[query]',
-    //         test:/\.(js|css|html|svg)$/,
-    //         threshold:10240,
-    //         minRatio:0.8,
-    //         deleteOriginalAssets:true
-    //     })
-    // ]
+    plugins:[]
 }

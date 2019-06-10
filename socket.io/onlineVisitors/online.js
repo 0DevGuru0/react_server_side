@@ -2,6 +2,7 @@ const Redis = require('redis');
 const PubSub = require('./pubsub');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 /*redis Buckets:
  * 1) onlineVisitors (
         type: hash 
@@ -15,13 +16,10 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
         value: number
     )
 */
-
-const Online_Visitors_System = class OnlineVisitors {
-    constructor() {
+module.exports = class OnlineVisitors {
+    constructor(ip) {
         // get VisitorIP
-        this.fetchIP().then(ip => this.IP = ip).catch(err=>{
-            return err
-        });
+        this.IP = ip
         // config redis for key space notification
         this.redis = Redis.createClient();
         this.redis.on('ready', () => {
@@ -29,37 +27,36 @@ const Online_Visitors_System = class OnlineVisitors {
         })
         PubSub.subscribe("__keyevent@0__:incrby")
     }
-    async fetchIP() {
-        return new Promise(async (resolve, reject) => {
-            await axios.get('https://api.ipgeolocation.io/getip')
-                .then(res => resolve(res.data.ip))
-                .catch(error=>{
-                    if (error.response) {
-                        return reject(this.ErrorModel({
-                            message:'The request was made and the server responded with error',
-                            sourceCode:'getIPRequest',
-                            errorDetail:error.response.data
-                        }))
-                        } else if (error.request) {
-                        return reject(this.ErrorModel({
-                            message:'The request was made but no response was received',
-                            sourceCode:'getIPRequest',
-                            errorDetail:error.request
-                        }))
-                        } else {
-                        return reject(this.ErrorModel({
-                            message:'Something happened in setting up the request that triggered an Error',
-                            sourceCode:'getIPRequest',
-                            errorDetail:error.message
-                        })) 
+    static async fetchIP() {
+        // return new Promise(async (resolve, reject) => {
+        return await axios.get('https://api.ipgeolocation.io/getip')
+            .then(res => res.data)
+            .catch(error => {
+                if (error.response) {
+                    return JSON.stringify({
+                        message: 'The request was made and the server responded with error',
+                        sourceCode: 'getIPRequest',
+                        errorDetail: error.response.data
+                    })
+                } else if (error.request) {
+                    return {
+                        message: 'The request was made but no response was received',
+                        sourceCode: 'getIPRequest',
+                        errorDetail: error.request
                     }
-                })
-        })
+                } else {
+                    return {
+                        message: 'Something happened in setting up the request that triggered an Error',
+                        sourceCode: 'getIPRequest',
+                        errorDetail: error.message
+                    }
+                }
+            })
     }
 
-    async fetchVisitorInfo(){   
-        await axios.post(`${process.env.hostAddress}/api/userinfo`,{
-            ip:this.IP
+    async fetchVisitorInfo() {
+        await axios.post(`${process.env.hostAddress}/api/userinfo`, {
+            ip: this.IP
         })
     }
     VisitorInter() {
@@ -81,7 +78,16 @@ const Online_Visitors_System = class OnlineVisitors {
         })
 
     }
+    ErrorModel({
+        message,
+        sourceCode,
+        errorDetail
+    }) {
+        return chalk.white.bgRed.bold('\nERROR||') + `${message}\n` +
+            `sourceCode:` + chalk.redBright.bold(`[ipInfoSystem_${sourceCode})]\n`) +
+            `[detail]:` + chalk.redBright.bold(`${JSON.stringify(errorDetail)}`) + '\n'
 
+    }
     VisitorExit() {
         // GET visitor Bucket HGET(key:online:Visitors,filed:IP)
         this.redis.hget('online:Visitors', this.IP, (err, reply) => {
@@ -118,9 +124,9 @@ const Online_Visitors_System = class OnlineVisitors {
     online_Visitors_Count() {
         // trigger keyspace notification for incr and decr of onlineVisitors bucket
         PubSub.on("message", async (channel, message) => {
-            if(message == 'online:count'){
-                this.redis.get(message,(err,reply)=>{
-                    console.log('online_visitors_count::',reply)
+            if (message == 'online:count') {
+                this.redis.get(message, (err, reply) => {
+                    // console.log('online_visitors_count::',reply)
                 })
             }
         })
@@ -130,5 +136,3 @@ const Online_Visitors_System = class OnlineVisitors {
         return this.redis.get(key)
     }
 };
-
-module.exports = new Online_Visitors_System()

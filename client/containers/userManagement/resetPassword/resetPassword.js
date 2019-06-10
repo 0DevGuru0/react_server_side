@@ -15,9 +15,9 @@ class resetPassword extends Component {
     }
     formHandler=(e)=>{
         e.preventDefault()
-        if(this.state.password == '' || this.state.password_copy == ''){
+        if(this.state.password === '' || this.state.password_copy === ''){
             this.setState({errors:['please fill all credentials']})
-        }else if (this.state.password == this.state.password_copy){
+        }else if (this.state.password === this.state.password_copy){
             if(this.props.data.identifyUserByToken){
                 this.props.mutate({
                     variables:{
@@ -71,14 +71,7 @@ export default {
     component:
         graphql(userIdentifyByToken, {
             options: (props) => ({
-                variables: {
-                    Token: props.location.pathname.slice(15)
-                }
+                variables: { Token: props.location.pathname.slice(15) }
             })
-        })
-        (
-            graphql(updateUserPassword)(
-                resetPassword
-            )
-        )
+        })( graphql(updateUserPassword)( resetPassword ) )
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import {hydrate}from 'react-dom';
-var socket = require('socket.io-client')();
+
 //-----------Redux
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware,compose} from 'redux';
 import thunk from 'redux-thunk';
-import {AES,enc,} from 'crypto-js'
+import {AES,enc} from 'crypto-js'
 import axios from 'axios'
 //-----------Router
 import {BrowserRouter} from 'react-router-dom';
@@ -21,6 +21,10 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import https from 'https'
 
+
+
+
+var socket = require('socket.io-client')();
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,

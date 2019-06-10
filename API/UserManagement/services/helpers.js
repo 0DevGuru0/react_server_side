@@ -153,7 +153,7 @@ Auth.identifyUserByToken =({token,req})=>{
     return new Promise((res, rej) => {
         return jwt.verify(token,'afsan|user|resetPassword|007', { subject: "resetPassword" },(err, decoded)=>{
             if(err){
-                if(err.name == 'TokenExpiredError'){
+                if(err.name === 'TokenExpiredError'){
                     return rej('request expired please try again')
                 }else{
                     return rej(err)

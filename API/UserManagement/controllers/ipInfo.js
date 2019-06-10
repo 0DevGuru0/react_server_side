@@ -1,4 +1,3 @@
-import axios from 'axios';
 import redis from 'redis';
 import moment from 'moment';
 import chalk from 'chalk';
@@ -61,7 +60,7 @@ ipInfo.storeSystem = async (cb,ip) => {
                if (err) { errors.push(err)}
             })
          }
-         if(errors.length == 0){
+         if(errors.length === 0){
             redisClient.del(lastDay)
          } else {
             return cb(ErrorModel({

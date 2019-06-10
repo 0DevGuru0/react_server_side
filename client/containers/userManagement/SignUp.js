@@ -11,9 +11,11 @@ class SignUp extends Component{
             email:'',
             password:''
         },
-        errors:[]
+        errors:[],
+        loading:false
     }
     submitHandler = (e)=>{
+        this.setState({loading:true})
         e.preventDefault()
         const {name,email,password} = this.state.user
         this.props.mutate({
@@ -21,8 +23,10 @@ class SignUp extends Component{
             refetchQueries:[{query}]
         })
         .then(()=>{
+            this.setState({loading:false})
             this.props.history.replace('/')
         }).catch((e)=>{
+            this.setState({loading:false})
             let errors = e.graphQLErrors.map(err=>err.message);
             errors = errors[0].split(',')
             this.setState({errors});
@@ -34,12 +38,13 @@ class SignUp extends Component{
         return errors
     }
     render(){
+        if(this.state.loading){
+            return <div className={classes.loader}>Loading...</div>
+        }
         return(
             <div className={classes.container}>
                 <div className={classes.errorBox}>
-                    <ul>
-                        {this.showErrors()}
-                    </ul>
+                    <ul> {this.showErrors()} </ul>
                 </div>
                 <form onSubmit={this.submitHandler}>
                     <label>Name</label>

@@ -1,7 +1,6 @@
 import {Schema,model} from 'mongoose';
 import validator from 'validator';
 import {compare,genSalt,hash} from 'bcrypt';
-import moment from 'moment';
 const userSchema = new Schema({
     name:{
         type:String,

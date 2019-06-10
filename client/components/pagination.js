@@ -22,7 +22,7 @@ export default ({
 
   pageNum.map(pg=>{
     let classArray = classes.pageList;
-    if(pg == currentPage){
+    if(pg === currentPage){
       classArray = [classes.pageList,classes.activePage].join(' ')
     }
     return list.push(
@@ -31,7 +31,7 @@ export default ({
       </li>
     )
   })
-  if (currentPage !== lastPage && !pageNum.find(e => e == lastPage)) {
+  if (currentPage !== lastPage && !pageNum.find(e => e === lastPage)) {
     list.push(
         <li key ={Math.random()*lastPage} className={classes.lastPage}>
             <Link to={baseAddress+lastPage}>lastPage[{lastPage}]</Link>

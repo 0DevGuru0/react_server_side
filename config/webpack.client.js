@@ -1,14 +1,20 @@
+'use strict';
+
 const path = require('path'),
     webpack = require('webpack'),
     BrotliPlugin = require('brotli-webpack-plugin'),
     CompressionPlugin = require('compression-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-    UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
-    nodeExternals = require('webpack-node-externals');
+    UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+    require('dotenv').config()
+
+const isEnvProduction = process.env.NODE_ENV == 'production' ? true : false;
+const isEnvDevelopment = process.env.NODE_ENV == 'development' ? true : false;
+
 module.exports = {
     name: "client",
-    mode: "production",
+    mode: process.env.NODE_ENV,
     entry: [
         "@babel/runtime/regenerator",
         // "react-hot-loader/patch",
@@ -31,7 +37,8 @@ module.exports = {
         }
     },
     stats: {
-        warnings: false
+        warnings: false,
+        children: false,
     },
     optimization: {
         splitChunks: {
@@ -44,11 +51,21 @@ module.exports = {
                 }
             }
         },
+        minimize: isEnvProduction,
         minimizer: [
             new UglifyJsPlugin({
+                extractComments: true,
                 parallel: true,
                 cache: true,
                 uglifyOptions: {
+                    parse: {
+                        ecma: 8
+                    },
+                    compress: {
+                        ecma: 5,
+                        warnings: false,
+
+                    },
                     output: {
                         comments: false
                     }
@@ -58,6 +75,23 @@ module.exports = {
     },
     module: {
         rules: [{
+                parser: {
+                    requireEnsure: false
+                }
+            },
+            {
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
+                exclude: /node_modules/,
+                enforce: 'pre',
+                use: [{
+                    loader: require.resolve('eslint-loader'),
+                    options: {
+                        formatter: require.resolve('react-dev-utils/eslintFormatter'),
+                        eslintPath: require.resolve('eslint'),
+                    },
+                }]
+            },
+            {
                 test: /\.(png|svg|jpg|gif)$/,
                 loader: require.resolve('file-loader'),
                 options: {
@@ -65,12 +99,36 @@ module.exports = {
                 },
             },
             {
-                test: /.js$/,
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: [{
-                    loader: require.resolve("babel-loader")
-                }]
+                    loader: require.resolve("babel-loader"),
+                    options: {
+                        cacheDirectory: true,
+                        cacheCompression: isEnvProduction,
+                        compact: isEnvProduction,
+                    }
+                }, ]
             },
+            {
+                test: /\.(js|mjs)$/,
+                include: "/node_modules",
+                loader: require.resolve('babel-loader'),
+                options: {
+                    babelrc: false,
+                    configFile: false,
+                    compact: false,
+                    presets: [
+                        [
+                            require.resolve('babel-preset-react-app/dependencies'),
+                            { helpers: true },
+                        ]
+                    ],
+                    cacheDirectory: true,
+                    cacheCompression: isEnvProduction,
+                    sourceMaps: false,
+                },
+            }, 
             {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
@@ -132,6 +190,7 @@ module.exports = {
             filename: '[name]_sass.css',
             chunkFilename: '[id]_sass.css',
         }),
-        new ExtractTextPlugin('stylesheets/[name].css')
+        new ExtractTextPlugin('stylesheets/[name].css'),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
 }

@@ -59,7 +59,7 @@ class Header extends Component{
       if(!this.props.user.isVerified || !this.props.data.user.isVerified){
         console.log(this.props)
         return <div className={classes.emailVerify}>
-          <p>please confirm your email verify<a href="#" onClick={this.sendEmail}>Send Request To My Email</a></p>
+          <p>please confirm your email verify<button onClick={this.sendEmail}>Send Request To My Email</button></p>
         </div>
       }
     }
@@ -72,7 +72,7 @@ class Header extends Component{
     }else if(this.state.emailRequested){
 
       return <div className={classes.emailVerify_send}>
-          <p>Email send successfully do you want send again__<a href="#" onClick={this.sendEmail}>Send Request To My Email</a></p>
+          <p>Email send successfully do you want send again__<button onClick={this.sendEmail}>Send Request To My Email</button></p>
       </div>
 
     }else{
