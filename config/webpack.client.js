@@ -1,4 +1,4 @@
-'use strict';
+
 
 const path = require('path'),
     webpack = require('webpack'),
@@ -6,6 +6,7 @@ const path = require('path'),
     CompressionPlugin = require('compression-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
+    WebpackMessages = require('webpack-messages'),
     UglifyJsPlugin = require('uglifyjs-webpack-plugin');
     require('dotenv').config()
 
@@ -36,10 +37,7 @@ module.exports = {
             errors: true
         }
     },
-    stats: {
-        warnings: false,
-        children: false,
-    },
+    stats: 'none',
     optimization: {
         splitChunks: {
             chunks: 'all',
@@ -185,6 +183,10 @@ module.exports = {
             test: /\.(js|css|html|svg)$/,
             threshold: 10240,
             minRatio: 0.8,
+        }),
+        new WebpackMessages({
+            name: 'client',
+            logger: str => console.log(`>> ${str}`)
         }),
         new MiniCssExtractPlugin({
             filename: '[name]_sass.css',

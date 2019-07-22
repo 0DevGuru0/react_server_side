@@ -27,6 +27,7 @@ class SignUp extends Component{
             this.props.history.replace('/')
         }).catch((e)=>{
             this.setState({loading:false})
+            console.log(e)
             let errors = e.graphQLErrors.map(err=>err.message);
             errors = errors[0].split(',')
             this.setState({errors});

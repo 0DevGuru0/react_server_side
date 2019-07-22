@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const WebpackMessages = require('webpack-messages');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 
@@ -8,7 +9,7 @@ module.exports = {
     mode: "development",
     entry: ["./index.js"],
     externals: [nodeExternals()],
-    stats:{warnings: false},
+    stats:'none',
     devtool: "cheap-module-source-map",
     output: {
         filename: "server-bundle.js",
@@ -53,7 +54,11 @@ module.exports = {
     },
     plugins:[
         new ExtractTextPlugin('stylesheets/[name].css'),
-        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+        new WebpackMessages({
+            name: 'client',
+            logger: str => console.log(`>> ${str}`)
+        }),
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
 
     ]
 };
