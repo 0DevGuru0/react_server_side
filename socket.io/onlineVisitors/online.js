@@ -1,6 +1,7 @@
 const Redis = require('redis');
 const PubSub = require('./pubsub');
 const axios = require('axios');
+const chalk = require('chalk');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 /*redis Buckets:
@@ -53,7 +54,6 @@ module.exports = class OnlineVisitors {
                 }
             })
     }
-
     async fetchVisitorInfo() {
         await axios.post(`${process.env.hostAddress}/api/userinfo`, {
             ip: this.IP
@@ -120,11 +120,10 @@ module.exports = class OnlineVisitors {
             }
         })
     }
-
     online_Visitors_Count() {
         // trigger keyspace notification for incr and decr of onlineVisitors bucket
         PubSub.on("message", async (channel, message) => {
-            if (message == 'online:count') {
+            if (message === 'online:count') {
                 this.redis.get(message, (err, reply) => {
                     // console.log('online_visitors_count::',reply)
                 })

@@ -22,10 +22,12 @@ export default async(req,store,context)=>{
         link:createHttpLink({
             fetch,
             uri: `https://localhost:3000/api/graphql`,
+            onError: ({ networkError, graphQLErrors }) => {
+                console.log('graphQLErrors', graphQLErrors)
+                console.log('networkError', networkError)
+            },
             credentials:'same-origin',
-            fetchOptions:{
-                agent: new https.Agent({ rejectUnauthorized: false }),
-            }
+            fetchOptions:{ agent: new https.Agent({ rejectUnauthorized: false }), }
         }),
         cache: new InMemoryCache()
     });
@@ -61,6 +63,7 @@ export default async(req,store,context)=>{
                     <script>window.__APOLLO_STATE__=${JSON.stringify(client.extract(),getCircularReplacer())}</script>
                 </body>
             </html>`
-    })
+    }).catch(e=>e)
 }
+
 

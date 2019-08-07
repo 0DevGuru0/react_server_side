@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import * as actionCreator from '../Store/actions';
+import * as actionCreator from '../store/actions';
 import requireAuth from '../hoc/requireAuth';
 import Helmet from 'react-helmet'
 // import $ from 'jquery'

@@ -8,7 +8,8 @@ import SignIn from './containers/userManagement/SignIn';
 import Signup from './containers/userManagement/SignUp';
 import resetPassword from './containers/userManagement/resetPassword/resetPassword';
 import requestToReset from './containers/userManagement/resetPassword/requestToReset';
-export default [{
+export default [
+    {
     ...Root,
     path: '/',
     routes:[

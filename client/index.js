@@ -24,23 +24,21 @@ import https from 'https'
 
 
 
-var socket = require('socket.io-client')();
+const socket = require('socket.io-client')();
+
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,
-    link: createHttpLink({
+    link:createHttpLink({
+        fetch,
         uri: `https://localhost:3000/api/graphql`,
         credentials:'same-origin',
-        fetchOptions:{
-            agent: new https.Agent({ rejectUnauthorized: false }),
-        }
+        fetchOptions:{ agent: new https.Agent({ rejectUnauthorized: false }), }
     }),
     cache: new InMemoryCache({dataIdFromObject:o=>o.id}).restore(window.__APOLLO_STATE__),
 })
 
-const axiosInstance = axios.create({
-    baseURL: '/api'
-});
+const axiosInstance = axios.create({ baseURL: '/api' });
 
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})

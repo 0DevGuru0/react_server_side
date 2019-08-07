@@ -112,7 +112,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "3e9ca0f78e0a58ee0223";
+/******/ 	var hotCurrentHash = "0c138cac1327c173246c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1211,17 +1211,17 @@ var loadData = function loadData(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread */ "./node_modules/@babel/runtime/helpers/objectSpread.js");
 /* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _containers_home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./containers/home */ "./client/containers/home.js");
-/* harmony import */ var _containers_usersList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./containers/usersList */ "./client/containers/usersList.js");
-/* harmony import */ var _containers_adminsList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./containers/adminsList */ "./client/containers/adminsList.js");
-/* harmony import */ var _RootPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./RootPage */ "./client/RootPage.js");
-/* harmony import */ var _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./containers/notFoundPage */ "./client/containers/notFoundPage.js");
-/* harmony import */ var _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./containers/userManagement/SignIn */ "./client/containers/userManagement/SignIn.js");
-/* harmony import */ var _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./containers/userManagement/SignUp */ "./client/containers/userManagement/SignUp.js");
-/* harmony import */ var _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/resetPassword */ "./client/containers/userManagement/resetPassword/resetPassword.js");
-/* harmony import */ var _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/requestToReset */ "./client/containers/userManagement/resetPassword/requestToReset.js");
+/* harmony import */ var _containers_home__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./containers/home */ "./client/containers/home.js");
+/* harmony import */ var _containers_usersList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./containers/usersList */ "./client/containers/usersList.js");
+/* harmony import */ var _containers_adminsList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./containers/adminsList */ "./client/containers/adminsList.js");
+/* harmony import */ var _RootPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RootPage */ "./client/RootPage.js");
+/* harmony import */ var _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./containers/notFoundPage */ "./client/containers/notFoundPage.js");
+/* harmony import */ var _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./containers/userManagement/SignIn */ "./client/containers/userManagement/SignIn.js");
+/* harmony import */ var _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./containers/userManagement/SignUp */ "./client/containers/userManagement/SignUp.js");
+/* harmony import */ var _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/resetPassword */ "./client/containers/userManagement/resetPassword/resetPassword.js");
+/* harmony import */ var _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./containers/userManagement/resetPassword/requestToReset */ "./client/containers/userManagement/resetPassword/requestToReset.js");
+
+// import React from 'react';
 
 
 
@@ -1231,178 +1231,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-/* harmony default export */ __webpack_exports__["default"] = ([_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _RootPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
+/* harmony default export */ __webpack_exports__["default"] = ([_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _RootPage__WEBPACK_IMPORTED_MODULE_4__["default"], {
   path: '/',
   routes: [_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/users'
-  }, _containers_usersList__WEBPACK_IMPORTED_MODULE_3__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  }, _containers_usersList__WEBPACK_IMPORTED_MODULE_2__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/admins'
-  }, _containers_adminsList__WEBPACK_IMPORTED_MODULE_4__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  }, _containers_adminsList__WEBPACK_IMPORTED_MODULE_3__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/signin'
-  }, _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_7__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  }, _containers_userManagement_SignIn__WEBPACK_IMPORTED_MODULE_6__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/signup'
-  }, _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_8__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  }, _containers_userManagement_SignUp__WEBPACK_IMPORTED_MODULE_7__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/request_resetPass'
-  }, _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_10__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
+  }, _containers_userManagement_resetPassword_requestToReset__WEBPACK_IMPORTED_MODULE_9__["default"]), _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({
     path: '/resetPassword'
-  }, _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_9__["default"]), {
-    component: _containers_home__WEBPACK_IMPORTED_MODULE_2__["default"],
+  }, _containers_userManagement_resetPassword_resetPassword__WEBPACK_IMPORTED_MODULE_8__["default"]), {
+    component: _containers_home__WEBPACK_IMPORTED_MODULE_1__["default"],
     path: '/'
-  }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_6__["default"])]
+  }, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, _containers_notFoundPage__WEBPACK_IMPORTED_MODULE_5__["default"])]
 })]);
-
-/***/ }),
-
-/***/ "./client/Store/actions/actionTypes.js":
-/*!*********************************************!*\
-  !*** ./client/Store/actions/actionTypes.js ***!
-  \*********************************************/
-/*! exports provided: FETCH_USERS, FETCH_CURRENT_USER, FETCH_ADMINS, PAGE_VIEWS */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_USERS", function() { return FETCH_USERS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CURRENT_USER", function() { return FETCH_CURRENT_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_ADMINS", function() { return FETCH_ADMINS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PAGE_VIEWS", function() { return PAGE_VIEWS; });
-var FETCH_USERS = "FETCH_USERS",
-    FETCH_CURRENT_USER = "FETCH_CURRENT_USER",
-    FETCH_ADMINS = "FETCH_ADMINS",
-    PAGE_VIEWS = 'PAGE_VIEWS';
-
-/***/ }),
-
-/***/ "./client/Store/actions/index.js":
-/*!***************************************!*\
-  !*** ./client/Store/actions/index.js ***!
-  \***************************************/
-/*! exports provided: fetchUsers, fetchAdmins, fetchCurrentUser */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUsers", function() { return fetchUsers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAdmins", function() { return fetchAdmins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCurrentUser", function() { return fetchCurrentUser; });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js");
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actionTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./actionTypes */ "./client/Store/actions/actionTypes.js");
-
-
-
-var fetchUsers = function fetchUsers(pageNum) {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(dispatch, getState, api) {
-        var collection;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return api.get("/users?page=".concat(pageNum));
-
-              case 2:
-                collection = _context.sent;
-                dispatch({
-                  type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_USERS"],
-                  payload: collection.data
-                });
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      return function (_x, _x2, _x3) {
-        return _ref.apply(this, arguments);
-      };
-    }()
-  );
-},
-    fetchAdmins = function fetchAdmins() {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref2 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(dispatch, getState, api) {
-        var Admins;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return api.get('/admins');
-
-              case 2:
-                Admins = _context2.sent;
-                dispatch({
-                  type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_ADMINS"],
-                  payload: Admins.data
-                });
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }));
-
-      return function (_x4, _x5, _x6) {
-        return _ref2.apply(this, arguments);
-      };
-    }()
-  );
-},
-    fetchCurrentUser = function fetchCurrentUser() {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref3 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(dispatch, getState, api) {
-        var User;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return api.get('/current_user');
-
-              case 2:
-                User = _context3.sent;
-                dispatch({
-                  type: _actionTypes__WEBPACK_IMPORTED_MODULE_2__["FETCH_CURRENT_USER"],
-                  payload: User.data
-                });
-
-              case 4:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }));
-
-      return function (_x7, _x8, _x9) {
-        return _ref3.apply(this, arguments);
-      };
-    }()
-  );
-};
 
 /***/ }),
 
@@ -1529,8 +1376,7 @@ function (_Component) {
           console.log(_this.props);
           return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
             className: _header_css__WEBPACK_IMPORTED_MODULE_13___default.a.emailVerify
-          }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("p", null, "please confirm your email verify", react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("a", {
-            href: "#",
+          }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("p", null, "please confirm your email verify", react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("button", {
             onClick: _this.sendEmail
           }, "Send Request To My Email")));
         }
@@ -1547,8 +1393,7 @@ function (_Component) {
       } else if (_this.state.emailRequested) {
         return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
           className: _header_css__WEBPACK_IMPORTED_MODULE_13___default.a.emailVerify_send
-        }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("p", null, "Email send successfully do you want send again__", react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("a", {
-          href: "#",
+        }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("p", null, "Email send successfully do you want send again__", react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("button", {
           onClick: _this.sendEmail
         }, "Send Request To My Email")));
       } else {
@@ -1626,7 +1471,7 @@ __webpack_require__.r(__webpack_exports__);
   pageNum.map(function (pg) {
     var classArray = classes.pageList;
 
-    if (pg == currentPage) {
+    if (pg === currentPage) {
       classArray = [classes.pageList, classes.activePage].join(' ');
     }
 
@@ -1639,7 +1484,7 @@ __webpack_require__.r(__webpack_exports__);
   });
 
   if (currentPage !== lastPage && !pageNum.find(function (e) {
-    return e == lastPage;
+    return e === lastPage;
   })) {
     list.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
       key: Math.random() * lastPage,
@@ -1739,7 +1584,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _Store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store/actions */ "./client/Store/actions/index.js");
+/* harmony import */ var _store_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/actions */ "./client/store/actions/index.js");
 /* harmony import */ var _hoc_requireAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hoc/requireAuth */ "./client/hoc/requireAuth.js");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-helmet */ "./node_modules/react-helmet/lib/Helmet.js");
 /* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_helmet__WEBPACK_IMPORTED_MODULE_9__);
@@ -1812,14 +1657,14 @@ var mapStateToProps = function mapStateToProps(_ref) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     FetchAdmins: function FetchAdmins() {
-      return dispatch(_Store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
+      return dispatch(_store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
     }
   };
 };
 
 var loadData = function loadData(_ref2) {
   var dispatch = _ref2.dispatch;
-  return dispatch(_Store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
+  return dispatch(_store_actions__WEBPACK_IMPORTED_MODULE_7__["fetchAdmins"]());
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2227,6 +2072,7 @@ function (_Component) {
           loading: false
         });
 
+        console.log(e);
         var errors = e.graphQLErrors.map(function (err) {
           return err.message;
         });
@@ -2542,11 +2388,11 @@ function (_Component) {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "formHandler", function (e) {
       e.preventDefault();
 
-      if (_this.state.password == '' || _this.state.password_copy == '') {
+      if (_this.state.password === '' || _this.state.password_copy === '') {
         _this.setState({
           errors: ['please fill all credentials']
         });
-      } else if (_this.state.password == _this.state.password_copy) {
+      } else if (_this.state.password === _this.state.password_copy) {
         if (_this.props.data.identifyUserByToken) {
           _this.props.mutate({
             variables: {

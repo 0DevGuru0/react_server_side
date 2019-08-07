@@ -13,8 +13,6 @@ const onlineVisitors = (httpsServer) => {
             System.VisitorInter()
             client.on('disconnect', () => { System.VisitorExit() });
         }else{ console.log( ErrorModel( JSON.parse(IP) ) ) }
-        
-
     });
 }
 
