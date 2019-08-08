@@ -23,10 +23,10 @@ module.exports = class OnlineVisitors {
         this.IP = ip
         // config redis for key space notification
         this.redis = Redis.createClient();
-        this.redis.on('ready', () => {
-            this.redis.config('SET', "notify-keyspace-events", 'E$')
-        })
-        PubSub.subscribe("__keyevent@0__:incrby")
+        // this.redis.on('ready', () => {
+        //     this.redis.config('SET', "notify-keyspace-events", 'E$')
+        // })
+        // PubSub.subscribe("__keyevent@0__:incrby")
     }
     static async fetchIP() {
         // return new Promise(async (resolve, reject) => {
@@ -55,9 +55,7 @@ module.exports = class OnlineVisitors {
             })
     }
     async fetchVisitorInfo() {
-        await axios.post(`${process.env.hostAddress}/api/userinfo`, {
-            ip: this.IP
-        })
+        await axios.post(`${process.env.hostAddress}/api/userinfo`, { ip: this.IP })
     }
     VisitorInter() {
         // check IP HEXISTS(key:online:Visitors,filed:IP)
@@ -120,16 +118,17 @@ module.exports = class OnlineVisitors {
             }
         })
     }
-    online_Visitors_Count() {
-        // trigger keyspace notification for incr and decr of onlineVisitors bucket
-        PubSub.on("message", async (channel, message) => {
-            if (message === 'online:count') {
-                this.redis.get(message, (err, reply) => {
-                    // console.log('online_visitors_count::',reply)
-                })
-            }
-        })
-    }
+    // online_Visitors_Count() {
+    //     // trigger keyspace notification for incr and decr of onlineVisitors bucket
+    //     PubSub.on("message", async (channel, message) => {
+    //         console.log(message)
+    //         if (message === 'online:count') {
+    //             this.redis.get(message, (err, reply) => {
+    //                 console.log('online_visitors_count::',reply)
+    //             })
+    //         }
+    //     })
+    // }
 
     get(key) {
         return this.redis.get(key)

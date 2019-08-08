@@ -1,15 +1,13 @@
 const onlineSys = require('./online');
 const chalk = require('chalk');
 
-
-
 const onlineVisitors = (httpsServer) => {
     const io = require('socket.io')(httpsServer)
     io.on('connection', async client => {
         let IP = await onlineSys.fetchIP()
         if(IP.ip){
             const System =  new onlineSys(IP.ip)
-            System.online_Visitors_Count()
+            // System.online_Visitors_Count()
             System.VisitorInter()
             client.on('disconnect', () => { System.VisitorExit() });
         }else{ console.log( ErrorModel( JSON.parse(IP) ) ) }

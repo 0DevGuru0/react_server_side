@@ -52,7 +52,7 @@ let UsersList_State = JSON.parse(DecryptUsersList.toString(enc.Utf8))
 socket.on('connect', function(){
     socket.emit('client','client connected')
     socket.on('disconnect',()=>{
-        socket.emit('client_1','client disconnected')
+        socket.emit('client','client disconnected')
     })
 });
 const store = createStore(reducers, UsersList_State, enhancer)
