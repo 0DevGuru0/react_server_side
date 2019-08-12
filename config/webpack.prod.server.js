@@ -1,6 +1,7 @@
 const path = require('path'),
     webpack = require('webpack'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    WebpackMessages = require('webpack-messages'),
     postcssPresetEnv = require('postcss-preset-env'),
     nodeExternals = require('webpack-node-externals');
 
@@ -78,6 +79,10 @@ module.exports = {
     },
     plugins:[
         new ExtractTextPlugin('stylesheets/[name].css'),
+        new WebpackMessages({
+            name: 'server',
+            logger: str => console.log(`>> ${str}`)
+        }),
         new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     ]
 };

@@ -194,5 +194,15 @@ module.exports = {
         }),
         new ExtractTextPlugin('stylesheets/[name].css'),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ]
+    ],
+    node: {
+        module: 'empty',
+        dgram: 'empty',
+        dns: 'mock',
+        fs: 'empty',
+        http2: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        child_process: 'empty',
+    }
 }

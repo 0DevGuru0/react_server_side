@@ -5,6 +5,8 @@ import {graphql}   from 'react-apollo';
 import query       from '../Graphql/query/user'
 import emailVerify from '../Graphql/mutation/emailVerify';
 import classes     from './header.css';
+const socket = require('socket.io-client')();
+
 class Header extends Component{
   constructor(props){
     super(props)
@@ -15,6 +17,19 @@ class Header extends Component{
   }
   renderButtons=()=>{
     if (this.props.user || this.props.data.user) {
+      socket.on('connect', ()=>{ 
+      //  reply  {id:'userID'}
+      console.log(this.props.user)
+      console.log('data->',this.props.data.user)
+        socket.emit('clientType','user')
+
+        // socket.emit('InterUser',{id:})
+
+        socket.on('disconnect',()=>{ 
+          console.log('diexxxx')
+          // socket.emit('exitUser','ExitUser') 
+        })
+      })
       return (
         <div>
           <li><Link to="/admins">Admins</Link></li>
@@ -22,23 +37,14 @@ class Header extends Component{
         </div>
       );
     } else {
+      socket.on('connect', ()=>{ socket.emit('clientType','visitor') })
       return (
         <div>
-          <li>
-            <Link to="/users">Users</Link>
-          </li>
-          <li>
-            <Link to="/admins">Admins</Link>
-          </li>
-          <li>
-            <Link to="/Signin">SignIn</Link>
-          </li>
-          <li>
-            <Link to="/Signup">SignUp</Link>
-          </li>
-          <li>
-            <a href="https://localhost:3000/api/auth/google">Login via google</a>
-          </li>
+          <li> <Link to="/users">Users</Link> </li>
+          <li> <Link to="/admins">Admins</Link> </li>
+          <li> <Link to="/Signin">SignIn</Link> </li>
+          <li> <Link to="/Signup">SignUp</Link> </li>
+          <li> <a href="https://localhost:3000/api/auth/google">Login via google</a> </li>
         </div>
       );
     }

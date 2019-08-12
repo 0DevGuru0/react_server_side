@@ -36,7 +36,9 @@ app.use(function (req, res, next) {
 
 const compiler = webpack([webpackClientConfig, webpackServerConfig]);
 const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, { 
-  serverSideRender: true
+  serverSideRender: true,
+  logLevel:'silent',
+  logTime:false
 })
 const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)

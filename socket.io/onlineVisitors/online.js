@@ -1,5 +1,4 @@
 const Redis = require('redis');
-const PubSub = require('./pubsub');
 const axios = require('axios');
 const chalk = require('chalk');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
@@ -99,6 +98,7 @@ module.exports = class OnlineVisitors {
                         // [DECR reply] < 0
                         // DELETE visitor HDEL(key:online:Visitors,filed:IP)
                         this.redis.hdel('online:Visitors', this.IP)
+                        this.redis.decr('online:count')
                     }
                     // [DECR reply] > 0 || [DECR reply] = 0
                     // " another connection of IP exist. "
