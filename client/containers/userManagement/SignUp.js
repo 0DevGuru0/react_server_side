@@ -2,7 +2,8 @@ import React,{Component} from 'react';
 import {graphql} from 'react-apollo';
 import SignUp_mutation from '../../Graphql/mutation/Signup';
 import query from '../../Graphql/query/user';
-import classes from './signup.css'
+import classes from './signup.css';
+const socket = require('socket.io-client')();
 class SignUp extends Component{
 
    state={
@@ -23,6 +24,9 @@ class SignUp extends Component{
             refetchQueries:[{query}]
         })
         .then(()=>{
+            socket.on('connect',()=>{
+                socket.emit('userEntered',this.props.data.user._id)
+            })
             this.setState({loading:false})
             this.props.history.replace('/')
         }).catch((e)=>{

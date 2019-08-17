@@ -3,11 +3,12 @@ import {graphql} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
 import query from '../../Graphql/query/user'
 import classes from './signin.css';
+const socket = require('socket.io-client')();
 class SignIn extends Component{
 
     state = {
         user: {
-            email: '',
+            email: '', 
             password: ''
         },
         errors: [],
@@ -23,6 +24,7 @@ class SignIn extends Component{
             refetchQueries:[{query}]
         })
         .then(()=>{
+            socket.emit('userEntered',true)
             this.setState({loading:false})
             this.props.history.replace('/')
         }).catch((e)=>{
@@ -39,6 +41,7 @@ class SignIn extends Component{
     }
     signInForm=()=>{
         if(this.state.loading){
+          
             return <div className={classes.loader}>Loading...</div>
         }else{
             return ( <div>

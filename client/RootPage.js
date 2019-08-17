@@ -7,6 +7,7 @@ import * as actionCreators from './store/actions'
 import {graphql} from 'react-apollo';
 import pageviews from './Graphql/mutation/pageViews';
 import moment from 'moment';
+
 class rootRoute extends Component {
 
     componentDidUpdate(prevProps){

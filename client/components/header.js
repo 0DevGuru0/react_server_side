@@ -6,7 +6,6 @@ import query       from '../Graphql/query/user'
 import emailVerify from '../Graphql/mutation/emailVerify';
 import classes     from './header.css';
 const socket = require('socket.io-client')();
-
 class Header extends Component{
   constructor(props){
     super(props)
@@ -15,20 +14,16 @@ class Header extends Component{
       emailRequested:false
     }
   }
+
   renderButtons=()=>{
     if (this.props.user || this.props.data.user) {
       socket.on('connect', ()=>{ 
-      //  reply  {id:'userID'}
-      console.log(this.props.user)
-      console.log('data->',this.props.data.user)
         socket.emit('clientType','user')
-
-        // socket.emit('InterUser',{id:})
-
-        socket.on('disconnect',()=>{ 
-          console.log('diexxxx')
-          // socket.emit('exitUser','ExitUser') 
-        })
+        
+        socket.emit('InterUser',{id:this.props.user._id || this.props.data.user._id})
+      })
+      socket.on('disconnect',()=>{ 
+        socket.emit('exitUser',{id:this.props.user._id || this.props.data.user._id}) 
       })
       return (
         <div>
@@ -63,7 +58,6 @@ class Header extends Component{
   emailVerify = ()=>{
     if(this.props.data.user && this.props.user){
       if(!this.props.user.isVerified || !this.props.data.user.isVerified){
-        console.log(this.props)
         return <div className={classes.emailVerify}>
           <p>please confirm your email verify<button onClick={this.sendEmail}>Send Request To My Email</button></p>
         </div>

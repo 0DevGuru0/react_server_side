@@ -10,10 +10,7 @@ const server = require('./server/server').default;
 const privateKey = fs.readFileSync('server.key');
 const certificate = fs.readFileSync('server.cert');
 
-const httpsServer = https.createServer({
-    key: privateKey,
-    cert: certificate
-}, server)
+const httpsServer = https.createServer({ key: privateKey, cert: certificate }, server)
 
 onlineVisitors_server(httpsServer)
 

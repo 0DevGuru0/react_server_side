@@ -104,7 +104,7 @@ module.exports = class OnlineVisitors {
                     // " another connection of IP exist. "
                 })
 
-            } else if (reply == 0) {
+            } else if (+reply === 0) {
                 // [HGET reply] = 0
 
                 // DELETE visitor HDEL(key:online:Visitors,filed:IP)
