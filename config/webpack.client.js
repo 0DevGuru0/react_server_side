@@ -54,20 +54,7 @@ module.exports = {
             new UglifyJsPlugin({
                 extractComments: true,
                 parallel: true,
-                cache: true,
-                uglifyOptions: {
-                    parse: {
-                        ecma: 8
-                    },
-                    compress: {
-                        ecma: 5,
-                        warnings: false,
-
-                    },
-                    output: {
-                        comments: false
-                    }
-                }
+                cache: true
             })
         ],
     },

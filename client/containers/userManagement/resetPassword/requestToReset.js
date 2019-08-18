@@ -60,4 +60,4 @@ render(){
 }
 export default {
     component:graphql(mutation)(requestToReset)
-};
+}

@@ -32,21 +32,21 @@ const onlineVisitors = (httpsServer) => {
 
         client.on('userEntered',reply=>{
             if(reply === false){
-                client.request.session.destroy();
+                client.request.session.destroy()
             }else{
-                client.request.session.signedIn = reply;
+                client.request.session.user = reply;
                 client.request.session.save();
+                console.log(client.request.session.user)
             }
         })
 
         client.on('disconnect', () => {
-            if (client.request.session.user 
-                || client.request.session.signedIn ) {
-                redis.hget('online:Users', client.request.session.user, (err, reply) => {
+            if ( client.request.session.user ) {
+                redis.hget('online:Users', client.request.session.user , (err, reply) => {
                     if (reply > 0) {
                         redis.hincrby('online:Users', client.request.session.user, -1, (err, reply) => {
                             if (reply < 0 || +reply === 0) {
-                                redis.hdel('online:Users', client.request.session.user,(err,reply)=>{
+                                redis.hdel('online:Users', client.request.session.user ,(err,reply)=>{
                                     if(reply===1){ redis.incrby('online:users:count',-1) }
                                 })
                             }

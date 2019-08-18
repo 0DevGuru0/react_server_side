@@ -83,9 +83,7 @@ const mapDispatchToProps = dispatch=>({
 const loadData = ({dispatch},pageNum)=>(
     dispatch(   actionCreators.fetchUsers(pageNum)  )
 )
-
-
-export default ({
+export default {
     component:connect(mapStateToProps,mapDispatchToProps)(UserList),
     loadData
-});
+}

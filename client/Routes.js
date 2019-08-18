@@ -1,4 +1,3 @@
-// import React from 'react';
 import Home from './containers/home';
 import usersList from './containers/usersList';
 import adminsList from './containers/adminsList';
@@ -38,11 +37,11 @@ export default [
             ...resetPassword
         },
         {
-            component:Home,
             path:'/',
+            ...Home,
         },
         {
-            ...NotFoundPage
+            component:NotFoundPage
         }
     ]
 }]

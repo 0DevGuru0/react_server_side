@@ -67,11 +67,10 @@ class resetPassword extends Component {
     }
 }
 
-export default {
-    component:
-        graphql(userIdentifyByToken, {
-            options: (props) => ({
-                variables: { Token: props.location.pathname.slice(15) }
-            })
-        })( graphql(updateUserPassword)( resetPassword ) )
-};
+export default{
+    component:graphql(userIdentifyByToken, {
+        options: (props) => ({
+            variables: { Token: props.location.pathname.slice(15) }
+        })
+    })( graphql(updateUserPassword)( resetPassword ) )
+}

@@ -21,11 +21,6 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import https from 'https'
 
-
-
-
-const socket = require('socket.io-client')();
-
 const client = new ApolloClient({
     ssrForceFetchDelay: 100,
     connectToDevTools: true,
@@ -49,10 +44,6 @@ const enhancer = composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosI
 let DecryptUsersList = AES.decrypt(window.INITIAL_STATE, 'secret key 123');
 let UsersList_State = JSON.parse(DecryptUsersList.toString(enc.Utf8))
 
-socket.on('connect', ()=>{
-    socket.emit('client','client connected')
-    socket.on('disconnect',()=>{ socket.emit('client','client disconnected') })
-});
 const store = createStore(reducers, UsersList_State, enhancer)
 function Render(Route){
     hydrate(

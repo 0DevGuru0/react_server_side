@@ -2,7 +2,7 @@ import React from 'react';
 import {Helmet} from "react-helmet";
 import classes from './home.css'
 import { hot } from 'react-hot-loader'
-const Home = () => {
+const Home = (props) => {
   return (
     <div className="center-align" style={{marginTop:'200px'}}>
     <Helmet>
@@ -19,4 +19,7 @@ const Home = () => {
   );
 };
 
-export default hot(module)(Home);
+export default {
+  component:hot(module)(Home)
+}
+

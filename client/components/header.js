@@ -5,7 +5,6 @@ import {graphql}   from 'react-apollo';
 import query       from '../Graphql/query/user'
 import emailVerify from '../Graphql/mutation/emailVerify';
 import classes     from './header.css';
-const socket = require('socket.io-client')();
 class Header extends Component{
   constructor(props){
     super(props)
@@ -17,13 +16,13 @@ class Header extends Component{
 
   renderButtons=()=>{
     if (this.props.user || this.props.data.user) {
-      socket.on('connect', ()=>{ 
-        socket.emit('clientType','user')
+      this.props.socket.on('connect', ()=>{ 
+        this.props.socket.emit('clientType','user')
         
-        socket.emit('InterUser',{id:this.props.user._id || this.props.data.user._id})
+        this.props.socket.emit('InterUser',{id:this.props.user._id || this.props.data.user._id})
       })
-      socket.on('disconnect',()=>{ 
-        socket.emit('exitUser',{id:this.props.user._id || this.props.data.user._id}) 
+      this.props.socket.on('disconnect',()=>{ 
+        this.props.socket.emit('exitUser',{id:this.props.user._id || this.props.data.user._id}) 
       })
       return (
         <div>
@@ -32,7 +31,7 @@ class Header extends Component{
         </div>
       );
     } else {
-      socket.on('connect', ()=>{ socket.emit('clientType','visitor') })
+      this.props.socket.on('connect', ()=>{ this.props.socket.emit('clientType','visitor') })
       return (
         <div>
           <li> <Link to="/users">Users</Link> </li>

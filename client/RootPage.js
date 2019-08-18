@@ -7,8 +7,10 @@ import * as actionCreators from './store/actions'
 import {graphql} from 'react-apollo';
 import pageviews from './Graphql/mutation/pageViews';
 import moment from 'moment';
+import socketClient from 'socket.io-client';
 
-class rootRoute extends Component {
+const socket = socketClient()
+class RootRoute extends Component {
 
     componentDidUpdate(prevProps){
         if(this.props.location.pathname !== prevProps.location.pathname ){
@@ -19,11 +21,16 @@ class rootRoute extends Component {
                 this.props.mutate({variables:{key,field}})
         }
     }
+    
     render(){
+        socket.on('connect', ()=>{
+            socket.emit('client','client connected')
+            socket.on('disconnect',()=>{ socket.emit('client','client disconnected') })
+        });
         return (
             <div>
-                <Header/>
-                {renderRoutes(this.props.route.routes)}
+                <Header socket={socket}/>
+                {renderRoutes(this.props.route.routes,{socket})}
             </div>
         )
     }
@@ -32,10 +39,12 @@ class rootRoute extends Component {
 const mapDispatchToProps = dispatch=>({
     fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser()),
 })
+
 const loadData = ({dispatch})=>(
-dispatch(actionCreators.fetchCurrentUser())
+    dispatch(actionCreators.fetchCurrentUser())
 )
+
 export default {
-    component:graphql(pageviews)(connect(null,mapDispatchToProps)(rootRoute)),
+    component:graphql(pageviews)(connect(null,mapDispatchToProps)(RootRoute)),
     loadData
 }

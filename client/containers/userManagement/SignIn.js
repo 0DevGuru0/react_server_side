@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
-import {graphql} from 'react-apollo';
+import {graphql,} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
 import query from '../../Graphql/query/user'
 import classes from './signin.css';
-const socket = require('socket.io-client')();
 class SignIn extends Component{
 
     state = {
@@ -14,7 +13,13 @@ class SignIn extends Component{
         errors: [],
         loading:false
     }
-
+    componentDidUpdate(prevProps,prevState){
+        if(this.props.data.user !== prevProps.data.user && this.props.data.user){
+            this.props.socket.emit('userEntered',this.props.data.user._id)
+            this.setState({loading:false})
+            this.props.history.replace('/')
+        }
+    }
     submitHandler = (e)=>{
         this.setState({loading:true})
         e.preventDefault()
@@ -22,17 +27,13 @@ class SignIn extends Component{
         this.props.mutate({
             variables:{email,password},
             refetchQueries:[{query}]
-        })
-        .then(()=>{
-            socket.emit('userEntered',true)
-            this.setState({loading:false})
-            this.props.history.replace('/')
         }).catch((e)=>{
             this.setState({loading:false})
             let errors = e.graphQLErrors.map(err=>err.message);
             errors = errors[0].split(',')
             this.setState({errors});
         })
+
     }
     showErrors = ()=>{
         const errors = []
@@ -71,10 +72,9 @@ class SignIn extends Component{
 }
 
 export default {
-    component:
-    graphql(query)(
-        graphql(SignIn_mutation)(
-            SignIn
+    component:graphql(SignIn_mutation)( 
+        graphql(query)(
+            SignIn 
         )
     )
-};
+}

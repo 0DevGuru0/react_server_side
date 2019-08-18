@@ -3,7 +3,6 @@ import createStore from '../helpers/createStore';
 import { matchRoutes } from "react-router-config";
 import routes from '../../client/Routes'
 import Redis from 'ioredis';
-import axios from 'axios';
 
 var redis = new Redis();
 export default () => (req,res)=>{
