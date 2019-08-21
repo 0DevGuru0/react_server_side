@@ -11,6 +11,7 @@ let sessionMiddleware = session({
 
 const redis = Redis.createClient();
 
+
 const onlineVisitors = (httpsServer) => {
 
     const io = require('socket.io')(httpsServer)
@@ -19,38 +20,54 @@ const onlineVisitors = (httpsServer) => {
     io.on('connection', client => {
 
         client.on('InterUser', reply => {
-            if (client.request.session.user && client.request.session.user === reply.id) {
+            if (client.request.session.user 
+                && client.request.session.user === reply.id) {
+
                 redis.hget('online:Users', reply.id,(err,result)=>{
-                    if(!result){ redis.incrby('online:users:count',1) }
+                    if(!result ){ 
+                        redis.incrby('online:users:count',1) }
                 })
-                redis.hincrby('online:Users', reply.id, 1)
+                if(!client.request.session.sign){
+                    redis.hincrby('online:Users', reply.id, 1)
+                    client.request.session.sign = false;
+                }
                 
             } else if (!client.request.session.user) {
                 client.request.session.user = reply.id;
+                client.request.session.sign = reply.sign;
             }
+
         });
-
-        client.on('userEntered',reply=>{
-            if(reply === false){
-                client.request.session.destroy()
-            }else{
-                client.request.session.user = reply;
-                client.request.session.save();
-                console.log(client.request.session.user)
-            }
-        })
-
         client.on('disconnect', () => {
-            if ( client.request.session.user ) {
-                redis.hget('online:Users', client.request.session.user , (err, reply) => {
-                    if (reply > 0) {
-                        redis.hincrby('online:Users', client.request.session.user, -1, (err, reply) => {
-                            if (reply < 0 || +reply === 0) {
-                                redis.hdel('online:Users', client.request.session.user ,(err,reply)=>{
-                                    if(reply===1){ redis.incrby('online:users:count',-1) }
+
+            /*
+                - check to see the client close the browser is visitor or user
+                    - Visitor|  pass it with out any action
+                    - User|     get mount of the user in online:Users bucket
+                        -mount < 0 --> it's not possible
+                        -mount = 0 --> pass it with out any action
+                        -mount > 0 --> decrease usersID mount by one then check to see the result
+                            -result > 0 --> pass it with out any action
+                            -result = 0 ,result < 0 --> 
+                                user signed out permanently and delete userID from online:Users 
+                                + decrement online:users:count by one
+            */
+
+            if (client.request.session.user) {
+                let userID = client.request.session.user
+                redis.hget('online:Users', userID, (err, reply) => {
+                    if (+reply > 0) {
+
+                        redis.hincrby('online:Users', userID, -1, (err, reply) => {
+                            if (+reply < 0 || +reply === 0) {
+
+                                redis.hdel('online:Users', userID, (err, reply) => {
+                                    if (+reply === 1) { redis.incrby('online:users:count', -1) }
                                 })
+
                             }
                         })
+
                     }
                 })
             }

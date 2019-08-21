@@ -5,7 +5,7 @@ import query from '../../Graphql/query/user';
 import classes from './signup.css';
 class SignUp extends Component{
 
-   state={
+   state = {
         user:{
             name:'',
             email:'',
@@ -16,7 +16,7 @@ class SignUp extends Component{
     }
     componentDidUpdate(prevProps,prevState){
         if(this.props.data.user !== prevProps.data.user && this.props.data.user){
-            this.props.socket.emit('userEntered',this.props.data.user._id)
+            this.props.socket.emit('InterUser',{id:this.props.data.user._id,sign:true})
             this.setState({loading:false})
             this.props.history.replace('/')
         }

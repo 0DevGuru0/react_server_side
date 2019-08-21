@@ -3,6 +3,8 @@ import {graphql,} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
 import query from '../../Graphql/query/user'
 import classes from './signin.css';
+import { detect } from 'detect-browser';
+const browser = detect();
 class SignIn extends Component{
 
     state = {
@@ -15,7 +17,7 @@ class SignIn extends Component{
     }
     componentDidUpdate(prevProps,prevState){
         if(this.props.data.user !== prevProps.data.user && this.props.data.user){
-            this.props.socket.emit('userEntered',this.props.data.user._id)
+            this.props.socket.emit('InterUser',{id:this.props.data.user._id,sign:true})
             this.setState({loading:false})
             this.props.history.replace('/')
         }
@@ -67,6 +69,7 @@ class SignIn extends Component{
         }
     }
     render(){
+        console.log(browser.name+'_'+browser.version)
         return( this.signInForm() )
     }
 }

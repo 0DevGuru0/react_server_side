@@ -37,6 +37,7 @@
         "css-loader": "^2.0.0",
         "css-mqpacker": "^7.0.0",
         "cssnano": "^4.1.7",
+        "detect-browser": "^4.6.0",
         "dgram": "^1.0.1",
         "dns": "^0.2.2",
         "dotenv": "^6.2.0",
