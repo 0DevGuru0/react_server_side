@@ -1,8 +1,8 @@
 import React , {Component} from 'react';
 import { Link }    from 'react-router-dom';
-import {connect}   from 'react-redux';
+// import {connect}   from 'react-redux';
 import {graphql}   from 'react-apollo';
-import query       from '../Graphql/query/user'
+// import query       from '../Graphql/query/user'
 import emailVerify from '../Graphql/mutation/emailVerify';
 import classes     from './header.css';
 class Header extends Component{
@@ -10,20 +10,23 @@ class Header extends Component{
     super(props)
     this.state={
       email_loading:false,
-      emailRequested:false
+      emailRequested:false,
     }
   }
-
+  userSocket = ()=>{
+    let userId = this.props.user._id || this.props.data.user._id ;
+    let sign = this.props.sign
+    this.props.socket.emit('clientType','user')
+    return this.props.socket.emit('InterUser',{ id:userId, sign }) 
+  }
+  componentDidMount(){
+    if (this.props.user || this.props.data.user) {
+      this.userSocket()
+    }
+  }
   renderButtons=()=>{
     if (this.props.user || this.props.data.user) {
-      this.props.socket.on('connect', ()=>{ 
-        this.props.socket.emit('clientType','user')
-        
-        this.props.socket.emit('InterUser',{id:this.props.user._id || this.props.data.user._id})
-      })
-      this.props.socket.on('disconnect',()=>{ 
-        this.props.socket.emit('exitUser',{id:this.props.user._id || this.props.data.user._id}) 
-      })
+      if(this.props.sign){ this.userSocket() }
       return (
         <div>
           <li><Link to="/admins">Admins</Link></li>
@@ -31,7 +34,7 @@ class Header extends Component{
         </div>
       );
     } else {
-      this.props.socket.on('connect', ()=>{ this.props.socket.emit('clientType','visitor') })
+      this.props.socket.emit('clientType','visitor')
       return (
         <div>
           <li> <Link to="/users">Users</Link> </li>
@@ -79,6 +82,7 @@ class Header extends Component{
     }
   }
   render(){
+    debugger;
     return (
     <div>
       {this.emailSection()}
@@ -92,12 +96,4 @@ class Header extends Component{
     );
   }
 }
-
-const mapStateToProps =({auth})=>({user:auth.user})
-export default connect(mapStateToProps,null)(
-  graphql(query)(
-    graphql(emailVerify)(
-      Header
-    )
-  )
-);
+export default graphql( emailVerify )( Header );

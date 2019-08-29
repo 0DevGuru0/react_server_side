@@ -23,8 +23,19 @@ app.use('/api', proxy(process.env.userManagementHost, {
     next(err);
   }
 }));
-
 app.enable('trust proxy');
+
+// const session = require('express-session')
+
+// let sessionMiddleware = session({
+//     secret: '930611040afsan_nightmare',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: true }
+// });
+
+// app.use(sessionMiddleware)
+
 
 app.use(function (req, res, next) {
   if (req.secure) {
@@ -41,11 +52,11 @@ const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
   logTime:false
 })
 const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
+// const webpackHotMiddleware = require('webpack-hot-middleware')(compiler)
 
 app.use(webpackDevMiddleware)
 
-app.use(webpackHotMiddleware)
+// app.use(webpackHotMiddleware)
 
 app.use(webpackHotServerMiddleware(compiler));
 
@@ -65,5 +76,5 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
-
+// export {sessionMiddleware};
 export default app;

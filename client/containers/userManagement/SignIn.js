@@ -1,10 +1,9 @@
 import React,{Component} from 'react';
-import {graphql,} from 'react-apollo';
+import {graphql} from 'react-apollo';
 import SignIn_mutation from '../../Graphql/mutation/Signin';
 import query from '../../Graphql/query/user'
 import classes from './signin.css';
-import { detect } from 'detect-browser';
-const browser = detect();
+
 class SignIn extends Component{
 
     state = {
@@ -15,13 +14,16 @@ class SignIn extends Component{
         errors: [],
         loading:false
     }
-    componentDidUpdate(prevProps,prevState){
-        if(this.props.data.user !== prevProps.data.user && this.props.data.user){
-            this.props.socket.emit('InterUser',{id:this.props.data.user._id,sign:true})
-            this.setState({loading:false})
-            this.props.history.replace('/')
-        }
-    }
+    // componentDidUpdate(prevProps,prevState){
+    //     if(this.props.data.user !== prevProps.data.user && this.props.data.user){
+    //         // this.props.socket.emit('User',{
+    //         //     id:this.props.data.user._id,
+    //         //     credential:'signedIn'
+    //         // })
+            
+    //     }
+    // }
+
     submitHandler = (e)=>{
         this.setState({loading:true})
         e.preventDefault()
@@ -29,13 +31,16 @@ class SignIn extends Component{
         this.props.mutate({
             variables:{email,password},
             refetchQueries:[{query}]
+        }).then(()=>{
+            this.props.sign(true)
+            this.setState({loading:false})
+            this.props.history.replace('/')
         }).catch((e)=>{
             this.setState({loading:false})
             let errors = e.graphQLErrors.map(err=>err.message);
             errors = errors[0].split(',')
             this.setState({errors});
         })
-
     }
     showErrors = ()=>{
         const errors = []
@@ -69,15 +74,15 @@ class SignIn extends Component{
         }
     }
     render(){
-        console.log(browser.name+'_'+browser.version)
         return( this.signInForm() )
     }
 }
 
 export default {
-    component:graphql(SignIn_mutation)( 
-        graphql(query)(
-            SignIn 
+    component:
+    // graphql(query)(
+        graphql(SignIn_mutation)(
+            SignIn
         )
-    )
-}
+    // )
+};

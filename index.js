@@ -6,13 +6,13 @@ const onlineVisitors_server = require('./socket.io/onlineVisitors/server-side')
 require('dotenv').config()
 
 const server = require('./server/server').default;
-
+const {sessionMiddleware}= require('./server/server');
 const privateKey = fs.readFileSync('server.key');
 const certificate = fs.readFileSync('server.cert');
 
 const httpsServer = https.createServer({ key: privateKey, cert: certificate }, server)
 
-onlineVisitors_server(httpsServer)
+onlineVisitors_server(httpsServer,sessionMiddleware)
 
 
 httpsServer.listen(process.env.PORT, () => {

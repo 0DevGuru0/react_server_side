@@ -14,6 +14,7 @@ class SignUp extends Component{
         errors:[],
         loading:false
     }
+    
     componentDidUpdate(prevProps,prevState){
         if(this.props.data.user !== prevProps.data.user && this.props.data.user){
             this.props.socket.emit('InterUser',{id:this.props.data.user._id,sign:true})
@@ -70,5 +71,10 @@ class SignUp extends Component{
 }
 
 export default {
-    component:graphql(query)( graphql(SignUp_mutation)( SignUp ) )
-}
+    component:
+    graphql(query)(
+        graphql(SignUp_mutation)(
+            SignUp
+        )
+    )
+};

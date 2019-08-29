@@ -19,7 +19,7 @@ module.exports = {
     entry: [
         "@babel/runtime/regenerator",
         // "react-hot-loader/patch",
-        "webpack-hot-middleware/client?reload=true&noInfo=false",
+        // "webpack-hot-middleware/client?reload=true&noInfo=false",
         "./client/index.js"
     ],
     output: {
@@ -31,7 +31,7 @@ module.exports = {
     devtool: "cheap-module-source-map",
     devServer: {
         contentBase: path.join(__dirname, '../public'),
-        hot: true,
+        // hot: true,
         compress: true,
         overlay: {
             errors: true
@@ -54,7 +54,20 @@ module.exports = {
             new UglifyJsPlugin({
                 extractComments: true,
                 parallel: true,
-                cache: true
+                cache: true,
+                // uglifyOptions: {
+                //     parse: {
+                //         ecma: 8
+                //     },
+                //     compress: {
+                //         ecma: 5,
+                //         warnings: false,
+
+                //     },
+                //     output: {
+                //         comments: false
+                //     }
+                // }
             })
         ],
     },

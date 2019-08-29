@@ -22,7 +22,7 @@ module.exports = {
                 'ie 9'
             ]
         }),
-        fontMagic({ foundries: ['google'] }),
+        // fontMagic({ foundries: ['google'] }),
         flexBoxFixes(),
         Normalize(),
         cssNano(),

@@ -5,13 +5,18 @@ import {connect} from 'react-redux';
 import * as actionCreators from './store/actions'
 
 import {graphql} from 'react-apollo';
-import pageviews from './Graphql/mutation/pageViews';
+import pageViews from './Graphql/mutation/pageViews';
+import query from  './Graphql/query/user'
 import moment from 'moment';
-import socketClient from 'socket.io-client';
 
-const socket = socketClient()
-class RootRoute extends Component {
-
+const socket = require('socket.io-client')({
+    transports:['websocket'],
+    upgrade:false,
+});
+class rootRoute extends Component {
+    state={
+        userSign:false
+    }
     componentDidUpdate(prevProps){
         if(this.props.location.pathname !== prevProps.location.pathname ){
             // redis Setup
@@ -21,30 +26,39 @@ class RootRoute extends Component {
                 this.props.mutate({variables:{key,field}})
         }
     }
-    
+    handleSign= val => { this.setState({ userSign:val }) }
     render(){
-        socket.on('connect', ()=>{
-            socket.emit('client','client connected')
-            socket.on('disconnect',()=>{ socket.emit('client','client disconnected') })
-        });
+        // socket.on('connect', ()=>{
+        //     socket.emit('client','client connected')
+        //     socket.on('disconnect',()=>{ socket.emit('client','client disconnected') })
+        // });
         return (
             <div>
-                <Header socket={socket}/>
-                {renderRoutes(this.props.route.routes,{socket})}
+                <Header 
+                    {...this.props}
+                    socket={socket}
+                    sign={this.state.userSign}
+                    />   
+                {renderRoutes(
+                    this.props.route.routes,{
+                        socket,
+                        sign : this.handleSign
+                    }
+                )}
             </div>
         )
     }
 }
 
-const mapDispatchToProps = dispatch=>({
-    fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser()),
-})
-
-const loadData = ({dispatch})=>(
-    dispatch(actionCreators.fetchCurrentUser())
-)
+const mapDispatchToProps = dispatch=>({ fetchUser : ()=>dispatch(actionCreators.fetchCurrentUser()), })
+const mapStateToProps =({auth})=>({user:auth.user})
+const loadData = ({dispatch})=>(dispatch(actionCreators.fetchCurrentUser()))
 
 export default {
-    component:graphql(pageviews)(connect(null,mapDispatchToProps)(RootRoute)),
+    component:connect(mapStateToProps,mapDispatchToProps)(
+        graphql(query)( 
+            graphql(pageViews)( rootRoute )
+        )
+    ),
     loadData
 }
