@@ -33,6 +33,7 @@ class SignIn extends Component{
             refetchQueries:[{query}]
         }).then(()=>{
             this.props.sign(true)
+            this.props.socket.emit('SignIn','exit')
             this.setState({loading:false})
             this.props.history.replace('/')
         }).catch((e)=>{

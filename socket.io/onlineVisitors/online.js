@@ -1,4 +1,3 @@
-const Redis = require('redis');
 const axios = require('axios');
 const chalk = require('chalk');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
@@ -17,11 +16,11 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
     )
 */
 module.exports = class OnlineVisitors {
-    constructor(ip) {
+    constructor(ip,redis) {
         // get VisitorIP
         this.IP = ip
         // config redis for key space notification
-        this.redis = Redis.createClient();
+        this.redis = redis;
         // this.redis.on('ready', () => {
         //     this.redis.config('SET', "notify-keyspace-events", 'E$')
         // })
@@ -67,10 +66,13 @@ module.exports = class OnlineVisitors {
                 await this.fetchVisitorInfo()
                 // [checkIP] reply = false
                 // SET visitor Bucket HSET(key:online:Visitors,filed:IP,connection:0)
-                this.redis.hset('online:Visitors', this.IP, 0);
+                this.redis.hset('online:Visitors', this.IP, 0,(err,reply)=>{
+                    if(reply){
+                        // visitorsCount incr(key:online:count)
+                        this.redis.incr('online:count')
+                    }
+                });
 
-                // visitorsCount incr(key:online:count)
-                this.redis.incr('online:count')
             }
         })
 
@@ -91,7 +93,6 @@ module.exports = class OnlineVisitors {
 
             // [HGET reply] > 0
             if (reply > 0) {
-
                 // DECR visitor connection HINCRBY(key:online:Visitors,filed:IP,connection:-1)
                 this.redis.hincrby('online:Visitors', this.IP, -1, (err, reply) => {
                     if (reply < 0) {
@@ -104,17 +105,13 @@ module.exports = class OnlineVisitors {
                     // " another connection of IP exist. "
                 })
 
-            } else if (+reply === 0) {
-                // [HGET reply] = 0
-
+            }
+            if (+reply === 0) {
                 // DELETE visitor HDEL(key:online:Visitors,filed:IP)
-                this.redis.hdel('online:Visitors', this.IP)
-                // visitorsCount decr(key:online:count)
-                this.redis.decr('online:count')
-
-            } else {
-                // [HGET reply] < 0
-                // implicit event [system doesn't work properly|transmit error to admin(console)]
+                this.redis.hdel('online:Visitors', this.IP,(err,reply)=>{
+                    // visitorsCount decr(key:online:count)
+                    this.redis.decr('online:count')
+                })
             }
         })
     }

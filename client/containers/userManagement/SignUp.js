@@ -14,14 +14,6 @@ class SignUp extends Component{
         errors:[],
         loading:false
     }
-    
-    componentDidUpdate(prevProps,prevState){
-        if(this.props.data.user !== prevProps.data.user && this.props.data.user){
-            this.props.socket.emit('InterUser',{id:this.props.data.user._id,sign:true})
-            this.setState({loading:false})
-            this.props.history.replace('/')
-        }
-    }
     submitHandler = (e)=>{
         this.setState({loading:true})
         e.preventDefault()
@@ -29,6 +21,11 @@ class SignUp extends Component{
         this.props.mutate({
             variables:{name,email,password},
             refetchQueries:[{query}]
+        }).then(()=>{
+            this.props.sign(true)
+            this.props.socket.emit('SignIn','exit')
+            this.setState({loading:false})
+            this.props.history.replace('/')
         }).catch((e)=>{
             this.setState({loading:false})
             console.log(e)

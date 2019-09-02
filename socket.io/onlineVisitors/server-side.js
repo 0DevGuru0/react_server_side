@@ -2,7 +2,7 @@ const onlineSys = require('./online');
 // const chalk = require('chalk');
 const Redis = require('redis');
 const redis = Redis.createClient();
-const  parser = require('ua-parser-js');
+const parser = require('ua-parser-js');
 const session = require('express-session')
 
 let sessionMiddleware = session({
@@ -17,7 +17,7 @@ const onlineVisitors = (httpsServer) => {
     
     io.on('connection', client => {
         let {browser,os}     = parser(client.handshake.headers['user-agent']);
-        let browserContainer = browser.name+browser.major+":"+os.name+os.version
+        let browserContainer = browser.name + browser.major + ":" + os.name + os.version
 
         client.on('InterUser', reply => {            
             /*
@@ -40,7 +40,13 @@ const onlineVisitors = (httpsServer) => {
                         result = {};
                         result[browserContainer] = 1
                         redis.incr('online:users:count')
-                    }else{ result[browserContainer] = ++ result[browserContainer] }
+                    }else{ 
+                        if(!result[browserContainer]){
+                            result[browserContainer] = 1
+                        }else{
+                            result[browserContainer] = ++ result[browserContainer] 
+                        }
+                    }
                     redis.hset( 'online:Users' , reply.id , JSON.stringify(result))
                 })
             }
@@ -85,27 +91,26 @@ const onlineVisitors = (httpsServer) => {
            }
         })
 
+        client.on('SignIn', data=>{
+            client.request.session.system.VisitorExit()
+            client.request.session.signIn = true
+        })
+
         client.on('clientType', async reply => {
-            let IP = await onlineSys.fetchIP()
-            const System = new onlineSys(IP.ip)
-            if (reply === 'visitor') {
-                if (IP.ip) {
-                    System.VisitorInter()
-                    client.on('disconnect', () => {
+            const {ip} = await onlineSys.fetchIP()
+            const System = new onlineSys(ip,redis)
+            client.request.session.ip = ip
+            client.request.session.system = System
+            if (ip) {
+                if (reply === 'visitor') { System.VisitorInter() }
+                client.on('disconnect', () => {
+                    if( reply !== 'user' && !client.request.session.signIn ){ 
                         System.VisitorExit()
-                    });
-                } else {
-                    // console.log(ErrorModel(JSON.parse(IP)))
-                }
-            } else if (reply === 'user') {
-                if (IP.ip) {
-                    System.VisitorExit()
-                } else {
-                    // console.log(ErrorModel(JSON.parse(IP)))
-                }
+                        client.request.session.signIn = false
+                    }
+                });
             }
         })
-    
     });
 }
 

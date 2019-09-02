@@ -28,10 +28,12 @@ class rootRoute extends Component {
     }
     handleSign= val => { this.setState({ userSign:val }) }
     render(){
-        // socket.on('connect', ()=>{
-        //     socket.emit('client','client connected')
-        //     socket.on('disconnect',()=>{ socket.emit('client','client disconnected') })
-        // });
+        socket.on('connect', ()=>{
+            socket.emit('client','client connected')
+            socket.on('disconnect',()=>{ 
+                socket.emit('client','client disconnected')
+            })
+        });
         return (
             <div>
                 <Header 

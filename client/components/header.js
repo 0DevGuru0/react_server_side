@@ -22,6 +22,8 @@ class Header extends Component{
   componentDidMount(){
     if (this.props.user || this.props.data.user) {
       this.userSocket()
+    }else{
+      this.props.socket.emit('clientType','visitor')
     }
   }
   renderButtons=()=>{
@@ -34,7 +36,6 @@ class Header extends Component{
         </div>
       );
     } else {
-      this.props.socket.emit('clientType','visitor')
       return (
         <div>
           <li> <Link to="/users">Users</Link> </li>
