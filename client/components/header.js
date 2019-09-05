@@ -50,7 +50,7 @@ class Header extends Component{
   sendEmail =()=>{
     this.setState({email_loading:true})
     this.props.mutate({
-      variables:{ Email : this.props.user.email }
+      variables:{ Email : this.props.user.email || this.prop.data.user.email }
     }).then(()=>{
      this.setState({emailRequested:true,email_loading:false})
     }).catch(e=>{

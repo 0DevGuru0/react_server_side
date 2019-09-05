@@ -92,8 +92,10 @@ const onlineVisitors = (httpsServer) => {
         })
 
         client.on('SignIn', data=>{
-            client.request.session.system.VisitorExit()
-            client.request.session.signIn = true
+            if(client.request.session.system){
+                client.request.session.system.VisitorExit()
+                client.request.session.signIn = true
+            }
         })
 
         client.on('clientType', async reply => {

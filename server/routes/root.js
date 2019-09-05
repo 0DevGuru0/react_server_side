@@ -23,7 +23,7 @@ export default () => (req,res)=>{
         const pageRender = renderer(req,store,context,res)
         Promise.all([pageRender]).then(async(value)=>{
             if(context.notFound){ res.status(404)  }
-            redis.incrbyfloat('totalVisit',0.5)
+            redis.incrby('totalVisit',1)
 
             res.send(value[0])
         })
